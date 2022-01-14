@@ -33,18 +33,21 @@ public class MigradorTDN {
     public static void main(String[] args) throws ProtocolException, IOException {
 
        LeeCSV csv = new LeeCSV();
+       
+       boolean cliente = false;
+       boolean vendedor = false;
+       
 
         String[] archivos = {"datos/ciudad.csv", "datos/departamento.csv", "datos/distrito.csv"};
 
-        ArrayList<String[]> csvArray = csv.leerArchivo("fichero.csv");
+      
 
         //datos Cliente
         ArrayList<String[]> csvDepartamentos = csv.leerArchivo("datos/departamento.csv");
         ArrayList<String[]> csvCiudades = csv.leerArchivo("datos/ciudad.csv");
         ArrayList<String[]> csvDistritos = csv.leerArchivo("datos/distrito.csv");
         
-        ClienteProcesar cp = new ClienteProcesar();
-        ArrayList<Cliente> lClientes = cp.procesarDatosClientes(csvArray, csvDepartamentos, csvCiudades, csvDistritos);
+       
 
         ConexionHttps con = new ConexionHttps();
         String resultado = "";
@@ -61,18 +64,35 @@ public class MigradorTDN {
         Token rToken = new Gson().fromJson(resultado, Token.class);
         rToken.setUsername(login.getUsername());
 
-        for (int i = 0; i < 1; i++) {
-            con = new ConexionHttps();
+        
+        //seccion clientes
+        if(cliente){
+            
+            ArrayList<String[]> csvArray = csv.leerArchivo("fichero.csv");
+            ClienteProcesar cp = new ClienteProcesar();
+            ArrayList<Cliente> lClientes = cp.procesarDatosClientes(csvArray, csvDepartamentos, csvCiudades, csvDistritos);
 
-            con.setLink(Config.HOST + Config.CLIENTE);
+            for (int i = 0; i < 1; i++) {
+                con = new ConexionHttps();
 
-            con.setToken(rToken.getAccessToken());
-            con.setBarerAutenticacion(true);
+                con.setLink(Config.HOST + Config.CLIENTE);
 
-            con.setBody(new Gson().toJson(lClientes.get(i)));
-            System.out.println(new Gson().toJson(lClientes.get(i)));
-            System.out.println(con.getConexion());
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody(new Gson().toJson(lClientes.get(i)));
+                System.out.println(new Gson().toJson(lClientes.get(i)));
+                System.out.println(con.getConexion());
+            }
+
         }
+        
+        if (vendedor){
+        
+            
+            
+        }
+        
 
         //Logout
         con = new ConexionHttps();
