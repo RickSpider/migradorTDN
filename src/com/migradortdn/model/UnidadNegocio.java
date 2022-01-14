@@ -14,6 +14,11 @@ public class UnidadNegocio {
     private long id;
     private String nombre;
     private String descripcion;
+    private String ciudad;
+    private String pais;
+    private boolean $resolved = true;
+    
+    
 
     public long getId() {
         return id;
@@ -62,9 +67,7 @@ public class UnidadNegocio {
     public void set$resolved(boolean $resolved) {
         this.$resolved = $resolved;
     }
-    private String ciudad;
-    private String pais;
-    private boolean $resolved = true;
+    
     
     
 }

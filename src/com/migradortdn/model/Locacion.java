@@ -16,6 +16,14 @@ public class Locacion {
     private boolean check;
     private UnidadNegocio unidadNegocio;
 
+    public Locacion(long id, long sucursal, boolean check) {
+        this.id = id;
+        this.sucursal = sucursal;
+        this.check = check;
+    }
+    
+    
+
     public long getId() {
         return id;
     }

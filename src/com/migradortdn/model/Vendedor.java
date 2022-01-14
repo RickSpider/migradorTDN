@@ -13,6 +13,7 @@ import java.util.ArrayList;
  */
 public class Vendedor {
     
+    private long id;
     private String nombres;
     private String apellidos;
     private String numero;
@@ -26,6 +27,14 @@ public class Vendedor {
     private Tipo tipoDocumento;
     
     private ArrayList<Locacion> locaciones;
+    
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getNombres() {
         return nombres;

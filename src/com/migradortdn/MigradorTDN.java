@@ -9,16 +9,11 @@ import com.google.gson.Gson;
 import com.migradortdn.model.Cliente;
 import com.migradortdn.model.Login;
 import com.migradortdn.model.Token;
-import com.migradortdn.model.Tipo;
-import com.migradortdn.model.TipoCliente;
-import com.opencsv.CSVReader;
-import controlador.ClienteProcesar;
+import com.migradortdn.model.Vendedor;
+import controlador.DatosProcesar;
 import controlador.LeeCSV;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ProtocolException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 /**
@@ -35,7 +30,7 @@ public class MigradorTDN {
        LeeCSV csv = new LeeCSV();
        
        boolean cliente = false;
-       boolean vendedor = false;
+       boolean vendedor = true;
        
 
         String[] archivos = {"datos/ciudad.csv", "datos/departamento.csv", "datos/distrito.csv"};
@@ -51,6 +46,8 @@ public class MigradorTDN {
 
         ConexionHttps con = new ConexionHttps();
         String resultado = "";
+        
+        DatosProcesar dp = new DatosProcesar();
 
         con.setLink(Config.HOST + "/qualita-client/rest/login");
 
@@ -63,14 +60,37 @@ public class MigradorTDN {
 
         Token rToken = new Gson().fromJson(resultado, Token.class);
         rToken.setUsername(login.getUsername());
+        
+        //seccion vendedores
+        if (vendedor){
+        
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/vendedores/QUALITA_VENDEDORES_SUPERVISORES.csv");
+            ArrayList<Vendedor> lVendedores = dp.procesarDatosVendedor(csvArray, csvCiudades);
+            
+            for (int i = 0; i < 1; i++) {
+                con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.CLIENTE);
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody(new Gson().toJson(lVendedores.get(i)));
+                System.out.println(new Gson().toJson(lVendedores.get(i)));
+                System.out.println(con.getConexion());
+            }
+            
+            
+            
+        }
 
         
         //seccion clientes
         if(cliente){
             
             ArrayList<String[]> csvArray = csv.leerArchivo("fichero.csv");
-            ClienteProcesar cp = new ClienteProcesar();
-            ArrayList<Cliente> lClientes = cp.procesarDatosClientes(csvArray, csvDepartamentos, csvCiudades, csvDistritos);
+            
+            ArrayList<Cliente> lClientes = dp.procesarDatosClientes(csvArray, csvDepartamentos, csvCiudades, csvDistritos);
 
             for (int i = 0; i < 1; i++) {
                 con = new ConexionHttps();
@@ -87,11 +107,7 @@ public class MigradorTDN {
 
         }
         
-        if (vendedor){
-        
-            
-            
-        }
+      
         
 
         //Logout
