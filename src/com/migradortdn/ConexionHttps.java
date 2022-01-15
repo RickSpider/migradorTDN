@@ -51,6 +51,9 @@ public class ConexionHttps {
         int HttpResult = urlConnection.getResponseCode();
         
         if (HttpResult == HttpURLConnection.HTTP_OK) {
+            
+            System.out.println(HttpResult);
+            
             BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "iso-8859-1"));
             String line = null;
             while ((line = br.readLine()) != null) {
@@ -58,6 +61,10 @@ public class ConexionHttps {
             }
             br.close();
 
+        } else {
+        
+            System.out.println("HttpResult CODE"+HttpResult);
+            
         }
         urlConnection.disconnect();
        // System.out.println(linea);

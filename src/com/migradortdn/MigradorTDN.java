@@ -65,12 +65,13 @@ public class MigradorTDN {
         if (vendedor){
         
             ArrayList<String[]> csvArray = csv.leerArchivo("datos/vendedores/QUALITA_VENDEDORES_SUPERVISORES.csv");
+            System.out.println("el csvArray Vendedores "+csvArray.size());
             ArrayList<Vendedor> lVendedores = dp.procesarDatosVendedor(csvArray, csvCiudades);
             
             for (int i = 0; i < 1; i++) {
                 con = new ConexionHttps();
 
-                con.setLink(Config.HOST + Config.CLIENTE);
+                con.setLink(Config.HOST + Config.VENDEDOR);
 
                 con.setToken(rToken.getAccessToken());
                 con.setBarerAutenticacion(true);

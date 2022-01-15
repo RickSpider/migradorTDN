@@ -23,6 +23,6 @@ public class Config {
     //
     
     //VENDEDORES
-    public static String VENDEDOR = "";
+    public static String VENDEDOR = "/qualita-client/rest/vendedores";
     
 }

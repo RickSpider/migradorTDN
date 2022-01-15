@@ -124,8 +124,8 @@ public class DatosProcesar {
 
                 Vendedor v = new Vendedor();
 
-                v.setNombres(x[2]);
-                v.setApellidos(x[3]);
+                v.setNombres(x[2].trim());
+                v.setApellidos(x[3].trim());
                 
                 Tipo tipoDocumento = new Tipo();
                 
@@ -137,10 +137,12 @@ public class DatosProcesar {
                     tipoDocumento.setId(Config.IDOT);
                 }
                 
-                v.setNumero(x[5]);
-                v.setTelefono(x[6]);
+                v.setTipoDocumento(tipoDocumento);
                 
-                v.setDireccion(x[7]);
+                v.setNumero(x[5].trim());
+                v.setTelefono(x[6].trim());
+                
+                v.setDireccion(x[7].trim());
                 
                 //Seccion ciudad, si la ciudad no encuntra pone default San Lorenzo
                 boolean hayCiudad = false;
@@ -173,7 +175,13 @@ public class DatosProcesar {
                 unidadNegocio.setId(1);
                 
                 locacion.setUnidadNegocio(unidadNegocio);
-                lLocacion.add(locacion);
+                
+                Locacion locacionOri = new Locacion(locacion);
+                
+                lLocacion.add(locacionOri);
+                
+                v.setLocaciones(lLocacion);
+                v.setGrupoVendedor(1);
                 
                 lVendedores.add(v);
             }

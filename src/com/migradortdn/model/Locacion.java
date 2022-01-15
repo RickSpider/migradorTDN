@@ -11,40 +11,55 @@ package com.migradortdn.model;
  */
 public class Locacion {
     
-    private long id;
-    private long sucursal;
-    private boolean check;
+    
+    private Locacion locacion;
+    
+    private Long id;
+    private Long sucursal;
+    private Boolean check;
     private UnidadNegocio unidadNegocio;
+    
+    public Locacion (Locacion locacion){
+    
+        this.locacion = locacion;
+        
+    }
 
     public Locacion(long id, long sucursal, boolean check) {
         this.id = id;
         this.sucursal = sucursal;
         this.check = check;
     }
-    
-    
 
-    public long getId() {
+    public Locacion getLocacion() {
+        return locacion;
+    }
+
+    public void setLocacion(Locacion locacion) {
+        this.locacion = locacion;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getSucursal() {
+    public Long getSucursal() {
         return sucursal;
     }
 
-    public void setSucursal(long sucursal) {
+    public void setSucursal(Long sucursal) {
         this.sucursal = sucursal;
     }
 
-    public boolean isCheck() {
+    public Boolean getCheck() {
         return check;
     }
 
-    public void setCheck(boolean check) {
+    public void setCheck(Boolean check) {
         this.check = check;
     }
 
@@ -55,5 +70,9 @@ public class Locacion {
     public void setUnidadNegocio(UnidadNegocio unidadNegocio) {
         this.unidadNegocio = unidadNegocio;
     }
+
+   
     
+
+   
 }

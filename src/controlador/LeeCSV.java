@@ -27,7 +27,7 @@ public class LeeCSV {
 
             csvArray = new ArrayList<String[]>();
 
-            reader = new CSVReader(new InputStreamReader(new FileInputStream(pathArtchivo), StandardCharsets.ISO_8859_1));
+            reader = new CSVReader(new InputStreamReader(new FileInputStream(pathArtchivo), StandardCharsets.UTF_8));
             String[] nextLine = null;
 
             reader.readNext(); // elimina la cabecera
