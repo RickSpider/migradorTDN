@@ -5,6 +5,10 @@
  */
 package controlador;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.migradortdn.Config;
 import com.migradortdn.model.Cliente;
 import com.migradortdn.model.Locacion;
@@ -13,6 +17,7 @@ import com.migradortdn.model.TipoCliente;
 import com.migradortdn.model.UnidadNegocio;
 import com.migradortdn.model.Vendedor;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -40,15 +45,15 @@ public class DatosProcesar {
                 Tipo tipoDocumento = new Tipo();
                 //tipoDocumento.setTipoTipo(tipoTipoDocumento);
 
-                if (x[3].compareTo("RUC") == 0) {
+                if (x[3].trim().compareTo("RUC") == 0) {
                     tipoDocumento.setId(Config.IDRUC);
                 }
 
-                if (x[3].compareTo("CED") == 0) {
+                if (x[3].trim().compareTo("CED") == 0) {
                     tipoDocumento.setId(Config.IDCED);
                 }
 
-                if (x[3].compareTo("OT") == 0) {
+                if (x[3].trim().compareTo("OT") == 0) {
                     tipoDocumento.setId(Config.IDOT);
                 }
 
@@ -112,7 +117,7 @@ public class DatosProcesar {
 
     }
     
-    public ArrayList<Vendedor> procesarDatosVendedor(ArrayList<String[]> csvArray, ArrayList<String[]> csvCiudades){
+    public ArrayList<Vendedor> procesarDatosVendedor(ArrayList<String[]> csvArray, ArrayList<String[]> csvCiudades, boolean supervisor ,ArrayList<Vendedor> lSupervisores){
         
         ArrayList<Vendedor> lVendedores = new ArrayList<Vendedor>();
         
@@ -129,11 +134,11 @@ public class DatosProcesar {
                 
                 Tipo tipoDocumento = new Tipo();
                 
-                if (x[4].compareTo("CED") == 0) {
+                if (x[4].trim().compareTo("CED") == 0) {
                     tipoDocumento.setId(Config.IDCED);
                 }
 
-                if (x[4].compareTo("OT") == 0) {
+                if (x[4].trim().compareTo("OT") == 0) {
                     tipoDocumento.setId(Config.IDOT);
                 }
                 
@@ -148,7 +153,7 @@ public class DatosProcesar {
                 boolean hayCiudad = false;
                 for (String[] c : csvCiudades){
                 
-                    if (c[2].compareTo(x[11].trim())==0){
+                    if (c[2].trim().compareTo(x[8].trim())==0){
                     
                         Tipo ciudad = new Tipo();
                         ciudad.setId(Long.parseLong(c[0]));
@@ -183,6 +188,26 @@ public class DatosProcesar {
                 v.setLocaciones(lLocacion);
                 v.setGrupoVendedor(1);
                 
+                if (supervisor){
+                
+                    v.setIsSupervisor(true);
+                    
+                }else{
+                
+                    for (Vendedor s : lSupervisores){
+                    
+                        String nombreSupervisor = x[12].replaceAll(",", " ").trim();
+                        
+                        if (s.getNombresyapellidos().compareTo(nombreSupervisor) == 0){
+                            
+                            v.setSupervisor(s);
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
                 lVendedores.add(v);
             }
         
@@ -191,7 +216,60 @@ public class DatosProcesar {
         return lVendedores;
     }
     
+    public ArrayList [] separarVendedores( ArrayList<String[]> csvArray ){
     
-   
+        ArrayList [] out = new ArrayList[2];
+        
+        ArrayList<String[]> lSupervisores = new ArrayList<String[]>();
+        ArrayList<String[]> lVendedores = new ArrayList<String[]>();
+               
+        
+        for ( String[] x : csvArray ){
+        
+            long codigo = Long.parseLong(x[1].trim());
+            long codSupervisor = Long.parseLong(x[11].trim());
+            
+            if (codigo == codSupervisor){
+            
+                lSupervisores.add(x);
+                
+            
+            }else{
+            
+                lVendedores.add(x);
+                
+            }
+            
+            
+        }
+        
+        out[0] = lSupervisores;
+        out[1] = lVendedores;
+        
+        return out;
+    }
+    
+    public ArrayList<Vendedor> procesarListaVendedores(String json){
+    
+        ArrayList<String> in = new Gson().fromJson(json, ArrayList.class);
+        
+        ArrayList<Vendedor> out = new ArrayList<Vendedor>();
+    
+        for (String x : in){
+        
+            Vendedor v = new Gson().fromJson(x, Vendedor.class);
+            
+            System.out.println(x);
+            
+            //out.add(v);
+            
+        }
+        
+        
+        return out;
+        
+    }   
+    
+  
     
 }

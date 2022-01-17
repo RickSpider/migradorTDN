@@ -6,6 +6,7 @@
 package com.migradortdn;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.migradortdn.model.Cliente;
 import com.migradortdn.model.Login;
 import com.migradortdn.model.Token;
@@ -13,8 +14,10 @@ import com.migradortdn.model.Vendedor;
 import controlador.DatosProcesar;
 import controlador.LeeCSV;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.ProtocolException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -56,7 +59,7 @@ public class MigradorTDN {
 
         con.setBody(new Gson().toJson(login));
 
-        resultado = con.getConexion();
+        resultado = con.getConexion(Config.POST);
 
         Token rToken = new Gson().fromJson(resultado, Token.class);
         rToken.setUsername(login.getUsername());
@@ -64,11 +67,54 @@ public class MigradorTDN {
         //seccion vendedores
         if (vendedor){
         
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/vendedores/QUALITA_VENDEDORES_SUPERVISORES.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/vendedores/QUALITA_VENDEDORVIEW_01.csv");
             System.out.println("el csvArray Vendedores "+csvArray.size());
-            ArrayList<Vendedor> lVendedores = dp.procesarDatosVendedor(csvArray, csvCiudades);
             
-            for (int i = 0; i < 1; i++) {
+            ArrayList [] sv = dp.separarVendedores(csvArray);
+            
+            ArrayList <String []> lSupervisor = sv[0];
+            ArrayList <String []> lVendedor = sv[1];
+            
+            ArrayList<Vendedor> lSupervisores = dp.procesarDatosVendedor(lSupervisor, csvCiudades, true, new ArrayList<Vendedor> ());
+            
+            for (int i = 0; i < lSupervisores.size(); i++) {
+                con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.VENDEDOR);
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody(new Gson().toJson(lSupervisores.get(i)));
+                System.out.println(new Gson().toJson(lSupervisores.get(i)));
+                System.out.println(con.getConexion(Config.POST));
+            }
+            
+            //buscar id supervisores
+            
+            con = new ConexionHttps();
+
+            con.setLink(Config.HOST + Config.VENDEDOR + Config.VENDEDORLISTA);
+            //System.out.println(con.getLink());
+            
+           
+            con.setToken(rToken.getAccessToken());
+            con.setBarerAutenticacion(true);
+             
+            con.setBody("");
+           
+            
+           // System.out.println(con.getConexion(false));
+           
+           Type arrayVen = new TypeToken<ArrayList<Vendedor>>(){}.getType();
+            
+            ArrayList<Vendedor> lSupervisoresCargados = new Gson().fromJson(con.getConexion(Config.GET),  arrayVen);
+
+            
+            
+            ArrayList<Vendedor> lVendedores = dp.procesarDatosVendedor(lVendedor, csvCiudades, false, lSupervisoresCargados);
+            
+            for (int i = 0; i < 0 ; i++) {
                 con = new ConexionHttps();
 
                 con.setLink(Config.HOST + Config.VENDEDOR);
@@ -78,8 +124,10 @@ public class MigradorTDN {
 
                 con.setBody(new Gson().toJson(lVendedores.get(i)));
                 System.out.println(new Gson().toJson(lVendedores.get(i)));
-                System.out.println(con.getConexion());
+                System.out.println(con.getConexion(Config.POST));
             }
+            
+            
             
             
             
@@ -103,7 +151,7 @@ public class MigradorTDN {
 
                 con.setBody(new Gson().toJson(lClientes.get(i)));
                 System.out.println(new Gson().toJson(lClientes.get(i)));
-                System.out.println(con.getConexion());
+                System.out.println(con.getConexion(Config.POST));
             }
 
         }
@@ -120,7 +168,7 @@ public class MigradorTDN {
 
         con.setBody(new Gson().toJson(rToken));
 
-        System.out.println(con.getConexion());
+        System.out.println(con.getConexion(Config.POST));
 
         System.out.println((new Gson().toJson(rToken)));
 

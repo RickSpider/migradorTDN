@@ -16,17 +16,21 @@ public class Vendedor {
     private Long id;
     private String nombres;
     private String apellidos;
+    private String nombresyapellidos;
     private String numero;
     private String telefono;
     private String direccion;
     private boolean activo = true;
-    private boolean isSupervisor = true;
+    private boolean isSupervisor = false;
+    private boolean vendedor = true;
     private long grupoVendedor;
     
     private Tipo ciudad;
     private Tipo tipoDocumento;
     
     private ArrayList<Locacion> locaciones;
+    
+    private Vendedor supervisor;
     
     public Long getId() {
         return id;
@@ -124,4 +128,30 @@ public class Vendedor {
         this.locaciones = locaciones;
     }
 
+    public Vendedor getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(Vendedor supervisor) {
+        this.supervisor = supervisor;
+    }
+
+    public boolean isVendedor() {
+        return vendedor;
+    }
+
+    public void setVendedor(boolean vendedor) {
+        this.vendedor = vendedor;
+    }
+
+    public String getNombresyapellidos() {
+        return nombresyapellidos;
+    }
+
+    public void setNombresyapellidos(String nombresyapellidos) {
+        this.nombresyapellidos = nombresyapellidos;
+    }
+
+    
+    
 }
