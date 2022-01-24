@@ -31,7 +31,7 @@ public class Cliente {
    
     private TipoCliente tipoCliente;
 
-    private Boolean activo;
+    private Boolean activo = true;
    
     private List<Object[]> sucursales;
 
@@ -48,6 +48,29 @@ public class Cliente {
     private Tipo tipoTransferencia;
 
     private Tipo tipoOperacion;
+    
+    private String Codigo;
+    
+    private int saldoCuentaCliente = 0;
+    private int entregaRemisiones = 0;
+    private int SaldoCredito = 0;
+    private int pedidosVenta= 0;
+    private int chequeCartera = 0;
+    
+    private String saldocuentaClienteView = "0";
+    private String entregaRemisionesView = "0";
+    private String saldoCreditoView = "0";
+    private String pedidosVentaView = "0";
+    private String cequeCarteraView = "0";
+    
+    private Boolean controlarLimiteCredito = true;
+    
+    private String condicionVenta;
+    
+    private String limiteCreditoView = "0";
+    private int limiteCredito = 0;
+    private String diasToleranciaView = "0";
+    private int diasTolerancia = 0;
 
     public Long getId() {
         return id;
@@ -191,6 +214,142 @@ public class Cliente {
 
     public void setTipoOperacion(Tipo tipoOperacion) {
         this.tipoOperacion = tipoOperacion;
+    }
+
+    public String getCodigo() {
+        return Codigo;
+    }
+
+    public void setCodigo(String Codigo) {
+        this.Codigo = Codigo;
+    }
+
+    public int getSaldoCuentaCliente() {
+        return saldoCuentaCliente;
+    }
+
+    public void setSaldoCuentaCliente(int saldoCuentaCliente) {
+        this.saldoCuentaCliente = saldoCuentaCliente;
+    }
+
+    public int getEntregaRemisiones() {
+        return entregaRemisiones;
+    }
+
+    public void setEntregaRemisiones(int entregaRemisiones) {
+        this.entregaRemisiones = entregaRemisiones;
+    }
+
+    public int getSaldoCredito() {
+        return SaldoCredito;
+    }
+
+    public void setSaldoCredito(int SaldoCredito) {
+        this.SaldoCredito = SaldoCredito;
+    }
+
+    public int getPedidosVenta() {
+        return pedidosVenta;
+    }
+
+    public void setPedidosVenta(int pedidosVenta) {
+        this.pedidosVenta = pedidosVenta;
+    }
+
+    public int getChequeCartera() {
+        return chequeCartera;
+    }
+
+    public void setChequeCartera(int chequeCartera) {
+        this.chequeCartera = chequeCartera;
+    }
+
+    public String getSaldocuentaClienteView() {
+        return saldocuentaClienteView;
+    }
+
+    public void setSaldocuentaClienteView(String saldocuentaClienteView) {
+        this.saldocuentaClienteView = saldocuentaClienteView;
+    }
+
+    public String getEntregaRemisionesView() {
+        return entregaRemisionesView;
+    }
+
+    public void setEntregaRemisionesView(String entregaRemisionesView) {
+        this.entregaRemisionesView = entregaRemisionesView;
+    }
+
+    public String getSaldoCreditoView() {
+        return saldoCreditoView;
+    }
+
+    public void setSaldoCreditoView(String saldoCreditoView) {
+        this.saldoCreditoView = saldoCreditoView;
+    }
+
+    public String getPedidosVentaView() {
+        return pedidosVentaView;
+    }
+
+    public void setPedidosVentaView(String pedidosVentaView) {
+        this.pedidosVentaView = pedidosVentaView;
+    }
+
+    public String getCequeCarteraView() {
+        return cequeCarteraView;
+    }
+
+    public void setCequeCarteraView(String cequeCarteraView) {
+        this.cequeCarteraView = cequeCarteraView;
+    }
+
+    public Boolean getControlarLimiteCredito() {
+        return controlarLimiteCredito;
+    }
+
+    public void setControlarLimiteCredito(Boolean controlarLimiteCredito) {
+        this.controlarLimiteCredito = controlarLimiteCredito;
+    }
+
+    public String getCondicionVenta() {
+        return condicionVenta;
+    }
+
+    public void setCondicionVenta(String condicionVenta) {
+        this.condicionVenta = condicionVenta;
+    }
+
+    public String getLimiteCreditoView() {
+        return limiteCreditoView;
+    }
+
+    public void setLimiteCreditoView(String limiteCreditoView) {
+        this.limiteCreditoView = limiteCreditoView;
+    }
+
+    public int getLimiteCredito() {
+        return limiteCredito;
+    }
+
+    public void setLimiteCredito(int limiteCredito) {
+        this.limiteCredito = limiteCredito;
+    }
+
+    public String getDiasToleranciaView() {
+        return diasToleranciaView;
+    }
+
+    public void setDiasToleranciaView(String diasToleranciaView) {
+        this.diasToleranciaView = diasToleranciaView;
+    }
+
+    public int getDiasTolerancia() {
+        return diasTolerancia;
+    }
+
+    public void setDiasTolerancia(int diasTolerancia) {
+        this.diasTolerancia = diasTolerancia;
     }
 
     

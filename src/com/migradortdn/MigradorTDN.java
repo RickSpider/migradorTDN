@@ -15,6 +15,7 @@ import com.migradortdn.model.Token;
 import com.migradortdn.model.Vendedor;
 import com.migradortdn.model.Zona;
 import controlador.DatosProcesar;
+import controlador.ClienteDatosProcesar;
 import controlador.LeeCSV;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -210,13 +211,14 @@ public class MigradorTDN {
             
         }
 
+        ClienteDatosProcesar cdp = new ClienteDatosProcesar();
         
         //seccion clientes
         if(cliente){
             
             ArrayList<String[]> csvArray = csv.leerArchivo("fichero.csv");
             
-            ArrayList<Cliente> lClientes = dp.procesarDatosClientes(csvArray, csvDepartamentos, csvCiudades, csvDistritos);
+            ArrayList<Cliente> lClientes = cdp.procesarDatosClientes(csvArray, csvDepartamentos, csvCiudades, csvDistritos);
 
             for (int i = 0; i < 1; i++) {
                 con = new ConexionHttps();
