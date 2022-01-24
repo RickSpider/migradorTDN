@@ -9,11 +9,10 @@ package com.migradortdn.model;
  *
  * @author BlackSpider
  */
-
-public class TipoCliente {
+public class Sucursal {
     
     private Long id;
-    private String descripcion;
+    private String nombre;
 
     public Long getId() {
         return id;
@@ -23,14 +22,12 @@ public class TipoCliente {
         this.id = id;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
-    
-    
     
 }

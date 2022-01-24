@@ -9,8 +9,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.migradortdn.model.Cliente;
 import com.migradortdn.model.Login;
+import com.migradortdn.model.Ruta;
+import com.migradortdn.model.TipoCliente;
 import com.migradortdn.model.Token;
 import com.migradortdn.model.Vendedor;
+import com.migradortdn.model.Zona;
 import controlador.DatosProcesar;
 import controlador.LeeCSV;
 import java.io.IOException;
@@ -32,8 +35,11 @@ public class MigradorTDN {
 
        LeeCSV csv = new LeeCSV();
        
+       boolean zona = false;
+       boolean ruta = false;
+       boolean tipoCliente = true;
        boolean cliente = false;
-       boolean vendedor = true;
+       boolean vendedor = false;
        
 
         String[] archivos = {"datos/ciudad.csv", "datos/departamento.csv", "datos/distrito.csv"};
@@ -63,6 +69,53 @@ public class MigradorTDN {
 
         Token rToken = new Gson().fromJson(resultado, Token.class);
         rToken.setUsername(login.getUsername());
+        
+        if(zona){
+            
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/QUALITA_ZONAVIEW_01.csv");
+            
+            ArrayList<Zona> lZona = dp.procesarZona(csvArray);
+            
+            for( int i = 0 ; i <  lZona.size() ; i++){
+            
+                 con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.ZONA);
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody(new Gson().toJson(lZona.get(i)));
+                System.out.println(new Gson().toJson(lZona.get(i)));
+                System.out.println(con.getConexion(Config.POST));
+                
+            }
+            
+        }
+        
+         if(ruta){
+            
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/QUALITA_RUTAVIEW_01.csv");
+            
+            ArrayList<Ruta> lRuta = dp.procesarRuta(csvArray);
+            
+            for( int i = 0 ; i <  lRuta.size() ; i++){
+            
+                 con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.RUTA);
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody(new Gson().toJson(lRuta.get(i)));
+                System.out.println(new Gson().toJson(lRuta.get(i)));
+                System.out.println(con.getConexion(Config.POST));
+                
+            }
+            
+        }
+        
         
         //seccion vendedores
         if (vendedor){
@@ -130,6 +183,30 @@ public class MigradorTDN {
             
             
             
+            
+        }
+        
+        
+        if(tipoCliente){
+            
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/QUALITA_TIPOCLIENTEVIEW_01.csv");
+            
+            ArrayList<TipoCliente> lTipocliente = dp.procesarTipoCliente(csvArray);
+            
+            for( int i = 0 ; i <  lTipocliente.size() ; i++){
+            
+                 con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.TIPOSCLIENTES);
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody(new Gson().toJson(lTipocliente.get(i)));
+                System.out.println(new Gson().toJson(lTipocliente.get(i)));
+                System.out.println(con.getConexion(Config.POST));
+                
+            }
             
         }
 

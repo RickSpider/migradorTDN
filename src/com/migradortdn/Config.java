@@ -26,7 +26,14 @@ public class Config {
     public static long IDCED = 356;
     public static long IDOT = 7420;
     
-    //
+    // Tipo Cliente
+    public static String TIPOSCLIENTES = "/qualita-client/rest/tiposclientes";
+    
+    //Zonas
+    public static String ZONA = "/qualita-client/rest/zonas";
+    
+    //Rutas
+    public static String RUTA = "/qualita-client/rest/rutas";
     
     //VENDEDORES
     public static String VENDEDOR = "/qualita-client/rest/vendedores";

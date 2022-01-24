@@ -9,11 +9,12 @@ package com.migradortdn.model;
  *
  * @author BlackSpider
  */
-
-public class TipoCliente {
+public class Zona {
     
     private Long id;
+    private String zona;
     private String descripcion;
+    private boolean activo = true;
 
     public Long getId() {
         return id;
@@ -23,6 +24,14 @@ public class TipoCliente {
         this.id = id;
     }
 
+    public String getZona() {
+        return zona;
+    }
+
+    public void setZona(String zona) {
+        this.zona = zona;
+    }
+
     public String getDescripcion() {
         return descripcion;
     }
@@ -30,7 +39,5 @@ public class TipoCliente {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
-    
     
 }

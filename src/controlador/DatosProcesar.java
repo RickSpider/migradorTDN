@@ -12,10 +12,13 @@ import com.google.gson.JsonParser;
 import com.migradortdn.Config;
 import com.migradortdn.model.Cliente;
 import com.migradortdn.model.Locacion;
+import com.migradortdn.model.Ruta;
+import com.migradortdn.model.Sucursal;
 import com.migradortdn.model.Tipo;
 import com.migradortdn.model.TipoCliente;
 import com.migradortdn.model.UnidadNegocio;
 import com.migradortdn.model.Vendedor;
+import com.migradortdn.model.Zona;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,7 +99,8 @@ public class DatosProcesar {
                 
 
                 TipoCliente tipoCliente = new TipoCliente();
-                tipoCliente.setId(2);
+                Long id = new Long(2);
+                tipoCliente.setId(id);
                 cliente.setTipoCliente(tipoCliente);
 
                 Tipo tipoPersona = new Tipo();
@@ -270,6 +274,59 @@ public class DatosProcesar {
         
     }   
     
-  
+    public ArrayList<Zona> procesarZona(ArrayList<String[]> csvArray){
+        
+        ArrayList<Zona> out = new ArrayList<Zona>();
+        
+        for (String [] x : csvArray){
+        
+            Zona z = new Zona();
+            z.setZona(x[3].trim());
+            z.setDescripcion(x[1].trim()+" - "+x[2].trim()+" - "+x[3].trim());
+            
+            out.add(z);
+        }
+        
+        return out;
+        
+    }
+    
+    public ArrayList<Ruta> procesarRuta(ArrayList<String[]> csvArray){
+    
+        ArrayList<Ruta> out = new ArrayList<Ruta>();
+        Sucursal s = new Sucursal();
+        Long id = new Long(1);
+        s.setId(id); // sucrusal 1 Central 
+                
+        for (String [] x : csvArray){
+        
+            Ruta r = new Ruta();
+            r.setNombreRuta(x[2].trim());
+            r.setRuta(x[2].trim());
+            r.setSucursal(s);
+            
+            out.add(r);
+           
+        }
+        
+        return out;
+    }
+    
+    public ArrayList<TipoCliente> procesarTipoCliente(ArrayList<String[]> csvArray){
+    
+        ArrayList<TipoCliente> out = new ArrayList<TipoCliente>();
+       
+                
+        for (String [] x : csvArray){
+        
+            TipoCliente tc = new TipoCliente();
+            tc.setDescripcion(x[2].trim());
+           
+            out.add(tc);
+        }
+        
+        return out;
+        
+    }
     
 }
