@@ -8,6 +8,7 @@ package com.migradortdn;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.migradortdn.model.Cliente;
+import com.migradortdn.model.Data;
 import com.migradortdn.model.Login;
 import com.migradortdn.model.Ruta;
 import com.migradortdn.model.TipoCliente;
@@ -38,7 +39,7 @@ public class MigradorTDN {
        
        boolean zona = false;
        boolean ruta = false;
-       boolean tipoCliente = true;
+       boolean tipoCliente = false;
        boolean cliente = false;
        boolean vendedor = false;
        
@@ -160,7 +161,7 @@ public class MigradorTDN {
             
            // System.out.println(con.getConexion(false));
            
-           Type arrayVen = new TypeToken<ArrayList<Vendedor>>(){}.getType();
+            Type arrayVen = new TypeToken<ArrayList<Vendedor>>(){}.getType();
             
             ArrayList<Vendedor> lSupervisoresCargados = new Gson().fromJson(con.getConexion(Config.GET),  arrayVen);
 
@@ -196,7 +197,7 @@ public class MigradorTDN {
             
             for( int i = 0 ; i <  lTipocliente.size() ; i++){
             
-                 con = new ConexionHttps();
+                con = new ConexionHttps();
 
                 con.setLink(Config.HOST + Config.TIPOSCLIENTES);
 
@@ -212,6 +213,52 @@ public class MigradorTDN {
         }
 
         ClienteDatosProcesar cdp = new ClienteDatosProcesar();
+        
+        //seccion traer listas
+        
+        //Lista Tipo cliente
+        con = new ConexionHttps();
+
+        con.setLink(Config.HOST + Config.TIPOSCLIENTES + Config.TIPOSCLIENTESLISTA);
+
+        con.setToken(rToken.getAccessToken());
+        con.setBarerAutenticacion(true);
+
+        con.setBody("");
+        
+        Data <TipoCliente> dataTipoCliente = new Gson().fromJson( con.getConexion(Config.GET), Data.class);
+        
+        System.out.println("size ldata= "+dataTipoCliente.getData().size());
+        
+        //Lista Zona
+        con = new ConexionHttps();
+
+        con.setLink(Config.HOST + Config.ZONA + Config.ZONALISTA);
+
+        con.setToken(rToken.getAccessToken());
+        con.setBarerAutenticacion(true);
+
+        con.setBody("");
+        
+        Data <Zona> dataZona = new Gson().fromJson(con.getConexion(Config.GET), Data.class);
+        
+        System.out.println("size ldata= "+dataZona.getData().size());
+        
+        //Lista Ruta
+        con = new ConexionHttps();
+
+        con.setLink(Config.HOST + Config.RUTA + Config.RUTALISTA);
+
+        con.setToken(rToken.getAccessToken());
+        con.setBarerAutenticacion(true);
+
+        con.setBody("");
+        
+        Data <Ruta> dataRuta = new Gson().fromJson(con.getConexion(Config.GET), Data.class);
+        
+        System.out.println("size ldata= "+dataRuta.getData().size());
+        
+        
         
         //seccion clientes
         if(cliente){
