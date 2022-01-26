@@ -39,9 +39,10 @@ public class MigradorTDN {
        
        boolean zona = false;
        boolean ruta = false;
-       boolean tipoCliente = false;
-       boolean cliente = false;
        boolean vendedor = false;
+       boolean tipoCliente = false;
+       boolean cliente = true;
+       
        
 
         String[] archivos = {"datos/ciudad.csv", "datos/departamento.csv", "datos/distrito.csv"};
@@ -169,7 +170,7 @@ public class MigradorTDN {
             
             ArrayList<Vendedor> lVendedores = dp.procesarDatosVendedor(lVendedor, csvCiudades, false, lSupervisoresCargados);
             
-            for (int i = 0; i < 0 ; i++) {
+            for (int i = 0; i < lVendedor.size() ; i++) {
                 con = new ConexionHttps();
 
                 con.setLink(Config.HOST + Config.VENDEDOR);
@@ -226,9 +227,13 @@ public class MigradorTDN {
 
         con.setBody("");
         
-        Data <TipoCliente> dataTipoCliente = new Gson().fromJson( con.getConexion(Config.GET), Data.class);
+        String json = con.getConexion(Config.GET);
         
-        System.out.println("size ldata= "+dataTipoCliente.getData().size());
+        Data dataTipoCliente = new Gson().fromJson( json, Data.class);
+        
+        Type arrayTC = new TypeToken<List<TipoCliente>>(){}.getType();
+            
+        ArrayList<TipoCliente> lTipocliente =(new Gson().fromJson( new Gson().toJson(dataTipoCliente.getData()) , arrayTC));
         
         //Lista Zona
         con = new ConexionHttps();
@@ -240,9 +245,11 @@ public class MigradorTDN {
 
         con.setBody("");
         
-        Data <Zona> dataZona = new Gson().fromJson(con.getConexion(Config.GET), Data.class);
+        Data dataZona = new Gson().fromJson(con.getConexion(Config.GET), Data.class);
         
-        System.out.println("size ldata= "+dataZona.getData().size());
+        Type arrayZ = new TypeToken<List<Zona>>(){}.getType();
+            
+        ArrayList<Zona> lZona =(new Gson().fromJson(new Gson().toJson(dataZona.getData()), arrayZ));
         
         //Lista Ruta
         con = new ConexionHttps();
@@ -254,18 +261,41 @@ public class MigradorTDN {
 
         con.setBody("");
         
-        Data <Ruta> dataRuta = new Gson().fromJson(con.getConexion(Config.GET), Data.class);
+        Data dataRuta = new Gson().fromJson(con.getConexion(Config.GET), Data.class);
         
-        System.out.println("size ldata= "+dataRuta.getData().size());
+        Type arrayR = new TypeToken<List<Ruta>>(){}.getType();
+        
+        ArrayList<Ruta> lRuta = (new Gson().fromJson(new Gson().toJson(dataRuta.getData()), arrayR));
+        
+        //Vendedores
+        
+        con = new ConexionHttps();
+
+            con.setLink(Config.HOST + Config.VENDEDOR + Config.VENDEDORLISTA);
+            //System.out.println(con.getLink());
+            
+           
+            con.setToken(rToken.getAccessToken());
+            con.setBarerAutenticacion(true);
+             
+            con.setBody("");
+           
+            
+           // System.out.println(con.getConexion(false));
+           
+            Type arrayVen = new TypeToken<ArrayList<Vendedor>>(){}.getType();
+            
+            ArrayList<Vendedor> lVendedores = new Gson().fromJson(con.getConexion(Config.GET),  arrayVen);
         
         
         
         //seccion clientes
         if(cliente){
             
-            ArrayList<String[]> csvArray = csv.leerArchivo("fichero.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/QUALITA_CLIENTEVIEW_02.csv");
             
-            ArrayList<Cliente> lClientes = cdp.procesarDatosClientes(csvArray, csvDepartamentos, csvCiudades, csvDistritos);
+            ArrayList<Cliente> lClientes = cdp.procesarDatosClientes(csvArray, csvDepartamentos, csvCiudades, csvDistritos,
+                    lVendedores, lZona, lRuta, lTipocliente);
 
             for (int i = 0; i < 1; i++) {
                 con = new ConexionHttps();

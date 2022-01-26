@@ -5,7 +5,9 @@
  */
 package com.migradortdn.model;
 
+import com.google.gson.internal.LinkedTreeMap;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -13,10 +15,10 @@ import java.util.ArrayList;
  */
 public class Data <T> {
     
-    private ArrayList <T> data;
     private int draw;
     private int recordsTotal;
     private int recordsFiltered;
+    private ArrayList <T> data;
 
     public ArrayList<T> getData() {
         return data;
@@ -25,8 +27,6 @@ public class Data <T> {
     public void setData(ArrayList<T> data) {
         this.data = data;
     }
-
-   
 
     public int getDraw() {
         return draw;

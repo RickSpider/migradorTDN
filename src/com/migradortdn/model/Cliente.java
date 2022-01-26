@@ -5,6 +5,7 @@
  */
 package com.migradortdn.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ public class Cliente {
 
     private Boolean activo = true;
    
-    private List<Object[]> sucursales;
+    private ArrayList<Sucursal> sucursales = new ArrayList<Sucursal>();
 
     private List<Object[]> contactos;
   
@@ -49,7 +50,7 @@ public class Cliente {
 
     private Tipo tipoOperacion;
     
-    private String Codigo;
+    private String codigo;
     
     private int saldoCuentaCliente = 0;
     private int entregaRemisiones = 0;
@@ -152,11 +153,11 @@ public class Cliente {
         this.activo = activo;
     }
 
-    public List<Object[]> getSucursales() {
+    public ArrayList<Sucursal> getSucursales() {
         return sucursales;
     }
 
-    public void setSucursales(List<Object[]> sucursales) {
+    public void setSucursales(ArrayList<Sucursal> sucursales) {
         this.sucursales = sucursales;
     }
 
@@ -208,7 +209,7 @@ public class Cliente {
         this.tipoTransferencia = tipoTransferencia;
     }
 
-    public Tipo getTipoOperacion() {
+    public Tipo getTipoOperacion() { 
         return tipoOperacion;
     }
 
@@ -217,12 +218,14 @@ public class Cliente {
     }
 
     public String getCodigo() {
-        return Codigo;
+        return codigo;
     }
 
-    public void setCodigo(String Codigo) {
-        this.Codigo = Codigo;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
+    
+    
 
     public int getSaldoCuentaCliente() {
         return saldoCuentaCliente;

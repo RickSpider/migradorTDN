@@ -24,6 +24,18 @@ public class Sucursal {
     private Tipo pais;
     private Tipo departamento;
     private Tipo distrito;
+    private String direccion;
+    private Vendedor vendedor;
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    
 
     public Long getId() {
         return id;
@@ -111,6 +123,14 @@ public class Sucursal {
 
     public void setDistrito(Tipo distrito) {
         this.distrito = distrito;
+    }
+
+    public Vendedor getVendedor() {
+        return vendedor;
+    }
+
+    public void setVendedor(Vendedor vendedor) {
+        this.vendedor = vendedor;
     }
     
     
