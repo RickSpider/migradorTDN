@@ -72,6 +72,26 @@ public class Cliente {
     private int limiteCredito = 0;
     private String diasToleranciaView = "0";
     private int diasTolerancia = 0;
+    
+    private Tipo tipoVenta = new Tipo();
+    
+    private FormaPago formaPago;
+
+    public FormaPago getFormaPago() {
+        return formaPago;
+    }
+
+    public void setFormaPago(FormaPago formaPago) {
+        this.formaPago = formaPago;
+    }
+
+    public Tipo getTipoVenta() {
+        return tipoVenta;
+    }
+
+    public void setTipoVenta(Tipo tipoVenta) {
+        this.tipoVenta = tipoVenta;
+    }
 
     public Long getId() {
         return id;

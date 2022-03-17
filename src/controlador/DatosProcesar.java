@@ -11,11 +11,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.migradortdn.Config;
 import com.migradortdn.model.Cliente;
+import com.migradortdn.model.FormaPago;
 import com.migradortdn.model.Locacion;
 import com.migradortdn.model.Ruta;
 import com.migradortdn.model.Sucursal;
 import com.migradortdn.model.Tipo;
 import com.migradortdn.model.TipoCliente;
+import com.migradortdn.model.TipoProveedor;
 import com.migradortdn.model.UnidadNegocio;
 import com.migradortdn.model.Vendedor;
 import com.migradortdn.model.Zona;
@@ -236,6 +238,40 @@ public class DatosProcesar {
         
         return out;
         
+    }
+    
+    public ArrayList<TipoProveedor> procesarTipoProveedor(ArrayList<String[]> csvArray){
+    
+        ArrayList<TipoProveedor> out = new ArrayList<TipoProveedor>();
+        
+         for (String [] x : csvArray){
+        
+            TipoProveedor tp = new TipoProveedor();
+            tp.setDescripcion(x[1].trim());
+           
+            out.add(tp);
+        }
+         
+        return out;
+    }
+    
+    public ArrayList<FormaPago> procesarFormaPago(ArrayList<String[]> csvArray){
+    
+        ArrayList<FormaPago> out = new ArrayList<FormaPago>();
+        
+         for (String [] x : csvArray){
+        
+            FormaPago fp = new FormaPago();
+            fp.setDescripcion(x[1].trim());
+            fp.setCodigo(x[1].toString().trim());
+            fp.setCantidadCuotas(Integer.parseInt(x[2].toString()));
+            fp.setPlazoDias(Integer.parseInt(x[3].toString()));
+            fp.setDescripcionAbreviada(x[1].trim());
+            fp.getClase().setId(7552L); // clase referencias
+            out.add(fp);
+        }
+         
+        return out;
     }
     
 }

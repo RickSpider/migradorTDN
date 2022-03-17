@@ -7,6 +7,7 @@ package controlador;
 
 import com.migradortdn.Config;
 import com.migradortdn.model.Cliente;
+import com.migradortdn.model.FormaPago;
 import com.migradortdn.model.Ruta;
 import com.migradortdn.model.Sucursal;
 import com.migradortdn.model.Tipo;
@@ -25,7 +26,7 @@ public class ClienteDatosProcesar {
     public ArrayList<Cliente> procesarDatosClientes(
             ArrayList<String[]> csvArray, ArrayList<String[]> csvDepartamentos,
             ArrayList<String[]> csvCiudades, ArrayList<String[]> csvDistritos,
-            List<Vendedor> lVendedor, List<Zona> lZona, List<Ruta> lRuta, List<TipoCliente> lTipoCliente) {
+            List<Vendedor> lVendedor, List<Zona> lZona, List<Ruta> lRuta, List<TipoCliente> lTipoCliente, List<FormaPago> lFormaPago) {
 
         ArrayList<Cliente> lClientes = new ArrayList<Cliente>();
 
@@ -112,7 +113,7 @@ public class ClienteDatosProcesar {
                 Long id = new Long(2);
                 tipoCliente.setId(id);
                 cliente.setTipoCliente(tipoCliente);*/
-                    if (x[4].trim().length() < 11) {
+                    if (x[4].trim().length() < 10) {
 
                         Tipo tipoPersona = new Tipo();
                         tipoPersona.setId(354);
@@ -290,7 +291,19 @@ public class ClienteDatosProcesar {
                         }
 
                     }
-
+                    
+                    cliente.getTipoVenta().setId(7554);
+                    
+                    for (FormaPago x3 : lFormaPago){
+                    
+                       if (x[8].toString().trim().compareTo(x3.getDescripcion()) == 0){
+                       
+                           cliente.setFormaPago(x3);
+                           
+                       }
+                        
+                    }
+                    
                     lClientes.add(cliente);
 
                 }

@@ -8,7 +8,10 @@ package com.migradortdn;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.migradortdn.model.Cliente;
+import com.migradortdn.model.Data;
+import com.migradortdn.model.FormaPago;
 import com.migradortdn.model.Login;
+import com.migradortdn.model.TipoCliente;
 import com.migradortdn.model.Token;
 import com.migradortdn.model.Vendedor;
 import controlador.DatosProcesar;
@@ -17,6 +20,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.ProtocolException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -28,8 +32,9 @@ public class MigradorTDNBorrado {
 
        LeeCSV csv = new LeeCSV();
        
-       boolean cliente = false;
-       boolean vendedor = true;
+       boolean cliente = true;
+       boolean vendedor = false;
+       boolean formaPago = false;
      
        
 
@@ -40,7 +45,7 @@ public class MigradorTDNBorrado {
 
         con.setLink(Config.HOST + "/qualita-client/rest/login");
 
-        Login login = new Login("admin", "admin");
+        Login login = new Login("admin", "saricmaster$");
         //   Login login = new Login("admin", "admin");
 
         con.setBody(new Gson().toJson(login));
@@ -93,11 +98,93 @@ public class MigradorTDNBorrado {
             
             
         }
+        
+        
+        if (formaPago){
+                        
+            con = new ConexionHttps();
+
+            con.setLink(Config.HOST+Config.FORMAPAGO+Config.FORMAPAGOLISTA);
+            //System.out.println(con.getLink());
+            
+           
+            con.setToken(rToken.getAccessToken());
+            con.setBarerAutenticacion(true);
+             
+            con.setBody("");
+           
+            
+            
+          String json = con.getConexion(Config.GET);
+           
+           Data dataFomaPago = new Gson().fromJson( json, Data.class);
+        
+            Type arrayTC = new TypeToken<List<FormaPago>>(){}.getType();
+            
+            ArrayList<FormaPago> data =(new Gson().fromJson( new Gson().toJson(dataFomaPago.getData()) , arrayTC));
+            
+            
+            for (int i = 0; i < data.size() ; i++) {
+                con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.FORMAPAGO + "/"+data.get(i).getId());
+                
+                
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody("");
+                
+                System.out.println(con.getConexion(Config.DELETE));
+            }
+            
+            
+            
+            
+            
+        }
 
         
         //seccion clientes
         if(cliente){
             
+             con = new ConexionHttps();
+
+            con.setLink(Config.HOST+Config.CLIENTE+Config.CLIENTELISTA);
+            //System.out.println(con.getLink());
+            
+           
+            con.setToken(rToken.getAccessToken());
+            con.setBarerAutenticacion(true);
+             
+            con.setBody("");
+           
+            
+            
+          String json = con.getConexion(Config.GET);
+           
+           Data dataCliente = new Gson().fromJson( json, Data.class);
+        
+            Type arrayTC = new TypeToken<List<Cliente>>(){}.getType();
+            
+            ArrayList<Cliente> data =(new Gson().fromJson( new Gson().toJson(dataCliente.getData()) , arrayTC));
+            
+            
+            for (int i = 0; i < data.size() ; i++) {
+                con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.CLIENTE + "/"+data.get(i).getId());
+                
+                
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody("");
+                
+                System.out.println(con.getConexion(Config.DELETE));
+            }
          
 
         }

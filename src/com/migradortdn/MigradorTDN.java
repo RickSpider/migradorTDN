@@ -9,15 +9,19 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.migradortdn.model.Cliente;
 import com.migradortdn.model.Data;
+import com.migradortdn.model.FormaPago;
 import com.migradortdn.model.Login;
+import com.migradortdn.model.Proveedor;
 import com.migradortdn.model.Ruta;
 import com.migradortdn.model.TipoCliente;
+import com.migradortdn.model.TipoProveedor;
 import com.migradortdn.model.Token;
 import com.migradortdn.model.Vendedor;
 import com.migradortdn.model.Zona;
 import controlador.DatosProcesar;
 import controlador.ClienteDatosProcesar;
 import controlador.LeeCSV;
+import controlador.ProveedorDatosProcesar;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.ProtocolException;
@@ -41,7 +45,10 @@ public class MigradorTDN {
        boolean ruta = false;
        boolean vendedor = false;
        boolean tipoCliente = false;
+       boolean formaPago = false;
        boolean cliente = true;
+       boolean tipoProveedor = false;
+       boolean proveedor = false;
        
        
 
@@ -63,7 +70,7 @@ public class MigradorTDN {
 
         con.setLink(Config.HOST + "/qualita-client/rest/login");
 
-        Login login = new Login("admin", "admin");
+        Login login = new Login("admin", "saricmaster$");
         //   Login login = new Login("admin", "admin");
 
         con.setBody(new Gson().toJson(login));
@@ -74,7 +81,7 @@ public class MigradorTDN {
         rToken.setUsername(login.getUsername());
         
         if(zona){
-            
+            System.out.println("Cargando zona");
             ArrayList<String[]> csvArray = csv.leerArchivo("datos/QUALITA_ZONAVIEW_01.csv");
             
             ArrayList<Zona> lZona = dp.procesarZona(csvArray);
@@ -97,7 +104,7 @@ public class MigradorTDN {
         }
         
          if(ruta){
-            
+              System.out.println("Cargando Ruta");
             ArrayList<String[]> csvArray = csv.leerArchivo("datos/QUALITA_RUTAVIEW_01.csv");
             
             ArrayList<Ruta> lRuta = dp.procesarRuta(csvArray);
@@ -122,7 +129,7 @@ public class MigradorTDN {
         
         //seccion vendedores
         if (vendedor){
-        
+             System.out.println("Cargando Vendedor");
             ArrayList<String[]> csvArray = csv.leerArchivo("datos/vendedores/QUALITA_VENDEDORVIEW_01.csv");
             System.out.println("el csvArray Vendedores "+csvArray.size());
             
@@ -191,7 +198,7 @@ public class MigradorTDN {
         
         
         if(tipoCliente){
-            
+              System.out.println("Cargando TipoCliente");
             ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/QUALITA_TIPOCLIENTEVIEW_01.csv");
             
             ArrayList<TipoCliente> lTipocliente = dp.procesarTipoCliente(csvArray);
@@ -287,17 +294,64 @@ public class MigradorTDN {
             
             ArrayList<Vendedor> lVendedores = new Gson().fromJson(con.getConexion(Config.GET),  arrayVen);
         
+        //foma de pago (Condicion)
         
+        if (formaPago){
+        
+             System.out.println("Cargando formaPago (CONDICION)");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/QUALITA_CONDICIONVTA_01.csv");
+            
+            ArrayList<FormaPago> lFormaPago = dp.procesarFormaPago(csvArray);
+            
+            for( int i = 0 ; i <  lFormaPago.size() ; i++){
+            
+                con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.FORMAPAGO);
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody(new Gson().toJson(lFormaPago.get(i)));
+                System.out.println(new Gson().toJson(lFormaPago.get(i)));
+                System.out.println(con.getConexion(Config.POST));
+                
+            }
+            
+            
+        }
+        
+        con = new ConexionHttps();
+
+        con.setLink(Config.HOST + Config.FORMAPAGO + Config.FORMAPAGOLISTA);
+            //System.out.println(con.getLink());
+            
+           
+        con.setToken(rToken.getAccessToken());
+        con.setBarerAutenticacion(true);
+             
+        con.setBody("");
+           
+            
+           // System.out.println(con.getConexion(false));
+           
+        String jsonFp = con.getConexion(Config.GET);
+           
+        Data dataFomaPago = new Gson().fromJson( jsonFp, Data.class);
+        
+        Type arrayFP = new TypeToken<List<FormaPago>>(){}.getType();
+            
+        ArrayList<FormaPago> lTiposPagos =(new Gson().fromJson( new Gson().toJson(dataFomaPago.getData()) , arrayFP));
         
         //seccion clientes
         if(cliente){
-            
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/QUALITA_CLIENTEVIEW_02.csv");
+            System.out.println("Cargando cliente");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/QUALITA_CLIENTEVIEW_02-OLD.csv");
             
             ArrayList<Cliente> lClientes = cdp.procesarDatosClientes(csvArray, csvDepartamentos, csvCiudades, csvDistritos,
-                    lVendedores, lZona, lRuta, lTipocliente);
+                    lVendedores, lZona, lRuta, lTipocliente, lTiposPagos);
 
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < lClientes.size(); i++) {
                 con = new ConexionHttps();
 
                 con.setLink(Config.HOST + Config.CLIENTE);
@@ -312,8 +366,70 @@ public class MigradorTDN {
 
         }
         
-      
+        if (tipoProveedor){
         
+            System.out.println("Cargando Tipo Proveedor");
+            
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/proveedor/QUALITA_TIPOPROVEEDOR_01.csv");
+            
+            ArrayList<TipoProveedor> lTipoProveedor = dp.procesarTipoProveedor(csvArray);
+            
+             for( int i = 804 ; i <  lTipoProveedor.size() ; i++){
+            
+                con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.TIPOSPROVEEDORES);
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody(new Gson().toJson(lTipoProveedor.get(i)));
+                System.out.println(new Gson().toJson(lTipoProveedor.get(i)));
+                System.out.println(con.getConexion(Config.POST));
+                
+            }
+            
+        }
+        
+        con = new ConexionHttps();
+
+        con.setLink(Config.HOST + Config.TIPOSPROVEEDORES + Config.TIPOSPROVEEDORESLISTA);
+
+        con.setToken(rToken.getAccessToken());
+        con.setBarerAutenticacion(true);
+
+        con.setBody("");
+        
+        Data dataTipoProveedores = new Gson().fromJson( con.getConexion(Config.GET), Data.class);
+        
+        Type arrayTP = new TypeToken<List<TipoProveedor>>(){}.getType();
+            
+        ArrayList<TipoProveedor> lTipoProveedor =(new Gson().fromJson( new Gson().toJson(dataTipoProveedores.getData()) , arrayTP));
+      
+        if (proveedor){
+        
+            System.out.println("Cargando Proveedor");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/proveedor/QUALITA_PROVEEDORVIEW_01.csv");
+            
+            ProveedorDatosProcesar pdp = new ProveedorDatosProcesar();
+            
+            ArrayList<Proveedor> lProveedor = pdp.procesarDatosProveedores(csvArray, lTipoProveedor);
+
+            for (int i = 0; i < lProveedor.size(); i++) {
+                con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.PROVEEDOR);
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody(new Gson().toJson(lProveedor.get(i)));
+                System.out.println(new Gson().toJson(lProveedor.get(i)));
+                System.out.println(con.getConexion(Config.POST));
+            }
+
+            
+        }
 
         //Logout
         con = new ConexionHttps();
