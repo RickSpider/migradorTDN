@@ -49,6 +49,23 @@ public class ProductoDatosProcesar {
             p.getCodigoBarrasPrincipal().setCodigoBarras(x[11]);
             p.getCodigosBarras().add(p.getCodigoBarrasPrincipal());
             
+            int stocklote = (int) Double.parseDouble(x[14].trim());
+            switch(stocklote){
+                
+                case 0:{
+                    p.setCriterioControl(128L);
+                    break;
+                }
+                
+                
+                case 1:{
+                    p.setCriterioControl(21L);
+                    break;
+                }
+            
+            
+            }
+            
             for (Marca m : lMarca){
             
                 if (m.getDescripcion().compareTo(x[8].trim().toUpperCase())==0){
@@ -98,7 +115,7 @@ public class ProductoDatosProcesar {
             
             for (String[] s : csvArrayLinea){
             
-                if (s[4].trim().toUpperCase().compareTo(x[3].trim().toUpperCase())==0){
+                if (s[4].trim().toUpperCase().contains(x[3].trim().toUpperCase())){
                 
                     int linea = (int) Double.parseDouble(s[0].toString().trim());
                     

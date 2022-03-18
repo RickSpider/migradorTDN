@@ -43,6 +43,24 @@ public class Proveedor {
     private boolean activo = true;
     
     private Tipo pais = null;
+    
+    private boolean calcularRetencion = false;
+
+    public Tipo getPais() {
+        return pais;
+    }
+
+    public void setPais(Tipo pais) {
+        this.pais = pais;
+    }
+
+    public boolean isCalcularRetencion() {
+        return calcularRetencion;
+    }
+
+    public void setCalcularRetencion(boolean calcularRetencion) {
+        this.calcularRetencion = calcularRetencion;
+    }
 
     public boolean isActivo() {
         return activo;

@@ -64,7 +64,7 @@ public class Cliente {
     private String pedidosVentaView = "0";
     private String cequeCarteraView = "0";
     
-    private Boolean controlarLimiteCredito = true;
+    private Boolean controlarLimiteCredito = false;
     
     private String condicionVenta;
     

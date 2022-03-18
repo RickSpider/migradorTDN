@@ -632,7 +632,7 @@ public class MigradorTDN {
             ArrayList<Producto> lProducto = pdp.procesarDatosProducto(csvArrayProducto, csvArrayLinea, lProveedor, lUnidadMedidaBase
             , lUnidadMedida, lMarca);
             
-             for (int i = 0; i<3;i++){
+             for (int i = 0; i<30;i++){
              
                 con = new ConexionHttps();
 

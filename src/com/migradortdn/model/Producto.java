@@ -23,7 +23,7 @@ public class Producto {
     private Long lineaProducto;
     private Long marca;
     private ArrayList<Long>tiposImpuesto= new ArrayList<Long>();
-    private Long criterioControl = 128L;
+    private Long criterioControl;
     private boolean controlarFechaVencimiento = false;
     private ArrayList<Long>proveedores = new ArrayList<Long>();
     private Long proveedorPrincipal;
