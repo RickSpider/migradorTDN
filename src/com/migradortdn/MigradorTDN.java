@@ -11,16 +11,20 @@ import com.migradortdn.model.Cliente;
 import com.migradortdn.model.Data;
 import com.migradortdn.model.FormaPago;
 import com.migradortdn.model.Login;
+import com.migradortdn.model.Marca;
+import com.migradortdn.model.Producto;
 import com.migradortdn.model.Proveedor;
 import com.migradortdn.model.Ruta;
 import com.migradortdn.model.TipoCliente;
 import com.migradortdn.model.TipoProveedor;
 import com.migradortdn.model.Token;
+import com.migradortdn.model.UnidadMedida;
 import com.migradortdn.model.Vendedor;
 import com.migradortdn.model.Zona;
 import controlador.DatosProcesar;
 import controlador.ClienteDatosProcesar;
 import controlador.LeeCSV;
+import controlador.ProductoDatosProcesar;
 import controlador.ProveedorDatosProcesar;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -46,9 +50,14 @@ public class MigradorTDN {
        boolean vendedor = false;
        boolean tipoCliente = false;
        boolean formaPago = false;
-       boolean cliente = true;
+       boolean cliente = false;
        boolean tipoProveedor = false;
        boolean proveedor = false;
+       boolean unidadMedidaBase = false;
+       boolean unidadMedida = false;
+       boolean marca = false;
+       boolean producto = true;
+      
        
        
 
@@ -430,6 +439,218 @@ public class MigradorTDN {
 
             
         }
+        
+        //Seccion UnidadMedida
+        
+        ArrayList<String[]> csvArrayProducto = csv.leerArchivo("datos/producto/QUALITA_PRODUCTOSVIEW_01X3.csv");
+        
+        if (unidadMedidaBase){
+            
+            System.out.println("Cargando Unidad Medida Base");
+            
+            
+        
+            List<UnidadMedida> lUnidadBase = dp.procesarUnidadMedidaBase(csvArrayProducto);
+            
+            for (int i = 0; i<lUnidadBase.size();i++){
+            
+                 con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.UNIDADMEDIDA);
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody(new Gson().toJson(lUnidadBase.get(i)));
+                System.out.println(new Gson().toJson(lUnidadBase.get(i)));
+                System.out.println(con.getConexion(Config.POST));
+                
+            }
+
+        }
+        
+        if (unidadMedida){
+        
+            System.out.println("Cargando Unidad Medida");
+            
+            con = new ConexionHttps();
+
+            con.setLink(Config.HOST + Config.UNIDADMEDIDA + Config.UNIDADMEDIDALISTABASE);
+
+            con.setToken(rToken.getAccessToken());
+            con.setBarerAutenticacion(true);
+
+            con.setBody("");
+
+            Data dataUndBase = new Gson().fromJson( con.getConexion(Config.GET), Data.class);
+
+            Type arrayUND = new TypeToken<List<UnidadMedida>>(){}.getType();
+               
+            ArrayList<UnidadMedida> lUnidadMedidaBase =(new Gson().fromJson( new Gson().toJson(dataUndBase.getData()) , arrayUND));
+            
+            ArrayList<UnidadMedida> lUndM = dp.procesarUnidadMedida(csvArrayProducto, lUnidadMedidaBase);
+            
+            for (int i = 0; i<lUndM.size();i++){
+                
+                /*UnidadMedida mm = lUndM.get(i);
+            
+                System.out.println(mm.getDescripcion() +" "+ mm.getUnidadContenida().getDescripcion()+" " +mm.getCantidad() );*/
+                
+                 con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.UNIDADMEDIDA);
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody(new Gson().toJson(lUndM.get(i)));
+                System.out.println(new Gson().toJson(lUndM.get(i)));
+                System.out.println(con.getConexion(Config.POST));
+                
+            }
+            
+            
+            /*for (UnidadMedida x : lUnidadMedidaBase){
+            
+                System.out.println(x.getDescripcion());
+                
+            }*/
+            
+        }
+        
+        if (marca){
+        
+            System.out.println("Cargando Unidad Medida");
+            
+            ArrayList<Marca> lMarca = dp.procesarMarca(csvArrayProducto);
+            
+            for (int i = 0; i<lMarca.size();i++){
+            
+               // System.out.println(lMarca.get(i).getDescripcion());
+               
+                 con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.MARCA);
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody(new Gson().toJson(lMarca.get(i)));
+                System.out.println(new Gson().toJson(lMarca.get(i)));
+                System.out.println(con.getConexion(Config.POST));
+                
+                
+            }
+                       
+            
+        }
+        
+        if (producto){
+            
+            ArrayList<String[]> csvArrayLinea = csv.leerArchivo("datos/producto/linea_producto.csv");
+            
+            // proveedor
+            
+            System.out.println("Lista Proveedor");
+            
+            con = new ConexionHttps();
+
+            con.setLink(Config.HOST + Config.PROVEEDOR + Config.PROVEEDORLISTA);
+
+            con.setToken(rToken.getAccessToken());
+            con.setBarerAutenticacion(true);
+
+            con.setBody("");
+
+            Data dataProveedor = new Gson().fromJson( con.getConexion(Config.GET), Data.class);
+
+            Type arrayP = new TypeToken<List<Proveedor>>(){}.getType();
+               
+            ArrayList<Proveedor> lProveedor =(new Gson().fromJson( new Gson().toJson(dataProveedor.getData()) , arrayP));
+            System.out.println("tamaño proveedor "+lProveedor.size() );
+            //unidad medida base
+            
+            System.out.println("Unidad Medida Base");
+            
+            con = new ConexionHttps();
+
+            con.setLink(Config.HOST + Config.UNIDADMEDIDA + Config.UNIDADMEDIDALISTABASE);
+
+            con.setToken(rToken.getAccessToken());
+            con.setBarerAutenticacion(true);
+
+            con.setBody("");
+
+            Data dataUndBase = new Gson().fromJson( con.getConexion(Config.GET), Data.class);
+
+            Type arrayUNDbase= new TypeToken<List<UnidadMedida>>(){}.getType();
+               
+            ArrayList<UnidadMedida> lUnidadMedidaBase =(new Gson().fromJson( new Gson().toJson(dataUndBase.getData()) , arrayUNDbase));
+            
+            // unidad medida
+            
+            System.out.println("Unidad Medida");
+             
+            con = new ConexionHttps();
+
+            con.setLink(Config.HOST + Config.UNIDADMEDIDA + Config.UNIDADMEDIDALISTA);
+
+            con.setToken(rToken.getAccessToken());
+            con.setBarerAutenticacion(true);
+
+            con.setBody("");
+
+            Data dataUnd = new Gson().fromJson( con.getConexion(Config.GET), Data.class);
+
+            Type arrayUND = new TypeToken<List<UnidadMedida>>(){}.getType();
+               
+            ArrayList<UnidadMedida> lUnidadMedida =(new Gson().fromJson( new Gson().toJson(dataUnd.getData()) , arrayUND));
+            
+            System.out.println("Unidad Medida size "+lUnidadMedida.size());
+            
+            // marca
+            
+            System.out.println("Marca");            
+            
+            con = new ConexionHttps();
+
+            con.setLink(Config.HOST + Config.MARCA + Config.MARCALISTA);
+
+            con.setToken(rToken.getAccessToken());
+            con.setBarerAutenticacion(true);
+
+            con.setBody("");
+
+            Data dataMarca = new Gson().fromJson( con.getConexion(Config.GET), Data.class);
+
+            Type arrayM = new TypeToken<List<Marca>>(){}.getType();
+               
+            ArrayList<Marca> lMarca =(new Gson().fromJson( new Gson().toJson(dataMarca.getData()) , arrayM));
+        
+            //Producto
+            ProductoDatosProcesar pdp = new ProductoDatosProcesar();
+            ArrayList<Producto> lProducto = pdp.procesarDatosProducto(csvArrayProducto, csvArrayLinea, lProveedor, lUnidadMedidaBase
+            , lUnidadMedida, lMarca);
+            
+             for (int i = 0; i<3;i++){
+             
+                con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.PRODUCTO);
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody(new Gson().toJson(lProducto.get(i)));
+                System.out.println(new Gson().toJson(lProducto.get(i)));
+                System.out.println(con.getConexion(Config.POST));
+                 
+                 
+             }
+            
+        }
+        
+        
 
         //Logout
         con = new ConexionHttps();
@@ -445,5 +666,7 @@ public class MigradorTDN {
         System.out.println((new Gson().toJson(rToken)));
 
     }
+    
+   
 
 }
