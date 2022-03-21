@@ -44,7 +44,7 @@ public class Proveedor {
     
     private Tipo pais = null;
     
-    private boolean calcularRetencion = false;
+    private boolean calcularRetencion = true;
 
     public Tipo getPais() {
         return pais;

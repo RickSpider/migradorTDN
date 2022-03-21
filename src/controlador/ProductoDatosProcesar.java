@@ -23,8 +23,41 @@ public class ProductoDatosProcesar {
         ArrayList<Producto> out = new ArrayList<Producto>();
         
         for (String[] x : csvArrayProducto){
-        
+            
             Producto p = new Producto();
+            boolean encontro = false;
+            
+            for (Producto x1 : out){
+            
+                if (x1.getNombre().compareTo(x[1].trim())==0){
+                    
+                    p = x1;
+                    encontro = true;
+                    break;
+                    
+                }
+                
+            }
+            
+            if (encontro){
+            
+                
+                for (UnidadMedida u : lUnidadMedida ){
+
+                     if (u.getDescripcion().compareTo(x[16].toString().trim().toUpperCase()) == 0
+                            && u.getCantidad() == ((int) Double.parseDouble(x[17].toString().replace(",", ".")))
+                            && u.getUnidadContenida().getDescripcion().toString().compareTo(x[15].toString().trim().toUpperCase()) == 0) {
+
+                       p.getUnidadesMedida().add(u.getId());
+
+                       break;
+                    }
+
+                }
+                
+                continue;
+            }
+           
             
             p.setNombre(x[1].trim());
             p.getLocaciones().add(1L);
