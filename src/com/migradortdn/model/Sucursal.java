@@ -26,6 +26,16 @@ public class Sucursal {
     private Tipo distrito;
     private String direccion;
     private Vendedor vendedor;
+    
+    private String ubicacionGeografica = "";
+
+    public String getUbicacionGeografica() {
+        return ubicacionGeografica;
+    }
+
+    public void setUbicacionGeografica(String ubicacionGeografica) {
+        this.ubicacionGeografica = ubicacionGeografica;
+    }
 
     public String getDireccion() {
         return direccion;

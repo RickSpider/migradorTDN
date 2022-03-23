@@ -64,12 +64,12 @@ public class Cliente {
     private String pedidosVentaView = "0";
     private String cequeCarteraView = "0";
     
-    private Boolean controlarLimiteCredito = false;
+    private Boolean controlarLimiteCredito = true;
     
     private String condicionVenta;
     
     private String limiteCreditoView = "0";
-    private int limiteCredito = 0;
+    private Long limiteCredito = 0L;
     private String diasToleranciaView = "0";
     private int diasTolerancia = 0;
     
@@ -351,13 +351,15 @@ public class Cliente {
         this.limiteCreditoView = limiteCreditoView;
     }
 
-    public int getLimiteCredito() {
+    public Long getLimiteCredito() {
         return limiteCredito;
     }
 
-    public void setLimiteCredito(int limiteCredito) {
+    public void setLimiteCredito(Long limiteCredito) {
         this.limiteCredito = limiteCredito;
     }
+
+    
 
     public String getDiasToleranciaView() {
         return diasToleranciaView;

@@ -318,8 +318,11 @@ public class DatosProcesar {
 
             for (UnidadMedida um : out) {
 
-                if (um.getDescripcion().compareTo(x[16].toString().trim().toUpperCase()) == 0
-                        && um.getCantidad() == ((int) Double.parseDouble(x[17].toString().replace(",", ".")))
+                int cant = (int) Double.parseDouble(x[17].toString().replace(",", "."));
+                
+                if (um.getDescripcion().compareTo(x[16].toString().trim().toUpperCase()+" - "+cant) == 0
+                        //&& um.getCantidad() == ((int) Double.parseDouble(x[17].toString().replace(",", ".")))
+                        && um.getCantidad() == cant
                         && um.getUnidadContenida().getDescripcion().toString().compareTo(x[15].toString().trim().toUpperCase()) == 0) {
 
                     existe = true;
@@ -332,10 +335,10 @@ public class DatosProcesar {
                 if (x[16].toString().trim().length() > 0) {
 
                     UnidadMedida u = new UnidadMedida();
-                    u.setDescripcion(x[16].toString().trim().toUpperCase());
-                    u.setAbreviatura(x[16].toString().trim().toUpperCase());
-                    double cantidad = Double.parseDouble(x[17].toString().replace(",", "."));
-                    u.setCantidad(((int) cantidad));
+                   // double cantidad = Double.parseDouble(x[17].toString().replace(",", "."));
+                    u.setCantidad(((int) Double.parseDouble(x[17].toString().replace(",", "."))));
+                    u.setDescripcion(x[16].toString().trim().toUpperCase()+" - "+u.getCantidad());
+                    u.setAbreviatura(u.getDescripcion());
 
                     for (UnidadMedida x1 : lUnidadMedidaBase) {
 

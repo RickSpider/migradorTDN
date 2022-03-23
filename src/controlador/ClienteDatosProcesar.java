@@ -26,7 +26,8 @@ public class ClienteDatosProcesar {
     public ArrayList<Cliente> procesarDatosClientes(
             ArrayList<String[]> csvArray, ArrayList<String[]> csvDepartamentos,
             ArrayList<String[]> csvCiudades, ArrayList<String[]> csvDistritos,
-            List<Vendedor> lVendedor, List<Zona> lZona, List<Ruta> lRuta, List<TipoCliente> lTipoCliente, List<FormaPago> lFormaPago) {
+            List<Vendedor> lVendedor, List<Zona> lZona, List<Ruta> lRuta, List<TipoCliente> lTipoCliente, 
+            List<FormaPago> lFormaPago, ArrayList<String[]> csvArrayCoordenadas ) {
 
         ArrayList<Cliente> lClientes = new ArrayList<Cliente>();
 
@@ -48,13 +49,19 @@ public class ClienteDatosProcesar {
                     Tipo tipoDocumento = new Tipo();
                     //tipoDocumento.setTipoTipo(tipoTipoDocumento);
 
-                    tipoDocumento.setId(Config.IDRUC);
+                    //tipoDocumento.setId(Config.IDRUC);
 
-                    /*if (x[3].trim().compareTo("RUC") == 0) {
-                    tipoDocumento.setId(Config.IDRUC);
-                //}
+                    if (x[4].trim().contains("-")) {
+                        
+                        tipoDocumento.setId(Config.IDRUC);
+                        
+                    }else{
+                    
+                        tipoDocumento.setId(Config.IDCED);
+                        
+                    }
 
-                if (x[3].trim().compareTo("CED") == 0) {
+                /*if (x[3].trim().compareTo("CED") == 0) {
                     tipoDocumento.setId(Config.IDCED);
                 }
 
@@ -133,7 +140,7 @@ public class ClienteDatosProcesar {
 
                     cliente.setCondicionVenta(x[8].trim());
                     cliente.setCodigo(x[1].trim());
-
+                    
                     Sucursal matriz = new Sucursal();
                     matriz.setDescripcion("Matriz");
                     matriz.setCodigoSucursal("001");
@@ -281,6 +288,18 @@ public class ClienteDatosProcesar {
                                     }
 
                                 }
+                                
+                                String codSubCod = x[1].trim()+x[2].trim();
+                               
+                                for (String [] geo : csvArrayCoordenadas){
+                                    //System.out.println(geo[2].trim());
+                                    if (codSubCod.compareTo(geo[1].trim()) == 0){
+                                    
+                                        sucursal.setUbicacionGeografica( "LAT: "+geo[5]+" ; LONG: "+ geo[6]);
+                                        break;
+                                    }
+                                    
+                                }
 
                                 cliente.getSucursales().add(sucursal);
 
@@ -303,6 +322,10 @@ public class ClienteDatosProcesar {
                        }
                         
                     }
+                    
+                    cliente.setLimiteCredito((long) Double.parseDouble(x[17].toString().replace(",", ".")));
+                    cliente.setLimiteCreditoView( String.valueOf(cliente.getLimiteCredito()) );
+                    
                     
                     lClientes.add(cliente);
 

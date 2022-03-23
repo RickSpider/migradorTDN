@@ -56,7 +56,7 @@ public class MigradorTDN {
        boolean unidadMedidaBase = false;
        boolean unidadMedida = false;
        boolean marca = false;
-       boolean producto = true;
+       boolean producto = false;
       
        
        
@@ -354,11 +354,14 @@ public class MigradorTDN {
         
         //seccion clientes
         if(cliente){
+            
+            ArrayList<String[]> csvArrayCoordenadas = csv.leerArchivo("datos/clientes/Coordenadas_clientes.csv");
+            
             System.out.println("Cargando cliente");
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/QUALITA_CLIENTEVIEW_02-OLD.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/QUALITA_CLIENTEVIEW_22032022.csv");
             
             ArrayList<Cliente> lClientes = cdp.procesarDatosClientes(csvArray, csvDepartamentos, csvCiudades, csvDistritos,
-                    lVendedores, lZona, lRuta, lTipocliente, lTiposPagos);
+                    lVendedores, lZona, lRuta, lTipocliente, lTiposPagos, csvArrayCoordenadas);
 
             for (int i = 0; i < lClientes.size(); i++) {
                 con = new ConexionHttps();
@@ -370,7 +373,10 @@ public class MigradorTDN {
 
                 con.setBody(new Gson().toJson(lClientes.get(i)));
                 System.out.println(new Gson().toJson(lClientes.get(i)));
+                
                 System.out.println(con.getConexion(Config.POST));
+              
+                //System.out.println(new Gson().toJson(lClientes.get(i)));
             }
 
         }
@@ -632,7 +638,7 @@ public class MigradorTDN {
             ArrayList<Producto> lProducto = pdp.procesarDatosProducto(csvArrayProducto, csvArrayLinea, lProveedor, lUnidadMedidaBase
             , lUnidadMedida, lMarca);
             
-             for (int i = 0; i<6 ;i++){
+             for (int i = 0; i<2 ;i++){
              
                 con = new ConexionHttps();
 
