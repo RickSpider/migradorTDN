@@ -26,8 +26,8 @@ public class ClienteDatosProcesar {
     public ArrayList<Cliente> procesarDatosClientes(
             ArrayList<String[]> csvArray, ArrayList<String[]> csvDepartamentos,
             ArrayList<String[]> csvCiudades, ArrayList<String[]> csvDistritos,
-            List<Vendedor> lVendedor, List<Zona> lZona, List<Ruta> lRuta, List<TipoCliente> lTipoCliente, 
-            List<FormaPago> lFormaPago, ArrayList<String[]> csvArrayCoordenadas ) {
+            List<Vendedor> lVendedor, List<Zona> lZona, List<Ruta> lRuta, List<TipoCliente> lTipoCliente,
+            List<FormaPago> lFormaPago, ArrayList<String[]> csvArrayCoordenadas) {
 
         ArrayList<Cliente> lClientes = new ArrayList<Cliente>();
 
@@ -50,18 +50,17 @@ public class ClienteDatosProcesar {
                     //tipoDocumento.setTipoTipo(tipoTipoDocumento);
 
                     //tipoDocumento.setId(Config.IDRUC);
-
                     if (x[4].trim().contains("-")) {
-                        
+
                         tipoDocumento.setId(Config.IDRUC);
-                        
-                    }else{
-                    
+
+                    } else {
+
                         tipoDocumento.setId(Config.IDCED);
-                        
+
                     }
 
-                /*if (x[3].trim().compareTo("CED") == 0) {
+                    /*if (x[3].trim().compareTo("CED") == 0) {
                     tipoDocumento.setId(Config.IDCED);
                 }
 
@@ -91,7 +90,27 @@ public class ClienteDatosProcesar {
 
                     for (String[] c : csvCiudades) {
 
-                        if (c[2].compareTo(x[11].trim()) == 0) {
+                        String sCiudad = x[11].trim();
+
+                        if (sCiudad.compareTo("ASUNCION") == 0) {
+
+                            sCiudad = "ASUNCION (DISTRITO)";
+
+                        }
+
+                        if (sCiudad.compareTo("PDTE. FRANCO") == 0) {
+
+                            sCiudad = "PUERTO PTE. FRANCO";
+
+                        }
+
+                        if (sCiudad.compareTo("J.A.SALDIVAR-50K") == 0 || sCiudad.compareTo("J.AUGUSTO SALDIVAR") == 0) {
+
+                            sCiudad = "J.AUGUSTO SALDIVAR";
+
+                        }
+
+                        if (c[2].compareTo(sCiudad) == 0) {
 
                             Tipo ciudad = new Tipo();
                             ciudad.setId(Long.parseLong(c[0]));
@@ -140,11 +159,45 @@ public class ClienteDatosProcesar {
 
                     cliente.setCondicionVenta(x[8].trim());
                     cliente.setCodigo(x[1].trim());
-                    
+
                     Sucursal matriz = new Sucursal();
                     matriz.setDescripcion("Matriz");
                     matriz.setCodigoSucursal("001");
-                    matriz.setCiudad(x[11].trim());
+
+                    for (String[] s : csvCiudades) {
+
+                        String sCiudad = x[11].trim();
+
+                        if (sCiudad.compareTo("ASUNCION") == 0) {
+
+                            sCiudad = "ASUNCION (DISTRITO)";
+
+                        }
+
+                        if (sCiudad.compareTo("PDTE. FRANCO") == 0) {
+
+                            sCiudad = "PUERTO PTE. FRANCO";
+
+                        }
+
+                        if (sCiudad.compareTo("J.A.SALDIVAR-50K") == 0 || sCiudad.compareTo("J.AUGUSTO SALDIVAR") == 0) {
+
+                            sCiudad = "J.AUGUSTO SALDIVAR";
+
+                        }
+
+                        if (s[2].compareTo(sCiudad) == 0) {
+
+                            Tipo ciudad = new Tipo();
+                            ciudad.setId(Long.parseLong(s[0]));
+                            //cliente.setCiudad(ciudad);
+                            matriz.setCiudad(ciudad);
+                            break;
+                        }
+
+                    }
+
+                    // matriz.setCiudad(x[11].trim());
                     matriz.setDireccion(x[7].trim());
                     matriz.setTelefono(cliente.getTelefono());
                     matriz.setPais(pais);
@@ -228,7 +281,40 @@ public class ClienteDatosProcesar {
 
                                 c = c + 1;
 
-                                sucursal.setCiudad(x2[11].trim());
+                                //sucursal.setCiudad(x2[11].trim());
+                                for (String[] s : csvCiudades) {
+
+                                    String sCiudad = x2[11].trim();
+
+                                    if (sCiudad.compareTo("ASUNCION") == 0) {
+
+                                        sCiudad = "ASUNCION (DISTRITO)";
+
+                                    }
+
+                                    if (sCiudad.compareTo("PDTE. FRANCO") == 0) {
+
+                                        sCiudad = "PUERTO PTE. FRANCO";
+
+                                    }
+
+                                    if (sCiudad.compareTo("J.A.SALDIVAR-50K") == 0 || sCiudad.compareTo("J.AUGUSTO SALDIVAR") == 0) {
+
+                                        sCiudad = "J.AUGUSTO SALDIVAR";
+
+                                    }
+
+                                    if (s[2].compareTo(sCiudad) == 0) {
+
+                                        Tipo ciudad = new Tipo();
+                                        ciudad.setId(Long.parseLong(s[0]));
+                                        //cliente.setCiudad(ciudad);
+                                        sucursal.setCiudad(ciudad);
+                                        break;
+                                    }
+
+                                }
+
                                 sucursal.setDireccion(x2[7].trim());
                                 sucursal.setTelefono(cliente.getTelefono());
                                 sucursal.setPais(pais);
@@ -288,45 +374,42 @@ public class ClienteDatosProcesar {
                                     }
 
                                 }
-                                
-                                String codSubCod = x[1].trim()+x[2].trim();
-                               
-                                for (String [] geo : csvArrayCoordenadas){
+
+                                String codSubCod = x[1].trim() + x[2].trim();
+
+                                for (String[] geo : csvArrayCoordenadas) {
                                     //System.out.println(geo[2].trim());
-                                    if (codSubCod.compareTo(geo[1].trim()) == 0){
-                                    
-                                        sucursal.setUbicacionGeografica( "LAT: "+geo[5]+" ; LONG: "+ geo[6]);
+                                    if (codSubCod.compareTo(geo[1].trim()) == 0) {
+
+                                        sucursal.setUbicacionGeografica("LAT: " + geo[5] + " ; LONG: " + geo[6]);
                                         break;
                                     }
-                                    
+
                                 }
 
                                 cliente.getSucursales().add(sucursal);
-
-                                
 
                             }
 
                         }
 
                     }
-                    
+
                     cliente.getTipoVenta().setId(7554);
-                    
-                    for (FormaPago x3 : lFormaPago){
-                    
-                       if (x[8].toString().trim().compareTo(x3.getDescripcion()) == 0){
-                       
-                           cliente.setFormaPago(x3);
-                           
-                       }
-                        
+
+                    for (FormaPago x3 : lFormaPago) {
+
+                        if (x[8].toString().trim().compareTo(x3.getDescripcion()) == 0) {
+
+                            cliente.setFormaPago(x3);
+
+                        }
+
                     }
-                    
+
                     cliente.setLimiteCredito((long) Double.parseDouble(x[17].toString().replace(",", ".")));
-                    cliente.setLimiteCreditoView( String.valueOf(cliente.getLimiteCredito()) );
-                    
-                    
+                    cliente.setLimiteCreditoView(String.valueOf(cliente.getLimiteCredito()));
+
                     lClientes.add(cliente);
 
                 }

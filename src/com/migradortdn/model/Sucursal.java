@@ -17,7 +17,10 @@ public class Sucursal {
     private String codigoSucursal;
     private String descripcion;
     private String telefono;
-    private String ciudad;
+   //private String ciudad;
+    
+    private Tipo ciudad;
+    
     
     private Zona zona;
     private Ruta ruta;
@@ -87,14 +90,14 @@ public class Sucursal {
         this.telefono = telefono;
     }
 
-    public String getCiudad() {
+    public Tipo getCiudad() {
         return ciudad;
     }
 
-    public void setCiudad(String ciudad) {
+    public void setCiudad(Tipo ciudad) {
         this.ciudad = ciudad;
     }
-
+    
     public Zona getZona() {
         return zona;
     }

@@ -56,7 +56,7 @@ public class MigradorTDN {
        boolean unidadMedidaBase = false;
        boolean unidadMedida = false;
        boolean marca = false;
-       boolean producto = false;
+       boolean producto = true;
       
        
        
@@ -363,7 +363,7 @@ public class MigradorTDN {
             ArrayList<Cliente> lClientes = cdp.procesarDatosClientes(csvArray, csvDepartamentos, csvCiudades, csvDistritos,
                     lVendedores, lZona, lRuta, lTipocliente, lTiposPagos, csvArrayCoordenadas);
 
-            for (int i = 0; i < lClientes.size(); i++) {
+            for (int i = 3086; i < 3087 ; i++) {
                 con = new ConexionHttps();
 
                 con.setLink(Config.HOST + Config.CLIENTE);
@@ -389,7 +389,7 @@ public class MigradorTDN {
             
             ArrayList<TipoProveedor> lTipoProveedor = dp.procesarTipoProveedor(csvArray);
             
-             for( int i = 804 ; i <  lTipoProveedor.size() ; i++){
+             for( int i = 0 ; i <  lTipoProveedor.size() ; i++){
             
                 con = new ConexionHttps();
 
