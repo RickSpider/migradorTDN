@@ -82,6 +82,13 @@ public class ProductoDatosProcesar {
             p.getCodigoBarrasPrincipal().setCodigoBarras(x[11]);
             p.getCodigosBarras().add(p.getCodigoBarrasPrincipal());
             
+            if (x[18].trim().compareTo("T")==0){
+            
+                p.setEsProductoImportacion(true);
+                
+            }
+            
+            
             int stocklote = (int) Double.parseDouble(x[14].trim());
             switch(stocklote){
                 
@@ -115,6 +122,7 @@ public class ProductoDatosProcesar {
                 
                     p.setUnidadMedidaBase(ub.getId());
                     p.getUnidadesMedida().add(ub.getId());
+                    p.setUnidadMedidaContenida(ub.getId());
                     break;
                 }                
                 
@@ -130,6 +138,8 @@ public class ProductoDatosProcesar {
                         && u.getUnidadContenida().getDescripcion().toString().compareTo(x[15].toString().trim().toUpperCase()) == 0) {
 
                    p.getUnidadesMedida().add(u.getId());
+                   p.setPresentacion(u.getId());
+                   p.setContenido(cant);
                  
                    break;
                 }
@@ -163,6 +173,7 @@ public class ProductoDatosProcesar {
                 
             }
             
+           
             
             out.add(p);
             

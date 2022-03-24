@@ -31,15 +31,83 @@ public class Producto {
     private ArrayList<Long> locaciones = new ArrayList<Long>();
     private Long unidadMedidaBase;
     private ArrayList<Long> unidadesMedida = new ArrayList<Long>();
-    private boolean controlStrock = true;
+    private boolean controlStock = true;
+    private boolean esProductoImportacion = false;
+    private boolean incluirEnOrdenesCompra = true;
+    private boolean itemCompra = true;
+    private boolean itemVenta = true;
+    
+    private Long presentacion;
+    private Long unidadMedidaContenida; 
+    private int contenido;
 
-    public boolean isControlStrock() {
-        return controlStrock;
+    public Long getPresentacion() {
+        return presentacion;
     }
 
-    public void setControlStrock(boolean controlStrock) {
-        this.controlStrock = controlStrock;
+    public void setPresentacion(Long presentacion) {
+        this.presentacion = presentacion;
     }
+
+    public Long getUnidadMedidaContenida() {
+        return unidadMedidaContenida;
+    }
+
+    public void setUnidadMedidaContenida(Long unidadMedidaContenida) {
+        this.unidadMedidaContenida = unidadMedidaContenida;
+    }
+
+    public int getContenido() {
+        return contenido;
+    }
+
+    public void setContenido(int contenido) {
+        this.contenido = contenido;
+    }
+   
+    
+    
+    public boolean isControlStock() {
+        return controlStock;
+    }
+
+    public void setControlStock(boolean controlStock) {
+        this.controlStock = controlStock;
+    }
+
+    public boolean isEsProductoImportacion() {
+        return esProductoImportacion;
+    }
+
+    public void setEsProductoImportacion(boolean esProductoImportacion) {
+        this.esProductoImportacion = esProductoImportacion;
+    }
+
+    public boolean isIncluirEnOrdenesCompra() {
+        return incluirEnOrdenesCompra;
+    }
+
+    public void setIncluirEnOrdenesCompra(boolean incluirEnOrdenesCompra) {
+        this.incluirEnOrdenesCompra = incluirEnOrdenesCompra;
+    }
+
+    public boolean isItemCompra() {
+        return itemCompra;
+    }
+
+    public void setItemCompra(boolean itemCompra) {
+        this.itemCompra = itemCompra;
+    }
+
+    public boolean isItemVenta() {
+        return itemVenta;
+    }
+
+    public void setItemVenta(boolean itemVenta) {
+        this.itemVenta = itemVenta;
+    }
+    
+    
 
     public Long getUnidadMedidaBase() {
         return unidadMedidaBase;

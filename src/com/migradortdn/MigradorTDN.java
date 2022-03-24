@@ -57,9 +57,6 @@ public class MigradorTDN {
        boolean unidadMedida = false;
        boolean marca = false;
        boolean producto = true;
-      
-       
-       
 
         String[] archivos = {"datos/ciudad.csv", "datos/departamento.csv", "datos/distrito.csv"};
 
@@ -448,7 +445,7 @@ public class MigradorTDN {
         
         //Seccion UnidadMedida
         
-        ArrayList<String[]> csvArrayProducto = csv.leerArchivo("datos/producto/QUALITA_PRODUCTOSVIEW_01X3.csv");
+        ArrayList<String[]> csvArrayProducto = csv.leerArchivo("datos/producto/QUALITA_PRODUCTOSVIEW_01_USAR.csv");
         
         if (unidadMedidaBase){
             
@@ -638,7 +635,7 @@ public class MigradorTDN {
             ArrayList<Producto> lProducto = pdp.procesarDatosProducto(csvArrayProducto, csvArrayLinea, lProveedor, lUnidadMedidaBase
             , lUnidadMedida, lMarca);
             
-             for (int i = 0; i<2 ;i++){
+             for (int i = 0; i<4 ;i++){
              
                 con = new ConexionHttps();
 
