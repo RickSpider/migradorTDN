@@ -15,7 +15,7 @@ public class Producto {
  
     private Long id;
     private int estado = 17;
-    private int claseProducto = 1;
+    private int claseProducto = 2;
     private ArrayList<CodigoBarras> codigosBarras = new ArrayList<CodigoBarras>();
     private CodigoBarras codigoBarrasPrincipal;
     private ArrayList<Object>atributos = new ArrayList<Object>();

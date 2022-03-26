@@ -78,9 +78,22 @@ public class ProductoDatosProcesar {
                 
             }
             
+            String codigoBarra = "";
+            
+            if (x[11].trim().length() > 0){
+        
+                codigoBarra = x[11].trim();
+                
+            }else{
+            
+                codigoBarra = x[0].trim();
+                
+            }
+              
             p.setCodigoBarrasPrincipal(new CodigoBarras());
-            p.getCodigoBarrasPrincipal().setCodigoBarras(x[11]);
+            p.getCodigoBarrasPrincipal().setCodigoBarras(codigoBarra);
             p.getCodigosBarras().add(p.getCodigoBarrasPrincipal());
+            
             
             if (x[18].trim().compareTo("T")==0){
             
@@ -161,7 +174,9 @@ public class ProductoDatosProcesar {
             
             for (String[] s : csvArrayLinea){
             
-                if (s[4].trim().toUpperCase().contains(x[3].trim().toUpperCase())){
+                String lienea = x[3].trim().replace("FRACC.", "FRACCIONADO").replace("PROD.", "PROD ").replace("GATOS", "GATO");
+                
+                if (s[4].trim().toUpperCase().contains(lienea.toUpperCase())){
                 
                     int linea = (int) Double.parseDouble(s[0].toString().trim());
                     
