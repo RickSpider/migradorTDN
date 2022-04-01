@@ -65,4 +65,8 @@ public class Config {
     //Producto
     public static String PRODUCTO = "/qualita-client/rest/productos";
     
+    
+    //Comprobante ntccliente
+    
+    public static String COMPROBANTEVENTA = "/qualita-client/rest/comprobanteventa";
 }

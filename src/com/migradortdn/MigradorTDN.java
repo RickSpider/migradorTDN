@@ -8,6 +8,7 @@ package com.migradortdn;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.migradortdn.model.Cliente;
+import com.migradortdn.model.Comprobante;
 import com.migradortdn.model.Data;
 import com.migradortdn.model.FormaPago;
 import com.migradortdn.model.Login;
@@ -23,13 +24,17 @@ import com.migradortdn.model.Vendedor;
 import com.migradortdn.model.Zona;
 import controlador.DatosProcesar;
 import controlador.ClienteDatosProcesar;
+import controlador.ComprobanteDatosProcesar;
 import controlador.LeeCSV;
 import controlador.ProductoDatosProcesar;
 import controlador.ProveedorDatosProcesar;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.ProtocolException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,7 +46,7 @@ public class MigradorTDN {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws ProtocolException, IOException {
+    public static void main(String[] args) throws ProtocolException, IOException, ParseException {
 
        LeeCSV csv = new LeeCSV();
        
@@ -57,6 +62,7 @@ public class MigradorTDN {
        boolean unidadMedida = false;
        boolean marca = false;
        boolean producto = true;
+       boolean comprbanteNTCCliente = false;
 
         String[] archivos = {"datos/ciudad.csv", "datos/departamento.csv", "datos/distrito.csv"};
 
@@ -360,7 +366,7 @@ public class MigradorTDN {
             ArrayList<Cliente> lClientes = cdp.procesarDatosClientes(csvArray, csvDepartamentos, csvCiudades, csvDistritos,
                     lVendedores, lZona, lRuta, lTipocliente, lTiposPagos, csvArrayCoordenadas);
 
-            for (int i = 3086; i < 3087 ; i++) {
+            for (int i = 0; i < lClientes.size() ; i++) { //retail 3086
                 con = new ConexionHttps();
 
                 con.setLink(Config.HOST + Config.CLIENTE);
@@ -445,7 +451,7 @@ public class MigradorTDN {
         
         //Seccion UnidadMedida
         
-        ArrayList<String[]> csvArrayProducto = csv.leerArchivo("datos/producto/QUALITA_PRODUCTOSVIEW_01.csv");
+        ArrayList<String[]> csvArrayProducto = csv.leerArchivo("datos/producto/QUALITA_PRODUCTOSVIEW_30032022.csv");
         
         if (unidadMedidaBase){
             
@@ -635,7 +641,7 @@ public class MigradorTDN {
             ArrayList<Producto> lProducto = pdp.procesarDatosProducto(csvArrayProducto, csvArrayLinea, lProveedor, lUnidadMedidaBase
             , lUnidadMedida, lMarca);
             
-             for (int i = 0; i<50 ;i++){
+            for (int i = 0; i<1 ;i++){
              
                 con = new ConexionHttps();
 
@@ -646,6 +652,52 @@ public class MigradorTDN {
 
                 con.setBody(new Gson().toJson(lProducto.get(i)));
                 System.out.println(new Gson().toJson(lProducto.get(i)));
+                System.out.println(con.getConexion(Config.POST));
+                 
+                 
+             }
+            
+        }
+        
+        if (comprbanteNTCCliente){
+            
+             ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/QUALITA_SALDOSNCR_01.csv");
+            
+            // cliente
+            
+            System.out.println("Lista Cliente");
+            
+            con = new ConexionHttps();
+
+            con.setLink(Config.HOST + Config.CLIENTE + Config.CLIENTELISTA);
+
+            con.setToken(rToken.getAccessToken());
+            con.setBarerAutenticacion(true);
+
+            con.setBody("");
+
+            Data dataCliente = new Gson().fromJson( con.getConexion(Config.GET), Data.class);
+
+            Type arrayC = new TypeToken<List<Cliente>>(){}.getType();
+               
+            ArrayList<Cliente> lCliente =(new Gson().fromJson( new Gson().toJson(dataCliente.getData()) , arrayC));
+            System.out.println("tamaño Cliente "+lCliente.size() );
+            
+            ComprobanteDatosProcesar cmdp = new ComprobanteDatosProcesar();
+            
+            ArrayList<Comprobante> lComprobante = cmdp.procesarDatosComprobante(csvArray, lCliente);
+            
+            for (int i = 0; i<10 ;i++){
+             
+                con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.COMPROBANTEVENTA);
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody(new Gson().toJson(lComprobante.get(i)));
+                System.out.println(new Gson().toJson(lComprobante.get(i)));
                 System.out.println(con.getConexion(Config.POST));
                  
                  
