@@ -15,7 +15,9 @@ import com.migradortdn.model.Login;
 import com.migradortdn.model.Marca;
 import com.migradortdn.model.Producto;
 import com.migradortdn.model.Proveedor;
+import com.migradortdn.model.PuntoVenta;
 import com.migradortdn.model.Ruta;
+import com.migradortdn.model.Timbrado;
 import com.migradortdn.model.TipoCliente;
 import com.migradortdn.model.TipoProveedor;
 import com.migradortdn.model.Token;
@@ -28,6 +30,7 @@ import controlador.ComprobanteDatosProcesar;
 import controlador.LeeCSV;
 import controlador.ProductoDatosProcesar;
 import controlador.ProveedorDatosProcesar;
+import controlador.TimbradoDatosProcesar;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.ProtocolException;
@@ -61,8 +64,9 @@ public class MigradorTDN {
        boolean unidadMedidaBase = false;
        boolean unidadMedida = false;
        boolean marca = false;
-       boolean producto = true;
-       boolean comprbanteNTCCliente = false;
+       boolean producto = false;
+       boolean timbrado = false;
+       boolean comprbanteNTCCliente = true;
 
         String[] archivos = {"datos/ciudad.csv", "datos/departamento.csv", "datos/distrito.csv"};
 
@@ -641,7 +645,7 @@ public class MigradorTDN {
             ArrayList<Producto> lProducto = pdp.procesarDatosProducto(csvArrayProducto, csvArrayLinea, lProveedor, lUnidadMedidaBase
             , lUnidadMedida, lMarca);
             
-            for (int i = 0; i<1 ;i++){
+            for (int i = 0; i<lProducto.size() ;i++){
              
                 con = new ConexionHttps();
 
@@ -659,10 +663,78 @@ public class MigradorTDN {
             
         }
         
+        if (timbrado){
+            
+             ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/QUALITA_TIMBRADONOTASCREDITOCLIENTES_01.csv");
+        
+            System.out.println("Puntos de venta");
+             
+            con = new ConexionHttps();
+
+            con.setLink(Config.HOST + Config.PUNTOVENTA + Config.PUNTOVENTALISTA);
+
+            con.setToken(rToken.getAccessToken());
+            con.setBarerAutenticacion(true);
+
+            con.setBody("");
+            
+            Data<PuntoVenta> dataPV = new Gson().fromJson(  con.getConexion(Config.GET), Data.class);
+
+            Type arrayPV = new TypeToken<List<PuntoVenta>>(){}.getType();
+               
+            ArrayList<PuntoVenta> lPuntoVenta =(new Gson().fromJson( new Gson().toJson(dataPV.getData()) , arrayPV));
+            
+            System.out.println("lPunto de venta size "+lPuntoVenta.size());
+            
+            TimbradoDatosProcesar tdp = new TimbradoDatosProcesar();
+            
+            ArrayList <Timbrado> lTimbradosNTC =  tdp.procesarTimbrado(csvArray, lPuntoVenta, 42L);//42 L es tipo nota de credito
+            
+            for (int i = 0; i<lTimbradosNTC.size() ;i++){
+             
+                con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.TIMBRADOEMPRESA);
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody(new Gson().toJson(lTimbradosNTC.get(i)));
+                System.out.println(new Gson().toJson(lTimbradosNTC.get(i)));
+                System.out.println(con.getConexion(Config.POST));
+                 
+                 
+             }
+          
+            
+        }
+        
         if (comprbanteNTCCliente){
             
              ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/QUALITA_SALDOSNCR_01.csv");
             
+            //timbrados
+            
+            System.out.println("Timbrado Empresa");
+            
+            con = new ConexionHttps();
+
+            con.setLink(Config.HOST + Config.TIMBRADOEMPRESA + Config.TIMBRADOEMPRESALISTA);
+
+            con.setToken(rToken.getAccessToken());
+            con.setBarerAutenticacion(true);
+
+            con.setBody("");
+            
+            System.out.println(con.getConexion(Config.GET));
+
+            Data dataTimbrado = new Gson().fromJson( con.getConexion(Config.GET), Data.class);
+
+            Type arrayT = new TypeToken<List<Timbrado>>(){}.getType();
+               
+            ArrayList<Timbrado> lTimbrados =(new Gson().fromJson( new Gson().toJson(dataTimbrado.getData()) , arrayT));
+            System.out.println("tamaño Timbrado "+lTimbrados.size() );
+             
             // cliente
             
             System.out.println("Lista Cliente");
@@ -683,11 +755,14 @@ public class MigradorTDN {
             ArrayList<Cliente> lCliente =(new Gson().fromJson( new Gson().toJson(dataCliente.getData()) , arrayC));
             System.out.println("tamaño Cliente "+lCliente.size() );
             
+           
+            
             ComprobanteDatosProcesar cmdp = new ComprobanteDatosProcesar();
             
-            ArrayList<Comprobante> lComprobante = cmdp.procesarDatosComprobante(csvArray, lCliente);
+            ArrayList<Comprobante> lComprobanteNTCC = cmdp.procesarDatosComprobante(csvArray, lCliente, lTimbrados);
             
-            for (int i = 0; i<10 ;i++){
+            
+            for (int i = 0; i<lComprobanteNTCC.size() ;i++){
              
                 con = new ConexionHttps();
 
@@ -696,8 +771,8 @@ public class MigradorTDN {
                 con.setToken(rToken.getAccessToken());
                 con.setBarerAutenticacion(true);
 
-                con.setBody(new Gson().toJson(lComprobante.get(i)));
-                System.out.println(new Gson().toJson(lComprobante.get(i)));
+                con.setBody(new Gson().toJson(lComprobanteNTCC.get(i)));
+                System.out.println(new Gson().toJson(lComprobanteNTCC.get(i)));
                 System.out.println(con.getConexion(Config.POST));
                  
                  

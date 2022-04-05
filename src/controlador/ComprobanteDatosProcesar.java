@@ -10,10 +10,12 @@ import com.migradortdn.model.Comprobante;
 import com.migradortdn.model.ComprobanteDetalle;
 import com.migradortdn.model.MontoImponible;
 import com.migradortdn.model.Sucursal;
+import com.migradortdn.model.Timbrado;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  *
@@ -21,11 +23,17 @@ import java.util.Date;
  */
 public class ComprobanteDatosProcesar {
 
-    public ArrayList<Comprobante> procesarDatosComprobante(ArrayList<String[]> csvArrayComprobante, ArrayList<Cliente> lClientes) throws ParseException {
+    public ArrayList<Comprobante> procesarDatosComprobante(ArrayList<String[]> csvArrayComprobante, ArrayList<Cliente> lClientes, ArrayList<Timbrado>lTimbrados) throws ParseException {
 
         ArrayList<Comprobante> out = new ArrayList<Comprobante>();
 
         for (String[] x : csvArrayComprobante) {
+            
+            if (x[6].trim().length() == 0){
+            
+                continue;
+                
+            }
 
             Comprobante comp = new Comprobante();
 
@@ -93,7 +101,25 @@ public class ComprobanteDatosProcesar {
             comp.setCambio(1L);
             comp.setMoneda(56L);
             comp.setTipo(4L);
-            comp.setTimbradoPuntoEmision(4L);
+            
+            Long timbradoPuntoEmisionId = 0L;
+            Long sucursalId = 0L;
+            
+           Long timbradoNum = Long.parseLong(x[6].trim());
+            
+            for (Timbrado pv : lTimbrados){
+
+                //if (Objects.equals(pv.getNumeroTimbrado(), timbradoNum) ){
+                if (Objects.equals(pv.getNumeroTimbrado(), timbradoNum)){
+                    timbradoPuntoEmisionId = pv.getId(); 
+                    sucursalId = pv.getSucursal().getId();
+                    break;
+                    
+                }
+                
+            }
+            
+            comp.setTimbradoPuntoEmision(timbradoPuntoEmisionId);
             comp.setTipoAplicacion(7459L);
             comp.setDeposito(2L);
             comp.setNumero(x[9].trim());
@@ -108,7 +134,7 @@ public class ComprobanteDatosProcesar {
             comp.setTotalImpuestos(0.0);
 
             comp.setLocacion(1L);
-            comp.setSucursal(1L);
+            comp.setSucursal(sucursalId);
             
             out.add(comp);
 

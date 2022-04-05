@@ -135,7 +135,7 @@ public class ProductoDatosProcesar {
                 
                     p.setUnidadMedidaBase(ub.getId());
                     p.getUnidadesMedida().add(ub.getId());
-                    p.setUnidadMedidaContenida(ub.getId());
+                   
                     break;
                 }                
                 
@@ -152,7 +152,8 @@ public class ProductoDatosProcesar {
 
                    p.getUnidadesMedida().add(u.getId());
                    p.setPresentacion(u.getId());
-                   p.setContenido(cant);
+                   p.setConversion((double) cant);
+                 
                  
                    break;
                 }
@@ -188,7 +189,32 @@ public class ProductoDatosProcesar {
                 
             }
             
+            
+             for (UnidadMedida ub : lUnidadMedidaBase){
+            
+                if (ub.getDescripcion().compareTo("KILO") == 0){
+                
+                    p.setUnidadMedidaContenida(ub.getId());
+                    p.setContenido( Double.valueOf(x[13].trim().replace(",", "."))/1000);
+                   
+                    break;
+                }                
+                
+            }
+             
            
+            
+                
+             
+             
+            System.out.println(p.getNombre());
+                        
+            double mult = p.getConversion()*p.getContenido();
+            
+            System.out.println("antes de multiplicar "+mult);
+             
+            p.setPesoUnidadBase(mult);
+            p.setPesoUnidadPresentacion(p.getConversion()*p.getPesoUnidadBase());
             
             out.add(p);
             

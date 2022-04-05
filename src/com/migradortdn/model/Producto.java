@@ -15,7 +15,7 @@ public class Producto {
  
     private Long id;
     private int estado = 17;
-    private int claseProducto = 2;
+    private int claseProducto = 1;
     private ArrayList<CodigoBarras> codigosBarras = new ArrayList<CodigoBarras>();
     private CodigoBarras codigoBarrasPrincipal;
     private ArrayList<Object>atributos = new ArrayList<Object>();
@@ -39,7 +39,54 @@ public class Producto {
     
     private Long presentacion;
     private Long unidadMedidaContenida; 
-    private int contenido;
+   // private int contenido;
+    
+    private Double conversion;
+    private Double contenido;
+    private String contenidoView;
+    
+    private Double pesoUnidadBase;
+    private Double pesoUnidadPresentacion;
+
+    public Double getConversion() {
+        return conversion;
+    }
+
+    public void setConversion(Double conversion) {
+        this.conversion = conversion;
+    }
+
+    public Double getContenido() {
+        return contenido;
+    }
+
+    public void setContenido(Double contenido) {
+        this.contenido = contenido;
+    }
+
+    public String getContenidoView() {
+        return contenidoView;
+    }
+
+    public void setContenidoView(String contenidoView) {
+        this.contenidoView = contenidoView;
+    }
+
+    public Double getPesoUnidadBase() {
+        return pesoUnidadBase;
+    }
+
+    public void setPesoUnidadBase(Double pesoUnidadBase) {
+        this.pesoUnidadBase = pesoUnidadBase;
+    }
+
+    public Double getPesoUnidadPresentacion() {
+        return pesoUnidadPresentacion;
+    }
+
+    public void setPesoUnidadPresentacion(Double pesoUnidadPresentacion) {
+        this.pesoUnidadPresentacion = pesoUnidadPresentacion;
+    }
 
     public Long getPresentacion() {
         return presentacion;
@@ -57,16 +104,6 @@ public class Producto {
         this.unidadMedidaContenida = unidadMedidaContenida;
     }
 
-    public int getContenido() {
-        return contenido;
-    }
-
-    public void setContenido(int contenido) {
-        this.contenido = contenido;
-    }
-   
-    
-    
     public boolean isControlStock() {
         return controlStock;
     }
