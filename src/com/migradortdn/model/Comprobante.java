@@ -18,7 +18,7 @@ public class Comprobante {
     private Long id;
     private boolean imputarIrpRsp = false;
     private boolean imputarIre = false;
-    private boolean imputarIvaGeneral = false;
+    private boolean imputarIvaGeneral = true;
     private Long moneda;
     private Long cambio;
     private Long cliente;

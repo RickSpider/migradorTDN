@@ -33,6 +33,8 @@ public class ProductoDatosProcesar {
                     
                     p = x1;
                     encontro = true;
+                   
+                    
                     break;
                     
                 }
@@ -41,19 +43,39 @@ public class ProductoDatosProcesar {
             
             if (encontro){
             
+                System.out.println("encontro wey");
                 
                 for (UnidadMedida u : lUnidadMedida ){
 
-                     if (u.getDescripcion().compareTo(x[16].toString().trim().toUpperCase()) == 0
+                     /*if (u.getDescripcion().compareTo(x[16].toString().trim().toUpperCase()) == 0
                             && u.getCantidad() == ((int) Double.parseDouble(x[17].toString().replace(",", ".")))
                             && u.getUnidadContenida().getDescripcion().toString().compareTo(x[15].toString().trim().toUpperCase()) == 0) {
-
+*/
+                     
+                int cant = (int) Double.parseDouble(x[17].toString().replace(",", "."));
+            
+                if (u.getDescripcion().compareTo(x[16].toString().trim().toUpperCase()+" - "+cant) == 0
+                       // && u.getCantidad() == ((int) Double.parseDouble(x[17].toString().replace(",", ".")))
+                        && u.getCantidad() == cant
+                        && u.getUnidadContenida().getDescripcion().toString().compareTo(x[15].toString().trim().toUpperCase()) == 0) {
+                     
                        p.getUnidadesMedida().add(u.getId());
+                       
+                       if (p.getConversion() < cant){
+                       
+                           p.setPresentacion(u.getId());
+                           p.setConversion(Double.parseDouble(x[17].toString().replace(",", ".")));
+                           p.setPesoUnidadBase(p.getConversion()*p.getContenido());
+                           p.setPesoUnidadPresentacion(p.getConversion()*p.getPesoUnidadBase());
+                           
+                       }
 
                        break;
                     }
 
                 }
+                
+                
                 
                 continue;
             }
