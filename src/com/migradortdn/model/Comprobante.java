@@ -37,7 +37,7 @@ public class Comprobante {
     private Long locacion;
     private Long sucursal;
     
-    private ArrayList<ComprobanteDetalle> comprobandtedetalle = new ArrayList<ComprobanteDetalle>();
+    private ArrayList<ComprobanteDetalle> comprobanteDetalle = new ArrayList<ComprobanteDetalle>();
     private ArrayList<MontoImponible> montosImponibles = new ArrayList<MontoImponible>();
 
     public Long getId() {
@@ -208,20 +208,20 @@ public class Comprobante {
         this.sucursal = sucursal;
     }
 
-    public ArrayList<ComprobanteDetalle> getComprobandtedetalle() {
-        return comprobandtedetalle;
-    }
-
-    public void setComprobandtedetalle(ArrayList<ComprobanteDetalle> comprobandtedetalle) {
-        this.comprobandtedetalle = comprobandtedetalle;
-    }
-
     public ArrayList<MontoImponible> getMontosImponibles() {
         return montosImponibles;
     }
 
     public void setMontosImponibles(ArrayList<MontoImponible> montosImponibles) {
         this.montosImponibles = montosImponibles;
+    }
+
+    public ArrayList<ComprobanteDetalle> getComprobanteDetalle() {
+        return comprobanteDetalle;
+    }
+
+    public void setComprobanteDetalle(ArrayList<ComprobanteDetalle> comprobanteDetalle) {
+        this.comprobanteDetalle = comprobanteDetalle;
     }
 
    

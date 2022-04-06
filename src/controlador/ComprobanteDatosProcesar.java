@@ -79,14 +79,14 @@ public class ComprobanteDatosProcesar {
 
             ComprobanteDetalle cd = new ComprobanteDetalle();
             cd.setTipo(105L);
-            cd.setServicio(2L);
+            cd.setServicio(415L);
             cd.setTotalItem(Double.valueOf(x[10].trim()) * -1);
             cd.setTotalItemView(cd.getTotalItem() + "");
             cd.setPrecioVenta(Double.valueOf(x[10].trim()) * -1);
             cd.setUltimoPrecioView(cd.getPrecioVenta() + "");
             cd.getMontosImponibles().add(mi);
 
-            comp.getComprobandtedetalle().add(cd);
+            comp.getComprobanteDetalle().add(cd);
 
             MontoImponible mi2 = new MontoImponible();
             mi2.setTipoImpuesto(3L);
@@ -112,6 +112,7 @@ public class ComprobanteDatosProcesar {
                 //if (Objects.equals(pv.getNumeroTimbrado(), timbradoNum) ){
                 if (Objects.equals(pv.getNumeroTimbrado(), timbradoNum)){
                     timbradoPuntoEmisionId = pv.getId(); 
+                    //System.out.println("el id de sucursal es "+pv.getSucursal().getId());
                     sucursalId = pv.getSucursal().getId();
                     break;
                     
