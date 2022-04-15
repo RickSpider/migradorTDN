@@ -31,6 +31,10 @@ public class Cliente {
     private String correo;
    
     private TipoCliente tipoCliente;
+    
+    private TipoCliente categoriaCliente;
+    
+    private Ramo tipoActividadRamoCliente;
 
     private Boolean activo = true;
    
@@ -376,6 +380,24 @@ public class Cliente {
     public void setDiasTolerancia(int diasTolerancia) {
         this.diasTolerancia = diasTolerancia;
     }
+
+    public TipoCliente getCategoriaCliente() {
+        return categoriaCliente;
+    }
+
+    public void setCategoriaCliente(TipoCliente categoriaCliente) {
+        this.categoriaCliente = categoriaCliente;
+    }
+
+    public Ramo getTipoActividadRamoCliente() {
+        return tipoActividadRamoCliente;
+    }
+
+    public void setTipoActividadRamoCliente(Ramo tipoActividadRamoCliente) {
+        this.tipoActividadRamoCliente = tipoActividadRamoCliente;
+    }
+    
+    
 
     
     

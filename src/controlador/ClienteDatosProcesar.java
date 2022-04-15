@@ -8,6 +8,7 @@ package controlador;
 import com.migradortdn.Config;
 import com.migradortdn.model.Cliente;
 import com.migradortdn.model.FormaPago;
+import com.migradortdn.model.Ramo;
 import com.migradortdn.model.Ruta;
 import com.migradortdn.model.Sucursal;
 import com.migradortdn.model.Tipo;
@@ -27,7 +28,7 @@ public class ClienteDatosProcesar {
             ArrayList<String[]> csvArray, ArrayList<String[]> csvDepartamentos,
             ArrayList<String[]> csvCiudades, ArrayList<String[]> csvDistritos,
             List<Vendedor> lVendedor, List<Zona> lZona, List<Ruta> lRuta, List<TipoCliente> lTipoCliente,
-            List<FormaPago> lFormaPago, ArrayList<String[]> csvArrayCoordenadas) {
+            List<FormaPago> lFormaPago, ArrayList<String[]> csvArrayCoordenadas, ArrayList<Ramo> lRamos, List<TipoCliente> lCategoriaCliente) {
 
         ArrayList<Cliente> lClientes = new ArrayList<Cliente>();
 
@@ -120,11 +121,11 @@ public class ClienteDatosProcesar {
 
                     }
 
-                    if (x[14].trim().length() > 0) {
+                    if (x[15].trim().length() > 0) { //antes era x14 ahora es x15 porque entra la lista de precios
 
                         for (TipoCliente tc : lTipoCliente) {
 
-                            if (tc.getDescripcion().compareTo(x[14].trim()) == 0) {
+                            if (tc.getDescripcion().compareTo(x[15].trim()) == 0) {
 
                                 cliente.setTipoCliente(tc);
 
@@ -133,6 +134,35 @@ public class ClienteDatosProcesar {
 
                         }
 
+                    }
+                    
+                    if (x[14].trim().length() > 0) { // este es el nuevo tipo paso a ser categoria
+
+                        for (TipoCliente tc : lCategoriaCliente) {
+
+                            if (tc.getDescripcion().compareTo(x[14].trim()) == 0) {
+
+                                cliente.setCategoriaCliente(tc);
+
+                                break;
+                            }
+
+                        }
+
+                    }
+                    
+                    if (x[3].trim().length() > 0){
+                    
+                        for (Ramo ra : lRamos){
+                        
+                            if (ra.getDescripcion().compareTo(x[3].trim())==0){
+                            
+                                cliente.setTipoActividadRamoCliente(ra);
+                                
+                            }
+                        
+                        }
+                        
                     }
 
                     /*TipoCliente tipoCliente = new TipoCliente();

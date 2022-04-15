@@ -30,6 +30,8 @@ public class Sucursal {
     private String direccion;
     private Vendedor vendedor;
     
+    private Long gln;
+    
     private String ubicacionGeografica = "";
 
     public String getUbicacionGeografica() {
@@ -144,6 +146,14 @@ public class Sucursal {
 
     public void setVendedor(Vendedor vendedor) {
         this.vendedor = vendedor;
+    }
+
+    public Long getGln() {
+        return gln;
+    }
+
+    public void setGln(Long gln) {
+        this.gln = gln;
     }
     
     

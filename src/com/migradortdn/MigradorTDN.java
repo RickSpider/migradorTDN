@@ -16,9 +16,9 @@ import com.migradortdn.model.Marca;
 import com.migradortdn.model.Producto;
 import com.migradortdn.model.Proveedor;
 import com.migradortdn.model.PuntoVenta;
+import com.migradortdn.model.Ramo;
 import com.migradortdn.model.Ruta;
 import com.migradortdn.model.Timbrado;
-import com.migradortdn.model.TimbradoPuntoEmision;
 import com.migradortdn.model.TipoCliente;
 import com.migradortdn.model.TipoProveedor;
 import com.migradortdn.model.Token;
@@ -36,9 +36,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.ProtocolException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,9 +55,9 @@ public class MigradorTDN {
        boolean zona = false;
        boolean ruta = false;
        boolean vendedor = false;
-       boolean tipoCliente = false;
+       boolean categoriaCliente = false; // esto era tipo cliente paso a ser categoria el 14/04/2022
        boolean formaPago = false;
-       boolean cliente = false;
+       boolean cliente = true;
        boolean tipoProveedor = false;
        boolean proveedor = false;
        boolean unidadMedidaBase = false;
@@ -212,7 +210,7 @@ public class MigradorTDN {
         }
         
         
-        if(tipoCliente){
+        if(categoriaCliente){ // esto pasa a ser Categoria Cliente
               System.out.println("Cargando TipoCliente");
             ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/QUALITA_TIPOCLIENTEVIEW_01.csv");
             
@@ -222,7 +220,7 @@ public class MigradorTDN {
             
                 con = new ConexionHttps();
 
-                con.setLink(Config.HOST + Config.TIPOSCLIENTES);
+                con.setLink(Config.HOST + Config.CATEGORIACLIENTE);
 
                 con.setToken(rToken.getAccessToken());
                 con.setBarerAutenticacion(true);
@@ -256,6 +254,22 @@ public class MigradorTDN {
         Type arrayTC = new TypeToken<List<TipoCliente>>(){}.getType();
             
         ArrayList<TipoCliente> lTipocliente =(new Gson().fromJson( new Gson().toJson(dataTipoCliente.getData()) , arrayTC));
+        
+        //Lista Categoria cliente
+        con = new ConexionHttps();
+
+        con.setLink(Config.HOST + Config.CATEGORIACLIENTE + Config.CATEGORIACLIENTELISTA);
+
+        con.setToken(rToken.getAccessToken());
+        con.setBarerAutenticacion(true);
+
+        con.setBody(""); 
+        
+        Data dataCategoriaCliente = new Gson().fromJson( con.getConexion(Config.GET), Data.class);
+        
+        Type arrayCC = new TypeToken<List<TipoCliente>>(){}.getType();
+            
+        ArrayList<TipoCliente> lCategoriaCliente =(new Gson().fromJson( new Gson().toJson(dataCategoriaCliente.getData()) , arrayCC));
         
         //Lista Zona
         con = new ConexionHttps();
@@ -363,13 +377,31 @@ public class MigradorTDN {
             
             ArrayList<String[]> csvArrayCoordenadas = csv.leerArchivo("datos/clientes/Coordenadas_clientes.csv");
             
+            System.out.println("Cargando Ramos");    
+            
+            con = new ConexionHttps();
+
+            con.setLink(Config.HOST + Config.RAMO + Config.RAMOLISTA);
+
+            con.setToken(rToken.getAccessToken());
+            con.setBarerAutenticacion(true);
+
+            con.setBody("");
+
+            Data dataRamo = new Gson().fromJson( con.getConexion(Config.GET), Data.class);
+
+            Type arrayRa = new TypeToken<List<Ramo>>(){}.getType();
+               
+            ArrayList<Ramo> lRamos =(new Gson().fromJson( new Gson().toJson(dataRamo.getData()) , arrayRa));
+        
+            
             System.out.println("Cargando cliente");
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/QUALITA_CLIENTEVIEW_22032022.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/QUALITA_CLIENTEVIEW_02_13042022.csv");
             
             ArrayList<Cliente> lClientes = cdp.procesarDatosClientes(csvArray, csvDepartamentos, csvCiudades, csvDistritos,
-                    lVendedores, lZona, lRuta, lTipocliente, lTiposPagos, csvArrayCoordenadas);
+                    lVendedores, lZona, lRuta, lTipocliente, lTiposPagos, csvArrayCoordenadas, lRamos, lCategoriaCliente);
 
-            for (int i = 0; i < lClientes.size() ; i++) { //retail 3086
+            for (int i = 3086; i < 3087  ; i++) { //retail 3086
                 con = new ConexionHttps();
 
                 con.setLink(Config.HOST + Config.CLIENTE);
