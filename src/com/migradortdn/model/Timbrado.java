@@ -21,6 +21,7 @@ public class Timbrado {
     //private Long sucursal;
     private Sucursal sucursal;
     private ClaseTimbrado claseTimbrado;
+     private ArrayList<TimbradoPuntoEmision> timbradoPuntoEmision;
 
     public ClaseTimbrado getClaseTimbrado() {
         return claseTimbrado;
@@ -29,10 +30,6 @@ public class Timbrado {
     public void setClaseTimbrado(ClaseTimbrado claseTimbrado) {
         this.claseTimbrado = claseTimbrado;
     }
-
-    
-    
-    private ArrayList<TimbradoPuntoEmision> timbradoPuntoEmision;
 
     public Long getId() {
         return id;

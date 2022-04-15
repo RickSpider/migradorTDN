@@ -11,6 +11,7 @@ import com.migradortdn.model.PuntoVenta;
 import com.migradortdn.model.Sucursal;
 import com.migradortdn.model.Timbrado;
 import com.migradortdn.model.TimbradoPuntoEmision;
+import com.migradortdn.model.TipoComprobante;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import java.util.Date;
  */
 public class TimbradoDatosProcesar {
     
-    public ArrayList<Timbrado> procesarTimbrado( ArrayList<String[]> csvArray, ArrayList<PuntoVenta> lPuntoVenta, Long tipoComprobante) throws ParseException{
+    public ArrayList<Timbrado> procesarTimbrado( ArrayList<String[]> csvArray, ArrayList<PuntoVenta> lPuntoVenta) throws ParseException{
     
         ArrayList<Timbrado> out = new ArrayList<Timbrado>();
         
@@ -37,9 +38,7 @@ public class TimbradoDatosProcesar {
                 continue;
                 
             }
-            
-            timbrado.setNumeroTimbrado(numeroTimbrado);
-        
+           
             int cs = (int) Double.parseDouble(x[2].trim().replace(",", "."));
             int pm = (int) Double.parseDouble(x[3].trim().replace(",", "."));
             
@@ -64,7 +63,23 @@ public class TimbradoDatosProcesar {
                 
             }
             
-              if (pm < 10){
+             boolean encontro = false;
+            
+            for (Timbrado t : out){
+            
+                if (t.getNumeroTimbrado().longValue() == numeroTimbrado 
+                       && t.getSucursal().getCodigoSucursal().compareTo(codigoSucursal) == 0 ){
+
+                    encontro = true;
+                    timbrado = t;
+                    System.out.println("Encontro!!!!!!!!!");
+                    break;
+                }
+                
+            }
+            
+            
+            if (pm < 10){
             
                 puntoEmision = "00"+pm;
                 
@@ -85,15 +100,14 @@ public class TimbradoDatosProcesar {
             Sucursal sucursal = null;
             Long puntoEmisionId = 0L;
             
-            for (PuntoVenta pv : lPuntoVenta){
-            
-                
+              for (PuntoVenta pv : lPuntoVenta){
                 
                 if (pv.getCodigoSucursal().compareTo(codigoSucursal) == 0){
                 
                     //System.out.println("Entre en el primer if");
                     
                     sucursal = pv.getSucursal();
+                    sucursal.setCodigoSucursal(codigoSucursal);
                 
                     for (PuntoEmision pe : pv.getPuntosEmision()){
                         
@@ -102,7 +116,7 @@ public class TimbradoDatosProcesar {
                         
                         if (pe.getNumero().compareTo(puntoEmision)==0){
                             
-                          System.out.println("entre en el segundo if");
+                          //System.out.println("entre en el segundo if");
                         
                           puntoEmisionId = pe.getId();
                           
@@ -121,7 +135,51 @@ public class TimbradoDatosProcesar {
                 }
                 
             }
+              
+           
+             
             
+            if (!encontro)
+                timbrado.setTimbradoPuntoEmision(new ArrayList<TimbradoPuntoEmision>());
+            
+            //-----------------------
+            
+            TimbradoPuntoEmision tpe = new TimbradoPuntoEmision();
+            
+            PuntoEmision pe = new PuntoEmision();
+            pe.setId(puntoEmisionId);
+            tpe.setPuntoEmisionVenta(pe);
+            
+             if(x[1].trim().compareTo("VENTASCREDITOS")==0){
+                 
+                TipoComprobante tc = new TipoComprobante();
+                tc.setId(42L);
+            
+                tpe.setTipoComprobante(tc);
+                
+            }
+            
+            if(x[1].trim().compareTo("VENTAS")==0){
+            
+                TipoComprobante tc = new TipoComprobante();
+                tc.setId(41L);
+                
+                tpe.setTipoComprobante(tc);
+                
+            }
+            
+            tpe.setNumeroInicial((long) Double.parseDouble(x[6].trim().replace(",", ".")));
+            tpe.setNumeroFinal((long) Double.parseDouble(x[7].trim().replace(",", ".")));
+            timbrado.getTimbradoPuntoEmision().add(tpe);
+            
+            if (encontro){
+            
+                continue;
+                
+            }           
+          
+            
+            timbrado.setNumeroTimbrado(numeroTimbrado);
             timbrado.setSucursal(sucursal);
            
             
@@ -136,14 +194,6 @@ public class TimbradoDatosProcesar {
             ClaseTimbrado ct = new ClaseTimbrado();
             ct.setId(308L);
             timbrado.setClaseTimbrado(ct);
-            
-            timbrado.setTimbradoPuntoEmision(new ArrayList<TimbradoPuntoEmision>());
-            TimbradoPuntoEmision tpe = new TimbradoPuntoEmision();
-            tpe.setPuntoEmisionVenta(puntoEmisionId);
-            tpe.setTipoComprobante(tipoComprobante);
-            tpe.setNumeroInicial((long) Double.parseDouble(x[6].trim().replace(",", ".")));
-            tpe.setNumeroFinal((long) Double.parseDouble(x[7].trim().replace(",", ".")));
-            timbrado.getTimbradoPuntoEmision().add(tpe);
             
             out.add(timbrado);
         }

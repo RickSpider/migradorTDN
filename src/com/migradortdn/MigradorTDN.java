@@ -18,6 +18,7 @@ import com.migradortdn.model.Proveedor;
 import com.migradortdn.model.PuntoVenta;
 import com.migradortdn.model.Ruta;
 import com.migradortdn.model.Timbrado;
+import com.migradortdn.model.TimbradoPuntoEmision;
 import com.migradortdn.model.TipoCliente;
 import com.migradortdn.model.TipoProveedor;
 import com.migradortdn.model.Token;
@@ -66,18 +67,16 @@ public class MigradorTDN {
        boolean marca = false;
        boolean producto = false;
        boolean timbrado = false;
-       boolean comprbanteNTCCliente = true;
+       boolean comprbanteNTCCliente = false;
+       boolean comprbanteVentaCliente = false;
+       
 
-        String[] archivos = {"datos/ciudad.csv", "datos/departamento.csv", "datos/distrito.csv"};
-
-      
+       String[] archivos = {"datos/ciudad.csv", "datos/departamento.csv", "datos/distrito.csv"};
 
         //datos Cliente
         ArrayList<String[]> csvDepartamentos = csv.leerArchivo("datos/departamento.csv");
         ArrayList<String[]> csvCiudades = csv.leerArchivo("datos/ciudad.csv");
         ArrayList<String[]> csvDistritos = csv.leerArchivo("datos/distrito.csv");
-        
-       
 
         ConexionHttps con = new ConexionHttps();
         String resultado = "";
@@ -437,7 +436,7 @@ public class MigradorTDN {
             
             ArrayList<Proveedor> lProveedor = pdp.procesarDatosProveedores(csvArray, lTipoProveedor);
 
-            for (int i = 0; i < lProveedor.size(); i++) {
+            for (int i = 1444; i < lProveedor.size(); i++) {
                 con = new ConexionHttps();
 
                 con.setLink(Config.HOST + Config.PROVEEDOR);
@@ -455,7 +454,7 @@ public class MigradorTDN {
         
         //Seccion UnidadMedida
         
-        ArrayList<String[]> csvArrayProducto = csv.leerArchivo("datos/producto/QUALITA_PRODUCTOSVIEW_30032022.csv");
+        ArrayList<String[]> csvArrayProducto = csv.leerArchivo("datos/producto/QUALITA_PRODUCTOSVIEW_07042022.csv");
         
         if (unidadMedidaBase){
             
@@ -560,7 +559,7 @@ public class MigradorTDN {
         
         if (producto){
             
-            ArrayList<String[]> csvArrayLinea = csv.leerArchivo("datos/producto/linea_producto.csv");
+            ArrayList<String[]> csvArrayLinea = csv.leerArchivo("datos/producto/prd_linea_producto06042022.csv");
             
             // proveedor
             
@@ -665,7 +664,7 @@ public class MigradorTDN {
         
         if (timbrado){
             
-             ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/QUALITA_TIMBRADONOTASCREDITOCLIENTES_01.csv");
+             ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/QUALITA_TIMBRADOVENTAS_11042022.csv");
         
             System.out.println("Puntos de venta");
              
@@ -688,7 +687,7 @@ public class MigradorTDN {
             
             TimbradoDatosProcesar tdp = new TimbradoDatosProcesar();
             
-            ArrayList <Timbrado> lTimbradosNTC =  tdp.procesarTimbrado(csvArray, lPuntoVenta, 42L);//42 L es tipo nota de credito
+            ArrayList <Timbrado> lTimbradosNTC =  tdp.procesarTimbrado(csvArray, lPuntoVenta);//42 L es tipo nota de credito
             
             for (int i = 0; i<lTimbradosNTC.size() ;i++){
              
@@ -709,9 +708,9 @@ public class MigradorTDN {
             
         }
         
-        if (comprbanteNTCCliente){
+      
             
-             ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/QUALITA_SALDOSNCR_01.csv");
+          
             
             //timbrados
             
@@ -726,7 +725,7 @@ public class MigradorTDN {
 
             con.setBody("");
             
-            System.out.println(con.getConexion(Config.GET));
+            //System.out.println(con.getConexion(Config.GET));
 
             Data dataTimbrado = new Gson().fromJson( con.getConexion(Config.GET), Data.class);
 
@@ -734,6 +733,31 @@ public class MigradorTDN {
                
             ArrayList<Timbrado> lTimbrados =(new Gson().fromJson( new Gson().toJson(dataTimbrado.getData()) , arrayT));
             System.out.println("tamaño Timbrado "+lTimbrados.size() );
+            
+            //Sigue timbrado
+            
+            
+            ArrayList<Timbrado> lTimbradosObj = new ArrayList<Timbrado>();
+            for (Timbrado t : lTimbrados){
+            
+                con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.TIMBRADOEMPRESA + "/"+t.getId() +Config.TIMBRADOEMPRESAGET);
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody("");
+               
+                Timbrado x = new Gson().fromJson( con.getConexion(Config.GET), Timbrado.class);
+                
+                lTimbradosObj.add(x);
+                
+            }
+            
+            // Locaciones
+            System.out.println("Locaciones");
+            ArrayList<String[]> csvLocacion = csv.leerArchivo("datos/comprobante/gnr_locacion.csv");
              
             // cliente
             
@@ -755,11 +779,13 @@ public class MigradorTDN {
             ArrayList<Cliente> lCliente =(new Gson().fromJson( new Gson().toJson(dataCliente.getData()) , arrayC));
             System.out.println("tamaño Cliente "+lCliente.size() );
             
-           
+        if (comprbanteNTCCliente){
+                
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/QUALITA_SALDOSNCR_01.csv");
             
             ComprobanteDatosProcesar cmdp = new ComprobanteDatosProcesar();
             
-            ArrayList<Comprobante> lComprobanteNTCC = cmdp.procesarDatosComprobante(csvArray, lCliente, lTimbrados);
+            ArrayList<Comprobante> lComprobanteNTCC = cmdp.procesarDatosComprobante(csvArray, lCliente, lTimbradosObj, csvLocacion, 4L);
             
             
             for (int i = 0; i<lComprobanteNTCC.size() ;i++){
@@ -778,9 +804,39 @@ public class MigradorTDN {
                  
              }
             
+           
+            
         }
         
         
+        if (comprbanteVentaCliente){
+        
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/QUALITA_SALDOSCLIENTES_07042022.csv");
+            
+            ComprobanteDatosProcesar cmdp = new ComprobanteDatosProcesar();
+            
+            ArrayList<Comprobante> lComprobanteVENTACliente = cmdp.procesarDatosComprobante(csvArray, lCliente, lTimbradosObj, csvLocacion, 3L);
+            
+            
+            for (int i = 0; i<1 ;i++){
+             
+                con = new ConexionHttps();
+
+                con.setLink(Config.HOST + Config.COMPROBANTEVENTA);
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                con.setBody(new Gson().toJson(lComprobanteVENTACliente.get(i)));
+                System.out.println(new Gson().toJson(lComprobanteVENTACliente.get(i)));
+                System.out.println(con.getConexion(Config.POST));
+                 
+                 
+             }
+            
+            
+        }
+      
 
         //Logout
         con = new ConexionHttps();

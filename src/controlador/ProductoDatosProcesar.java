@@ -65,7 +65,7 @@ public class ProductoDatosProcesar {
                        
                            p.setPresentacion(u.getId());
                            p.setConversion(Double.parseDouble(x[17].toString().replace(",", ".")));
-                           p.setPesoUnidadBase(p.getConversion()*p.getContenido());
+                           p.setPesoUnidadBase(p.getContenido());
                            p.setPesoUnidadPresentacion(p.getConversion()*p.getPesoUnidadBase());
                            
                        }
@@ -231,11 +231,11 @@ public class ProductoDatosProcesar {
              
             System.out.println(p.getNombre());
                         
-            double mult = p.getConversion()*p.getContenido();
+            //double mult = p.getConversion()*p.getContenido();
             
-            System.out.println("antes de multiplicar "+mult);
+            //System.out.println("antes de multiplicar "+mult);
              
-            p.setPesoUnidadBase(mult);
+            p.setPesoUnidadBase(p.getContenido());
             p.setPesoUnidadPresentacion(p.getConversion()*p.getPesoUnidadBase());
             
             out.add(p);

@@ -11,6 +11,7 @@ import com.migradortdn.model.ComprobanteDetalle;
 import com.migradortdn.model.MontoImponible;
 import com.migradortdn.model.Sucursal;
 import com.migradortdn.model.Timbrado;
+import com.migradortdn.model.TimbradoPuntoEmision;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,7 +24,8 @@ import java.util.Objects;
  */
 public class ComprobanteDatosProcesar {
 
-    public ArrayList<Comprobante> procesarDatosComprobante(ArrayList<String[]> csvArrayComprobante, ArrayList<Cliente> lClientes, ArrayList<Timbrado>lTimbrados) throws ParseException {
+    public ArrayList<Comprobante> procesarDatosComprobante(ArrayList<String[]> csvArrayComprobante,
+            ArrayList<Cliente> lClientes, ArrayList<Timbrado>lTimbrados, ArrayList<String[]> csvArrayLocacion, Long tipoComprobante) throws ParseException {
 
         ArrayList<Comprobante> out = new ArrayList<Comprobante>();
 
@@ -100,19 +102,59 @@ public class ComprobanteDatosProcesar {
 
             comp.setCambio(1L);
             comp.setMoneda(56L);
-            comp.setTipo(4L);
+            comp.setTipo(tipoComprobante); // 4 NOTA DE CREDITO 3 FACTURA credito
             
             Long timbradoPuntoEmisionId = 0L;
             Long sucursalId = 0L;
             
            Long timbradoNum = Long.parseLong(x[6].trim());
+           
+            //System.out.println("andes del ciclo el timbrado es :"+timbradoNum);
             
             for (Timbrado pv : lTimbrados){
+                
+               // System.out.println("timbrado viene "+pv.getNumeroTimbrado());
 
-                //if (Objects.equals(pv.getNumeroTimbrado(), timbradoNum) ){
-                if (Objects.equals(pv.getNumeroTimbrado(), timbradoNum)){
-                    timbradoPuntoEmisionId = pv.getId(); 
-                    //System.out.println("el id de sucursal es "+pv.getSucursal().getId());
+                if (pv.getNumeroTimbrado() == timbradoNum.longValue() ){
+                //if (Objects.equals(pv.getNumeroTimbrado(), timbradoNum)){
+                    //timbradoPuntoEmisionId = pv.getId(); 
+                    System.out.println("el timbrado macheado es  "+pv.getNumeroTimbrado());
+
+                    for (TimbradoPuntoEmision tpe : pv.getTimbradoPuntoEmision()){
+                        
+                        System.out.println(tpe.getId());
+                        System.out.println(tpe.getTipoComprobante().getDescripcion());
+                        System.out.println(tpe.getTipoComprobante().getId());
+                        
+                        Long comprobanteID = 0L;
+                        
+                        // 41 factura
+                        // 42 nota credito
+                        
+                        if (tipoComprobante.longValue() == 3){
+                        
+                            comprobanteID = 41L;
+                            
+                        }
+                        
+                         if (tipoComprobante.longValue() == 4){
+                        
+                            comprobanteID = 42L;
+                            
+                        }
+                        
+                        if (tpe.getTipoComprobante().getId().longValue() == comprobanteID.longValue()){
+                        
+                            System.out.println("Encontre comprobante tipo igual");
+                            timbradoPuntoEmisionId = tpe.getId();
+                            break;
+                            
+                        }
+                        
+                    }
+                  
+                    //System.out.println("el timbrado :"+pv.getNumeroTimbrado()+" "+timbradoNum);
+                    //System.out.println();
                     sucursalId = pv.getSucursal().getId();
                     break;
                     
@@ -134,7 +176,26 @@ public class ComprobanteDatosProcesar {
             comp.setMontoTotalView(comp.getMontoTotal() + "");
             comp.setTotalImpuestos(0.0);
 
-            comp.setLocacion(1L);
+            //comp.setLocacion(1L);
+            
+            for (String[] s : csvArrayLocacion){
+            
+                
+                
+                if (s[1].trim().compareTo(String.valueOf(sucursalId.longValue()))==0){
+                
+                    if (s[2].trim().compareTo("1") == 0){
+                    
+                        comp.setLocacion(Long.parseLong(s[0].trim()));
+                        
+                        break;
+                        
+                    }
+                    
+                }
+                
+            }
+            
             comp.setSucursal(sucursalId);
             
             out.add(comp);

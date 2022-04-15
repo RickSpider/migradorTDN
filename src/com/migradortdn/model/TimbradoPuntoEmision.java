@@ -11,10 +11,19 @@ package com.migradortdn.model;
  */
 public class TimbradoPuntoEmision {
 
+    private Long id;
     private Long numeroFinal;
     private Long numeroInicial;
-    private Long puntoEmisionVenta;
-    private Long tipoComprobante;
+    private PuntoEmision puntoEmisionVenta;
+    private TipoComprobante tipoComprobante;
+    
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getNumeroFinal() {
         return numeroFinal;
@@ -32,21 +41,23 @@ public class TimbradoPuntoEmision {
         this.numeroInicial = numeroInicial;
     }
 
-    public Long getPuntoEmisionVenta() {
+    public PuntoEmision getPuntoEmisionVenta() {
         return puntoEmisionVenta;
     }
 
-    public void setPuntoEmisionVenta(Long puntoEmisionVenta) {
+    public void setPuntoEmisionVenta(PuntoEmision puntoEmisionVenta) {
         this.puntoEmisionVenta = puntoEmisionVenta;
     }
 
-    public Long getTipoComprobante() {
+    public TipoComprobante getTipoComprobante() {
         return tipoComprobante;
     }
 
-    public void setTipoComprobante(Long tipoComprobante) {
+    public void setTipoComprobante(TipoComprobante tipoComprobante) {
         this.tipoComprobante = tipoComprobante;
     }
+
+   
     
     
     
