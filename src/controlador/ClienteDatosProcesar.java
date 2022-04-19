@@ -276,7 +276,10 @@ public class ClienteDatosProcesar {
                         }
 
                     }
-
+                    
+                    if (x[18].trim().length() > 0)
+                        matriz.setGln(Long.parseLong(x[18].trim()));
+                    
                     cliente.getSucursales().add(matriz);
 
                     //seccion buscar sucursales
@@ -417,6 +420,9 @@ public class ClienteDatosProcesar {
 
                                 }
 
+                                 if (x2[18].trim().length() > 0)
+                                    sucursal.setGln(Long.parseLong(x2[18].trim()));
+                                
                                 cliente.getSucursales().add(sucursal);
 
                             }

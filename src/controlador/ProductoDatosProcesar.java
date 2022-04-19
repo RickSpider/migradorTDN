@@ -230,8 +230,11 @@ public class ProductoDatosProcesar {
              
              
             System.out.println(p.getNombre());
+            
+            System.out.println("Conversion "+p.getConversion());
+            System.out.println("Contenido "+p.getContenido());
                         
-            //double mult = p.getConversion()*p.getContenido();
+           // double mult = p.getConversion()*p.getContenido();
             
             //System.out.println("antes de multiplicar "+mult);
              

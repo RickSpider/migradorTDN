@@ -68,7 +68,11 @@ public class ComprobanteDatosProcesar {
                         
                     }
                     
+                    if (comp.getSucursalCliente() == null){
                     
+                        comp.setSucursalCliente(c.getSucursales().get(0).getId());
+                        
+                    }  
 
                 }
 
@@ -76,15 +80,24 @@ public class ComprobanteDatosProcesar {
 
             MontoImponible mi = new MontoImponible();
             mi.setTipoImpuesto(3L);
-            mi.setBaseImponible(Double.valueOf(x[10].trim()) * -1);
+            
+            Double saldo = Double.valueOf(x[10].trim());
+            
+            if (tipoComprobante.longValue() == 4L){
+            
+                saldo = saldo*-1;
+                
+            }
+            
+            mi.setBaseImponible(saldo);
             mi.setPorcentaje(0L);
 
             ComprobanteDetalle cd = new ComprobanteDetalle();
             cd.setTipo(105L);
             cd.setServicio(415L);
-            cd.setTotalItem(Double.valueOf(x[10].trim()) * -1);
+            cd.setTotalItem(saldo);
             cd.setTotalItemView(cd.getTotalItem() + "");
-            cd.setPrecioVenta(Double.valueOf(x[10].trim()) * -1);
+            cd.setPrecioVenta(saldo);
             cd.setUltimoPrecioView(cd.getPrecioVenta() + "");
             cd.getMontosImponibles().add(mi);
 
@@ -92,8 +105,8 @@ public class ComprobanteDatosProcesar {
 
             MontoImponible mi2 = new MontoImponible();
             mi2.setTipoImpuesto(3L);
-            mi2.setTotal(Double.valueOf(x[10].trim()) * -1);
-            mi2.setBaseImponible(Double.valueOf(x[10].trim()) * -1);
+            mi2.setTotal(saldo);
+            mi2.setBaseImponible(saldo);
             mi2.setTotalView(mi2.getTotal() + "");
             mi2.setBaseImponibleView(mi2.getBaseImponible() + "");
             mi2.setValorView("0");
@@ -172,7 +185,7 @@ public class ComprobanteDatosProcesar {
             SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
             comp.setFecha(sdf2.format(fecha));
             
-            comp.setMontoTotal(Double.valueOf(x[10].trim()) * -1);
+            comp.setMontoTotal(saldo);
             comp.setMontoTotalView(comp.getMontoTotal() + "");
             comp.setTotalImpuestos(0.0);
 

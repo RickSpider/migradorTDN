@@ -57,7 +57,7 @@ public class MigradorTDN {
        boolean vendedor = false;
        boolean categoriaCliente = false; // esto era tipo cliente paso a ser categoria el 14/04/2022
        boolean formaPago = false;
-       boolean cliente = true;
+       boolean cliente = false;
        boolean tipoProveedor = false;
        boolean proveedor = false;
        boolean unidadMedidaBase = false;
@@ -66,7 +66,7 @@ public class MigradorTDN {
        boolean producto = false;
        boolean timbrado = false;
        boolean comprbanteNTCCliente = false;
-       boolean comprbanteVentaCliente = false;
+       boolean comprbanteVentaCliente = true;
        
 
        String[] archivos = {"datos/ciudad.csv", "datos/departamento.csv", "datos/distrito.csv"};
@@ -396,12 +396,12 @@ public class MigradorTDN {
         
             
             System.out.println("Cargando cliente");
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/QUALITA_CLIENTEVIEW_02_13042022.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/QUALITA_CLIENTEVIEW_02_18042022.csv");
             
             ArrayList<Cliente> lClientes = cdp.procesarDatosClientes(csvArray, csvDepartamentos, csvCiudades, csvDistritos,
                     lVendedores, lZona, lRuta, lTipocliente, lTiposPagos, csvArrayCoordenadas, lRamos, lCategoriaCliente);
 
-            for (int i = 3086; i < 3087  ; i++) { //retail 3086
+            for (int i = 0; i < lClientes.size()  ; i++) { //retail 63
                 con = new ConexionHttps();
 
                 con.setLink(Config.HOST + Config.CLIENTE);
@@ -468,7 +468,7 @@ public class MigradorTDN {
             
             ArrayList<Proveedor> lProveedor = pdp.procesarDatosProveedores(csvArray, lTipoProveedor);
 
-            for (int i = 1444; i < lProveedor.size(); i++) {
+            for (int i = 0; i < lProveedor.size(); i++) {
                 con = new ConexionHttps();
 
                 con.setLink(Config.HOST + Config.PROVEEDOR);
@@ -486,7 +486,7 @@ public class MigradorTDN {
         
         //Seccion UnidadMedida
         
-        ArrayList<String[]> csvArrayProducto = csv.leerArchivo("datos/producto/QUALITA_PRODUCTOSVIEW_07042022.csv");
+        ArrayList<String[]> csvArrayProducto = csv.leerArchivo("datos/producto/QUALITA_PRODUCTOSVIEW_11042022.csv");
         
         if (unidadMedidaBase){
             
@@ -850,11 +850,31 @@ public class MigradorTDN {
             ArrayList<Comprobante> lComprobanteVENTACliente = cmdp.procesarDatosComprobante(csvArray, lCliente, lTimbradosObj, csvLocacion, 3L);
             
             
-            for (int i = 0; i<1 ;i++){
+            for (int i = 0; i<lComprobanteVENTACliente.size() ;i++){
              
                 con = new ConexionHttps();
+                
+                Cliente c = null;
+                
+                for (Cliente c1 : lCliente){
+                
+                    if (lComprobanteVENTACliente.get(i).getCliente().longValue() == c1.getId().longValue()){
+                    
+                        c=c1;
+                        break;
+                        
+                    }
+                    
+                }
+                
+                if (c == null ){
+                    System.out.println("entre en el continue");
+                    continue;
+                    
+                }
 
-                con.setLink(Config.HOST + Config.COMPROBANTEVENTA);
+                con.setLink(Config.HOST + Config.COMPROBANTEVENTA+
+                        Config.COMPROBANTEVENTAPOST.replace("#1#", ""+c.getFormaPago().getPlazoDias()));
 
                 con.setToken(rToken.getAccessToken());
                 con.setBarerAutenticacion(true);
