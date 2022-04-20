@@ -36,6 +36,75 @@ public class ComprobanteDatosProcesar {
                 continue;
                 
             }
+            
+            boolean entro = false;
+            
+             
+            long clienteID = 0;
+            for (Cliente cli : lClientes){
+                
+                if (cli.getCodigo().compareTo(x[2].trim())==0){
+                        
+                    System.out.println("econtre cliente codigo "+cli.getCodigo());
+                    
+                    clienteID = cli.getId().longValue();
+                    break;
+                        
+               }
+                    
+            }
+            
+            for (Comprobante comp : out){
+            
+                if (comp.getNumero().compareTo(x[9].trim())==0 && comp.getCliente().longValue() == clienteID){
+                    
+                    System.out.println("agregando detalle");
+                    
+                    Double saldo = Double.valueOf(x[10].trim());
+            
+                    if (tipoComprobante.longValue() == 4L){
+
+                        saldo = saldo*-1;
+
+                    }
+                    
+                    MontoImponible mi = new MontoImponible();
+                    mi.setTipoImpuesto(3L);
+                     
+                    mi.setBaseImponible(saldo);
+                    mi.setPorcentaje(0L);
+                    
+                
+                    ComprobanteDetalle cd = new ComprobanteDetalle();
+                    cd.setTipo(105L);
+                    cd.setServicio(415L);
+                    cd.setTotalItem(saldo);
+                    cd.setTotalItemView(cd.getTotalItem() + "");
+                    cd.setPrecioVenta(saldo);
+                    cd.setUltimoPrecioView(cd.getPrecioVenta() + "");
+                    cd.getMontosImponibles().add(mi);
+
+                    comp.getComprobanteDetalle().add(cd);
+                    
+                    comp.setMontoTotal(comp.getMontoTotal()+saldo);
+                    comp.setMontoTotalView(comp.getMontoTotal() + "");
+                    
+                    comp.getMontosImponibles().get(0).setTotal(comp.getMontosImponibles().get(0).getTotal()+saldo);
+                    comp.getMontosImponibles().get(0).setBaseImponible(comp.getMontosImponibles().get(0).getBaseImponible()+saldo);
+                    comp.getMontosImponibles().get(0).setTotalView(comp.getMontosImponibles().get(0).getTotal() + "");
+                    comp.getMontosImponibles().get(0).setBaseImponibleView(comp.getMontosImponibles().get(0).getBaseImponible() + "");
+                    
+                    entro = true;
+                    
+                    break;
+                }
+                
+            }
+            
+            if (entro){
+            
+                continue;
+            }
 
             Comprobante comp = new Comprobante();
 
