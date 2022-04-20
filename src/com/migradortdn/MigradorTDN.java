@@ -65,8 +65,10 @@ public class MigradorTDN {
        boolean marca = false;
        boolean producto = false;
        boolean timbrado = false;
-       boolean comprbanteNTCCliente = false;
+       boolean comprbanteNTCCliente = true;
        boolean comprbanteVentaCliente = true;
+       boolean timbradoProveedor = false;
+       boolean comprobanteCompraProveedor = false;
        
 
        String[] archivos = {"datos/ciudad.csv", "datos/departamento.csv", "datos/distrito.csv"};
@@ -856,8 +858,18 @@ public class MigradorTDN {
                 
                 Cliente c = null;
                 
+                
+                
                 for (Cliente c1 : lCliente){
                 
+                    if (lComprobanteVENTACliente.get(i).getCliente() == null){
+                    
+                        System.out.println("sin cliente "+lComprobanteVENTACliente.get(i).getNumero());
+                        break;
+                        
+                        
+                    }
+                    
                     if (lComprobanteVENTACliente.get(i).getCliente().longValue() == c1.getId().longValue()){
                     
                         c=c1;
@@ -868,13 +880,18 @@ public class MigradorTDN {
                 }
                 
                 if (c == null ){
-                    System.out.println("entre en el continue");
+                    System.out.println("cliente nulo");
                     continue;
                     
                 }
+                System.out.println("i= "+i);
+                
+                String link =  Config.COMPROBANTEVENTAPOST.replace("#1#", ""+lComprobanteVENTACliente.get(i).getComprobanteDetalle().size()).replace("#2#", ""+c.getFormaPago().getPlazoDias());
 
+                System.out.println("link "+link);
+                
                 con.setLink(Config.HOST + Config.COMPROBANTEVENTA+
-                        Config.COMPROBANTEVENTAPOST.replace("#1#", ""+c.getFormaPago().getPlazoDias()));
+                       link);
 
                 con.setToken(rToken.getAccessToken());
                 con.setBarerAutenticacion(true);
@@ -885,6 +902,20 @@ public class MigradorTDN {
                  
                  
              }
+            
+            
+        }
+        
+         ArrayList<String[]> csvArrayCompProv = csv.leerArchivo("datos/comprobante/QUALITA_SALDOSPROVEEDOR_18042022.csv");
+        
+        if (timbradoProveedor){
+        
+            
+            
+        }
+        
+        if (comprobanteCompraProveedor){
+        
             
             
         }
