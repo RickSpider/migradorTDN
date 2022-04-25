@@ -39,6 +39,88 @@ public class Comprobante {
     
     private ArrayList<ComprobanteDetalle> comprobanteDetalle = new ArrayList<ComprobanteDetalle>();
     private ArrayList<MontoImponible> montosImponibles = new ArrayList<MontoImponible>();
+    
+    //seccion proveedor
+    
+    private Long proveedor;
+    private Long sucursalProveedor;
+    private Long rubroIva;
+    private Long timbradoProveedor;
+    private Long grupoCompra;
+    private Long fob;
+    private Long moneda1;
+
+    private Long proveedorPlazoCuotas;
+
+    public Long getProveedorPlazoCuotas() {
+        return proveedorPlazoCuotas;
+    }
+
+    public void setProveedorPlazoCuotas(Long proveedorPlazoCuotas) {
+        this.proveedorPlazoCuotas = proveedorPlazoCuotas;
+    }
+    
+    
+
+    public Long getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(Long proveedor) {
+        this.proveedor = proveedor;
+    }
+
+    public Long getSucursalProveedor() {
+        return sucursalProveedor;
+    }
+
+    public void setSucursalProveedor(Long sucursalProveedor) {
+        this.sucursalProveedor = sucursalProveedor;
+    }
+
+    public Long getRubroIva() {
+        return rubroIva;
+    }
+
+    public void setRubroIva(Long rubroIva) {
+        this.rubroIva = rubroIva;
+    }
+
+    public Long getTimbradoProveedor() {
+        return timbradoProveedor;
+    }
+
+    public void setTimbradoProveedor(Long timbradoProveedor) {
+        this.timbradoProveedor = timbradoProveedor;
+    }
+
+    public Long getGrupoCompra() {
+        return grupoCompra;
+    }
+
+    public void setGrupoCompra(Long grupoCompra) {
+        this.grupoCompra = grupoCompra;
+    }
+
+    public Long getFob() {
+        return fob;
+    }
+
+    public void setFob(Long fob) {
+        this.fob = fob;
+    }
+
+    public Long getMoneda1() {
+        return moneda1;
+    }
+
+    public void setMoneda1(Long moneda1) {
+        this.moneda1 = moneda1;
+    }
+    
+    
+    
+    //
 
     public Long getId() {
         return id;

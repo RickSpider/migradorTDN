@@ -24,6 +24,7 @@ public class ComprobanteDetalle {
     private String precioVentaView = "0,00";
     private int descuento = 0;
     private String descuentoView = "0";
+    private double ultimoPrecio;
     private String ultimoPrecioView;
     
     private ArrayList<MontoImponible> montosImponibles = new ArrayList<MontoImponible>();
@@ -132,6 +133,14 @@ public class ComprobanteDetalle {
 
     public void setMontosImponibles(ArrayList<MontoImponible> montosImponibles) {
         this.montosImponibles = montosImponibles;
+    }
+
+    public double getUltimoPrecio() {
+        return ultimoPrecio;
+    }
+
+    public void setUltimoPrecio(double ultimoPrecio) {
+        this.ultimoPrecio = ultimoPrecio;
     }
 
     
