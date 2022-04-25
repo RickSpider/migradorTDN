@@ -18,6 +18,8 @@ public class Cliente {
    
     private String nombre;
     
+    private String nombreFantasia;
+    
     private Tipo tipoPersona;
    
     private String numero;
@@ -396,9 +398,13 @@ public class Cliente {
     public void setTipoActividadRamoCliente(Ramo tipoActividadRamoCliente) {
         this.tipoActividadRamoCliente = tipoActividadRamoCliente;
     }
-    
-    
 
-    
+    public String getNombreFantasia() {
+        return nombreFantasia;
+    }
+
+    public void setNombreFantasia(String nombreFantasia) {
+        this.nombreFantasia = nombreFantasia;
+    }    
     
 }
