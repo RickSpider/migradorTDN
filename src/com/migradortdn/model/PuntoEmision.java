@@ -14,6 +14,17 @@ public class PuntoEmision {
     private Long id;
     private String numero;
     private String descripcion;
+    
+    //esto es para proveedor
+    private String puntoEmision;
+
+    public String getPuntoEmision() {
+        return puntoEmision;
+    }
+
+    public void setPuntoEmision(String puntoEmision) {
+        this.puntoEmision = puntoEmision;
+    }
 
     public Long getId() {
         return id;

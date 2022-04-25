@@ -5,6 +5,8 @@
  */
 package com.migradortdn.model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author BlackSpider
@@ -33,6 +35,34 @@ public class Sucursal {
     private Long gln;
     
     private String ubicacionGeografica = "";
+
+    
+    
+    
+    //Esto es para Proveedor
+    private String codigoEstablecimiento;
+    private ArrayList<PuntoEmision> puntosEmisionSucursal;
+    
+    
+    public String getCodigoEstablecimiento() {
+        return codigoEstablecimiento;
+    }
+
+    public void setCodigoEstablecimiento(String codigoEstablecimiento) {
+        this.codigoEstablecimiento = codigoEstablecimiento;
+    }
+
+    public ArrayList<PuntoEmision> getPuntosEmisionSucursal() {
+        return puntosEmisionSucursal;
+    }
+
+    public void setPuntosEmisionSucursal(ArrayList<PuntoEmision> puntosEmisionSucursal) {
+        this.puntosEmisionSucursal = puntosEmisionSucursal;
+    }
+
+    
+    
+    //end 
 
     public String getUbicacionGeografica() {
         return ubicacionGeografica;
