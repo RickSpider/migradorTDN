@@ -62,6 +62,12 @@ public class ConexionHttps {
             
         }
         
+        if (metodo == Config.PUT){
+        
+            urlConnection.setRequestMethod("PUT");
+            
+        }
+        
        
         
         if (this.barerAutenticacion && this.token.length() > 0){
