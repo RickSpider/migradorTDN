@@ -102,7 +102,7 @@ public class MigradorTDN {
 
         if (zona) {
             System.out.println("Cargando zona");
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/QUALITA_ZONAVIEW_01.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/zonasventa_25042022.csv");
 
             ArrayList<Zona> lZona = dp.procesarZona(csvArray);
 
@@ -125,7 +125,7 @@ public class MigradorTDN {
 
         if (ruta) {
             System.out.println("Cargando Ruta");
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/QUALITA_RUTAVIEW_01.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/rutasventa_25042022.csv");
 
             ArrayList<Ruta> lRuta = dp.procesarRuta(csvArray);
 
@@ -149,7 +149,7 @@ public class MigradorTDN {
         //seccion vendedores
         if (vendedor) {
             System.out.println("Cargando Vendedor");
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/vendedores/QUALITA_VENDEDORVIEW_01.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/vendedores/vendedores_25042022.csv");
             System.out.println("el csvArray Vendedores " + csvArray.size());
 
             ArrayList[] sv = dp.separarVendedores(csvArray);
@@ -208,7 +208,7 @@ public class MigradorTDN {
 
         if (categoriaCliente) { // esto pasa a ser Categoria Cliente
             System.out.println("Cargando TipoCliente");
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/QUALITA_TIPOCLIENTEVIEW_01.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/tipocliente_25042022.csv");
 
             ArrayList<TipoCliente> lTipocliente = dp.procesarTipoCliente(csvArray);
 
@@ -261,13 +261,17 @@ public class MigradorTDN {
 
         con.setBody("");
 
-        Data dataCategoriaCliente = new Gson().fromJson(con.getConexion(Config.GET), Data.class);
+        String jsonCategoria = con.getConexion(Config.GET);
+        
+        System.out.println(jsonCategoria);
+        
+        Data dataCategoriaCliente = new Gson().fromJson(jsonCategoria, Data.class);
 
         Type arrayCC = new TypeToken<List<TipoCliente>>() {
         }.getType();
 
         ArrayList<TipoCliente> lCategoriaCliente = (new Gson().fromJson(new Gson().toJson(dataCategoriaCliente.getData()), arrayCC));
-
+        
         //Lista Zona
         con = new ConexionHttps();
 
@@ -323,7 +327,7 @@ public class MigradorTDN {
         if (formaPago) {
 
             System.out.println("Cargando formaPago (CONDICION)");
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/QUALITA_CONDICIONVTA_01.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/codicionventa_25042022.csv");
 
             ArrayList<FormaPago> lFormaPago = dp.procesarFormaPago(csvArray);
 
@@ -388,12 +392,14 @@ public class MigradorTDN {
             ArrayList<Ramo> lRamos = (new Gson().fromJson(new Gson().toJson(dataRamo.getData()), arrayRa));
 
             System.out.println("Cargando cliente");
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/QUALITA_CLIENTEVIEW_02_18042022.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/clientes_25042022.csv");
 
             ArrayList<Cliente> lClientes = cdp.procesarDatosClientes(csvArray, csvDepartamentos, csvCiudades, csvDistritos,
                     lVendedores, lZona, lRuta, lTipocliente, lTiposPagos, csvArrayCoordenadas, lRamos, lCategoriaCliente);
 
-            for (int i = 0; i < lClientes.size(); i++) { //retail 63
+            for (int i = 0; i < lClientes.size(); i++) { //retail 64
+                
+                System.out.println(i);
                 con = new ConexionHttps();
 
                 con.setLink(Config.HOST + Config.CLIENTE);
@@ -415,7 +421,7 @@ public class MigradorTDN {
 
             System.out.println("Cargando Tipo Proveedor");
 
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/proveedor/QUALITA_TIPOPROVEEDOR_01.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/proveedor/tipoproveedor_25042022.csv");
 
             ArrayList<TipoProveedor> lTipoProveedor = dp.procesarTipoProveedor(csvArray);
 
@@ -455,13 +461,13 @@ public class MigradorTDN {
         if (proveedor) {
 
             System.out.println("Cargando Proveedor");
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/proveedor/QUALITA_PROVEEDORVIEW_01.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/proveedor/proveedor_25042022.csv");
 
             ProveedorDatosProcesar pdp = new ProveedorDatosProcesar();
 
             ArrayList<Proveedor> lProveedor = pdp.procesarDatosProveedores(csvArray, lTipoProveedor);
 
-            for (int i = 0; i < lProveedor.size(); i++) {
+            for (int i = 2832; i < lProveedor.size(); i++) {
                 con = new ConexionHttps();
 
                 con.setLink(Config.HOST + Config.PROVEEDOR);
@@ -477,7 +483,7 @@ public class MigradorTDN {
         }
 
         //Seccion UnidadMedida
-        ArrayList<String[]> csvArrayProducto = csv.leerArchivo("datos/producto/QUALITA_PRODUCTOSVIEW_11042022.csv");
+        ArrayList<String[]> csvArrayProducto = csv.leerArchivo("datos/producto/QUALITA_PRODUCTOSVIEW_20042022.csv");
 
         if (unidadMedidaBase) {
 
@@ -577,6 +583,12 @@ public class MigradorTDN {
 
             ArrayList<String[]> csvArrayLinea = csv.leerArchivo("datos/producto/prd_linea_producto06042022.csv");
 
+            for (String [] s : csvArrayLinea){
+            
+                System.out.println(s[4]);
+                
+            } 
+            
             // proveedor
             System.out.println("Lista Proveedor");
 
@@ -663,6 +675,8 @@ public class MigradorTDN {
 
             for (int i = 0; i < lProducto.size(); i++) {
 
+                System.out.println("el valor de i === "+i);
+                
                 con = new ConexionHttps();
 
                 con.setLink(Config.HOST + Config.PRODUCTO);
@@ -680,7 +694,7 @@ public class MigradorTDN {
 
         if (timbrado) {
 
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/QUALITA_TIMBRADOVENTAS_11042022.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/timbradosSaric_25042022.csv");
 
             System.out.println("Puntos de venta");
 
@@ -791,7 +805,7 @@ public class MigradorTDN {
 
             if (comprbanteNTCCliente) {
 
-                ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/QUALITA_SALDOSNCR_01.csv");
+                ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/notascredito_ventas_25042022.csv");
 
                 ComprobanteDatosProcesar cmdp = new ComprobanteDatosProcesar();
 
@@ -816,7 +830,7 @@ public class MigradorTDN {
 
             if (comprbanteVentaCliente) {
 
-                ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/QUALITA_SALDOSCLIENTES_07042022.csv");
+                ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/facturas_ventas_25042022.csv");
 
                 ComprobanteDatosProcesar cmdp = new ComprobanteDatosProcesar();
 
@@ -912,7 +926,7 @@ public class MigradorTDN {
 
         }
 
-        ArrayList<String[]> csvArrayCompProv = csv.leerArchivo("datos/comprobante/QUALITA_SALDOSPROVEEDOR_22042022.csv");
+        ArrayList<String[]> csvArrayCompProv = csv.leerArchivo("datos/comprobante/saldoscompras_25042022.csv");
 
         if (sucursalesProveedor || timbradoProveedor || comprobanteCompraProveedor) {
             
