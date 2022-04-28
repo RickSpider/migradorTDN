@@ -93,7 +93,8 @@ public class ConexionHttps {
             
             System.out.println(HttpResult);
             
-            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "iso-8859-1"));
+         //   BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "iso-8859-1"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
             String line = "";
             while ((line = br.readLine()) != null) {
                 linea = linea + line;
