@@ -171,8 +171,16 @@ public class ProductoDatosProcesar {
                        // && u.getCantidad() == ((int) Double.parseDouble(x[17].toString().replace(",", ".")))
                         && u.getCantidad() == cant
                         && u.getUnidadContenida().getDescripcion().toString().compareTo(x[15].toString().trim().toUpperCase()) == 0) {
+                     
+                    
 
-                   p.getUnidadesMedida().add(u.getId());
+                 
+                   
+                   if (u.getDescripcion().compareTo("UNIDAD - 1")!=0){
+                     
+                        p.getUnidadesMedida().add(u.getId());
+                   
+                   }
                    p.setPresentacion(u.getId());
                    p.setConversion((double) cant);
                  
@@ -194,6 +202,8 @@ public class ProductoDatosProcesar {
                 }
                 
             }
+            
+            System.out.println("csvProducto = "+x[3].trim());
             
             for (String[] s : csvArrayLinea){
             
@@ -217,18 +227,14 @@ public class ProductoDatosProcesar {
                 if (ub.getDescripcion().compareTo("KILO") == 0){
                 
                     p.setUnidadMedidaContenida(ub.getId());
+                    System.out.println("para el contenido"+ x[13]);
                     p.setContenido( Double.valueOf(x[13].trim().replace(",", "."))/1000);
                    
                     break;
                 }                
                 
             }
-             
-           
-            
-                
-             
-             
+
             System.out.println(p.getNombre());
             
             System.out.println("Conversion "+p.getConversion());
