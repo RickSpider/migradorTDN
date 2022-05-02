@@ -467,7 +467,7 @@ public class MigradorTDN {
 
             ArrayList<Proveedor> lProveedor = pdp.procesarDatosProveedores(csvArray, lTipoProveedor);
 
-            for (int i = 2832; i < lProveedor.size(); i++) {
+            for (int i = 0; i < lProveedor.size(); i++) {
                 con = new ConexionHttps();
 
                 con.setLink(Config.HOST + Config.PROVEEDOR);
@@ -583,11 +583,11 @@ public class MigradorTDN {
 
             ArrayList<String[]> csvArrayLinea = csv.leerArchivo("datos/producto/prd_linea_producto06042022.csv");
 
-            for (String [] s : csvArrayLinea){
+            /*for (String [] s : csvArrayLinea){
             
                 System.out.println(s[4]);
                 
-            } 
+            } */
             
             // proveedor
             System.out.println("Lista Proveedor");
@@ -673,7 +673,7 @@ public class MigradorTDN {
             ArrayList<Producto> lProducto = pdp.procesarDatosProducto(csvArrayProducto, csvArrayLinea, lProveedor, lUnidadMedidaBase,
                      lUnidadMedida, lMarca);
 
-            for (int i = 0; i < lProducto.size(); i++) {
+            for (int i = 400; i < lProducto.size(); i++) {
 
                 System.out.println("el valor de i === "+i);
                 
@@ -809,7 +809,7 @@ public class MigradorTDN {
 
                 ComprobanteDatosProcesar cmdp = new ComprobanteDatosProcesar();
 
-                ArrayList<Comprobante> lComprobanteNTCC = cmdp.procesarDatosComprobante(csvArray, lCliente, lTimbradosObj, csvLocacion, 4L);
+                ArrayList<Comprobante> lComprobanteNTCC = cmdp.procesarDatosComprobante(csvArray, lCliente, lTimbradosObj, csvLocacion, 4L, lTiposPagos );
 
                 for (int i = 0; i < lComprobanteNTCC.size(); i++) {
 
@@ -829,12 +829,17 @@ public class MigradorTDN {
             }
 
             if (comprbanteVentaCliente) {
+                
+                
+                
+                
+                
 
-                ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/facturas_ventas_25042022.csv");
+                ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/facturas_ventas_29042022.csv");
 
                 ComprobanteDatosProcesar cmdp = new ComprobanteDatosProcesar();
 
-                ArrayList<Comprobante> lComprobanteVENTACliente = cmdp.procesarDatosComprobante(csvArray, lCliente, lTimbradosObj, csvLocacion, 3L);
+                ArrayList<Comprobante> lComprobanteVENTACliente = cmdp.procesarDatosComprobante(csvArray, lCliente, lTimbradosObj, csvLocacion, 3L, lTiposPagos );
 
                 for (int i = 0; i < lComprobanteVENTACliente.size(); i++) {
 

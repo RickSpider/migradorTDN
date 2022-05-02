@@ -32,6 +32,8 @@ public class Vendedor {
     
     private Vendedor supervisor;
     
+    private String codigo;
+    
     public Long getId() {
         return id;
     }
@@ -150,6 +152,14 @@ public class Vendedor {
 
     public void setNombresyapellidos(String nombresyapellidos) {
         this.nombresyapellidos = nombresyapellidos;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
     

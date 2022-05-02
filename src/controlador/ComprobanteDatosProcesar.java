@@ -8,6 +8,7 @@ package controlador;
 import com.migradortdn.model.Cliente;
 import com.migradortdn.model.Comprobante;
 import com.migradortdn.model.ComprobanteDetalle;
+import com.migradortdn.model.FormaPago;
 import com.migradortdn.model.MontoImponible;
 import com.migradortdn.model.Sucursal;
 import com.migradortdn.model.Timbrado;
@@ -25,7 +26,8 @@ import java.util.Objects;
 public class ComprobanteDatosProcesar {
 
     public ArrayList<Comprobante> procesarDatosComprobante(ArrayList<String[]> csvArrayComprobante,
-            ArrayList<Cliente> lClientes, ArrayList<Timbrado>lTimbrados, ArrayList<String[]> csvArrayLocacion, Long tipoComprobante) throws ParseException {
+            ArrayList<Cliente> lClientes, ArrayList<Timbrado>lTimbrados, ArrayList<String[]> csvArrayLocacion, Long tipoComprobante,
+            ArrayList<FormaPago> lTiposPagos) throws ParseException {
 
         ArrayList<Comprobante> out = new ArrayList<Comprobante>();
 
@@ -77,7 +79,7 @@ public class ComprobanteDatosProcesar {
                 
                     ComprobanteDetalle cd = new ComprobanteDetalle();
                     cd.setTipo(105L);
-                    cd.setServicio(415L);
+                    cd.setServicio(440L);
                     cd.setTotalItem(saldo);
                     cd.setTotalItemView(cd.getTotalItem() + "");
                     cd.setPrecioVenta(saldo);
@@ -137,9 +139,31 @@ public class ComprobanteDatosProcesar {
                         
                     }
                     
-                    if (comp.getSucursalCliente() == null){
+                    if (comp.getSucursalCliente() == null || comp.getSucursalCliente().longValue() == 0){
+                        
+                        if (c.getSucursales().size() > 1){
+                        
+                             for (Sucursal s : c.getSucursales()) {
+
+                                if (s.getCodigoEstablecimiento().compareTo("001") == 0) {
+
+                                    comp.setSucursalCliente(s.getId());
+                                    break;
+
+                                }
+
+                            }
+                            
+                            
+                        } else{
+                        
+                            comp.setSucursalCliente(c.getSucursales().get(0).getId());
+                            
+                        }               
                     
-                        comp.setSucursalCliente(c.getSucursales().get(0).getId());
+                        
+                        
+                        break;
                         
                     }  
 
@@ -163,7 +187,7 @@ public class ComprobanteDatosProcesar {
 
             ComprobanteDetalle cd = new ComprobanteDetalle();
             cd.setTipo(105L);
-            cd.setServicio(415L);
+            cd.setServicio(440L);
             cd.setTotalItem(saldo);
             cd.setTotalItemView(cd.getTotalItem() + "");
             cd.setPrecioVenta(saldo);
@@ -273,6 +297,17 @@ public class ComprobanteDatosProcesar {
                         break;
                         
                     }
+                    
+                }
+                
+            }
+            
+            for (FormaPago fp : lTiposPagos){
+            
+                if (fp.getDescripcion().compareTo(x[13].trim())==0){
+                
+                    comp.setFormaPago(fp);
+                    break;
                     
                 }
                 

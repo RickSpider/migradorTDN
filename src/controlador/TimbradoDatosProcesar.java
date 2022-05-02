@@ -192,7 +192,7 @@ public class TimbradoDatosProcesar {
             timbrado.setFechaHasta(sdf2.format(fechaHasta));
             
             ClaseTimbrado ct = new ClaseTimbrado();
-            ct.setId(308L);
+            ct.setId(307L);
             timbrado.setClaseTimbrado(ct);
             
             out.add(timbrado);

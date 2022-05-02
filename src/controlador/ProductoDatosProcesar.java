@@ -82,7 +82,21 @@ public class ProductoDatosProcesar {
            
             
             p.setNombre(x[1].trim());
-            p.getLocaciones().add(1L);
+            
+            if (x[19].trim().compareTo("3")==0){
+            
+                p.getLocaciones().add(1L);
+                p.getLocaciones().add(7L);
+                p.getLocaciones().add(9L);
+            }
+            
+            if (x[19].trim().compareTo("1")==0){
+            
+                 p.getLocaciones().add(7L);
+                
+            }
+            
+           
             
             int impuesto = (int) Double.parseDouble(x[5].trim().replace(",", "."));
             
@@ -224,7 +238,7 @@ public class ProductoDatosProcesar {
             
              for (UnidadMedida ub : lUnidadMedidaBase){
             
-                if (ub.getDescripcion().compareTo("KILO") == 0){
+                if (ub.getDescripcion().compareTo("kilogramos") == 0){
                 
                     p.setUnidadMedidaContenida(ub.getId());
                     System.out.println("para el contenido"+ x[13]);

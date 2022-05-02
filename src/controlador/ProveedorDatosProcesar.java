@@ -445,18 +445,18 @@ public class ProveedorDatosProcesar {
             
             if (iva.longValue() == 0){
             
-                  cd.setServicio(415L);
+                  cd.setServicio(440L);
             }
             
             if (iva.longValue() == 10){
             
-                  cd.setServicio(416L);
+                  cd.setServicio(442L);
                 
             }
             
              if (iva.longValue() == 5){
             
-                cd.setServicio(417L);
+                cd.setServicio(441L);
                 
             }
            

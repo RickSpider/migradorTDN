@@ -45,6 +45,7 @@ public class DatosProcesar {
 
                 v.setNombres(x[2].trim());
                 v.setApellidos(x[3].trim());
+                v.setCodigo(x[1].trim());
 
                 Tipo tipoDocumento = new Tipo();
 

@@ -39,6 +39,7 @@ public class Comprobante {
     
     private ArrayList<ComprobanteDetalle> comprobanteDetalle = new ArrayList<ComprobanteDetalle>();
     private ArrayList<MontoImponible> montosImponibles = new ArrayList<MontoImponible>();
+    private FormaPago formaPago;
     
     //seccion proveedor
     
@@ -306,7 +307,15 @@ public class Comprobante {
         this.comprobanteDetalle = comprobanteDetalle;
     }
 
-   
+    public FormaPago getFormaPago() {
+        return formaPago;
+    }
+
+    public void setFormaPago(FormaPago formaPago) {
+        this.formaPago = formaPago;
+    }
+
+    
     
     
 }
