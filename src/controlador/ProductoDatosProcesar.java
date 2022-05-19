@@ -209,7 +209,7 @@ public class ProductoDatosProcesar {
                 if (prov.getNumeroDocumento().compareTo(x[9].trim())==0){
                     
                     p.setProveedorPrincipal(prov.getId());
-                    p.setProveedorSucursal(prov.getId());
+                    p.setProveedorSucursal(prov.getSucursales().get(0).getId());
                     p.getProveedores().add(prov.getId());
                 
                     break;

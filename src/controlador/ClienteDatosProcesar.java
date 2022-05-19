@@ -126,12 +126,12 @@ public class ClienteDatosProcesar {
 
                         for (TipoCliente tc : lTipoCliente) {
 
-                            if (tc.getId().longValue() == 25){
-                            
+                            if (tc.getId().longValue() == 25) {
+
                                 System.out.println(tc.getDescripcion());
-                                
+
                             }
-                            
+
                             if (tc.getDescripcion().compareTo(x[15].trim()) == 0) {
 
                                 cliente.setTipoCliente(tc);
@@ -142,13 +142,13 @@ public class ClienteDatosProcesar {
                         }
 
                     }
-                    
+
                     if (x[14].trim().length() > 0) { // este es el nuevo tipo paso a ser categoria
 
                         for (TipoCliente tc : lCategoriaCliente) {
 
                             if (tc.getDescripcion().compareTo(x[14].trim()) == 0) {
-                                
+
                                 cliente.setCategoriaCliente(tc);
 
                                 break;
@@ -157,19 +157,19 @@ public class ClienteDatosProcesar {
                         }
 
                     }
-                    
-                    if (x[3].trim().length() > 0){
-                    
-                        for (Ramo ra : lRamos){
-                        
-                            if (ra.getNombre().compareTo(x[3].trim())==0){
-                            
+
+                    if (x[3].trim().length() > 0) {
+
+                        for (Ramo ra : lRamos) {
+
+                            if (ra.getNombre().compareTo(x[3].trim()) == 0) {
+
                                 cliente.setTipoActividadRamoCliente(ra);
                                 break;
                             }
-                        
+
                         }
-                        
+
                     }
 
                     /*TipoCliente tipoCliente = new TipoCliente();
@@ -197,23 +197,114 @@ public class ClienteDatosProcesar {
                     cliente.setCondicionVenta(x[8].trim());
                     cliente.setCodigo(x[1].trim());
 
-                   
+                    //seccion matriz
+                    Sucursal matriz = new Sucursal();
+                    matriz.setDescripcion("Matriz");
+                    matriz.setCodigoSucursal("000");
 
+                    for (String[] s : csvCiudades) {
+
+                        String sCiudad = x[11].trim();
+
+                        if (sCiudad.compareTo("ASUNCION") == 0) {
+
+                            sCiudad = "ASUNCION (DISTRITO)";
+
+                        }
+
+                        if (sCiudad.compareTo("PDTE. FRANCO") == 0) {
+
+                            sCiudad = "PUERTO PTE. FRANCO";
+
+                        }
+
+                        if (sCiudad.compareTo("J.A.SALDIVAR-50K") == 0 || sCiudad.compareTo("J.AUGUSTO SALDIVAR") == 0) {
+
+                            sCiudad = "J.AUGUSTO SALDIVAR";
+
+                        }
+
+                        if (s[2].compareTo(sCiudad) == 0) {
+
+                            Tipo ciudad = new Tipo();
+                            ciudad.setId(Long.parseLong(s[0]));
+                            //cliente.setCiudad(ciudad);
+                            matriz.setCiudad(ciudad);
+                            break;
+                        }
+
+                    }
+
+                    // matriz.setCiudad(x[11].trim());
+                    matriz.setDireccion(x[7].trim());
+                    matriz.setTelefono(cliente.getTelefono());
+                    matriz.setPais(pais);
+                    matriz.setDepartamento(cliente.getDepartamento());
+
+                    if (x[12].trim().length() > 0) {
+
+                        for (Zona z : lZona) {
+
+                            if (z.getZona().compareTo(x[12].trim()) == 0) {
+
+                                matriz.setZona(z);
+                                break;
+                            }
+
+                        }
+
+                    }
+
+                    if (x[13].trim().length() > 0) {
+
+                        for (Ruta r : lRuta) {
+
+                            if (r.getNombreRuta().compareTo(x[13].trim()) == 0) {
+
+                                matriz.setRuta(r);
+                                break;
+                            }
+
+                        }
+
+                    }
+
+                    if (x[16].trim().length() > 0) {
+
+                        for (Vendedor v : lVendedor) {
+
+                            String vendedor = x[16].trim().replaceAll(",", " ");
+
+                            if (v.getNombresyapellidos().compareTo(vendedor) == 0) {
+
+                                matriz.setVendedor(v);
+                                break;
+                            }
+
+                        }
+
+                    }
+
+                    if (x[18].trim().length() > 0) {
+                        matriz.setGln(Long.parseLong(x[18].trim()));
+                    }
+
+                    cliente.getSucursales().add(matriz);
+
+                    //fin matriz
                     //seccion buscar sucursales
                     //int c = 2;
                     for (String[] x2 : csvArray) {
-                        
-                       
-                        
+
                         if (x2[2].trim().length() > 0) {
-                            
-                            int c= (int) Double.parseDouble(x2[2].trim().replace(",", "."));
+
+                            int c = (int) Double.parseDouble(x2[2].trim().replace(",", "."));
 
                             String codigo = x2[1].trim();
                             if (codigo.compareTo(cliente.getCodigo()) == 0) {
 
                                 Sucursal sucursal = new Sucursal();
-                                sucursal.setDescripcion(x2[5].trim());
+                                sucursal.setDescripcion(x2[19].trim());
 
                                 if (c < 10) {
 
@@ -234,7 +325,6 @@ public class ClienteDatosProcesar {
                                 }
 
                                 //c = c + 1;
-
                                 //sucursal.setCiudad(x2[11].trim());
                                 for (String[] s : csvCiudades) {
 
@@ -341,9 +431,10 @@ public class ClienteDatosProcesar {
 
                                 }
 
-                                 if (x2[18].trim().length() > 0)
+                                if (x2[18].trim().length() > 0) {
                                     sucursal.setGln(Long.parseLong(x2[18].trim()));
-                                
+                                }
+
                                 cliente.getSucursales().add(sucursal);
 
                             }
@@ -351,8 +442,8 @@ public class ClienteDatosProcesar {
                         }
 
                     }
-                    
-                    boolean encontroMatriz001 = false;
+
+                    /* boolean encontroMatriz001 = false;
                     
                     for (Sucursal s : cliente.getSucursales()){
                     
@@ -363,106 +454,11 @@ public class ClienteDatosProcesar {
                             
                         }
                         
-                    }
-                    
-                    if (!encontroMatriz001){
-                    
-                        Sucursal matriz = new Sucursal();
-                        matriz.setDescripcion("Matriz");
-                        matriz.setCodigoSucursal("001");
-
-                        for (String[] s : csvCiudades) {
-
-                            String sCiudad = x[11].trim();
-
-                            if (sCiudad.compareTo("ASUNCION") == 0) {
-
-                                sCiudad = "ASUNCION (DISTRITO)";
-
-                            }
-
-                            if (sCiudad.compareTo("PDTE. FRANCO") == 0) {
-
-                                sCiudad = "PUERTO PTE. FRANCO";
-
-                            }
-
-                            if (sCiudad.compareTo("J.A.SALDIVAR-50K") == 0 || sCiudad.compareTo("J.AUGUSTO SALDIVAR") == 0) {
-
-                                sCiudad = "J.AUGUSTO SALDIVAR";
-
-                            }
-
-                            if (s[2].compareTo(sCiudad) == 0) {
-
-                                Tipo ciudad = new Tipo();
-                                ciudad.setId(Long.parseLong(s[0]));
-                                //cliente.setCiudad(ciudad);
-                                matriz.setCiudad(ciudad);
-                                break;
-                            }
-
-                        }
-
-                        // matriz.setCiudad(x[11].trim());
-                        matriz.setDireccion(x[7].trim());
-                        matriz.setTelefono(cliente.getTelefono());
-                        matriz.setPais(pais);
-                        matriz.setDepartamento(cliente.getDepartamento());
-
-                        if (x[12].trim().length() > 0) {
-
-                            for (Zona z : lZona) {
-
-                                if (z.getZona().compareTo(x[12].trim()) == 0) {
-
-                                    matriz.setZona(z);
-                                    break;
-                                }
-
-                            }
-
-                        }
-
-                        if (x[13].trim().length() > 0) {
-
-                            for (Ruta r : lRuta) {
-
-                                if (r.getNombreRuta().compareTo(x[13].trim()) == 0) {
-
-                                    matriz.setRuta(r);
-                                    break;
-                                }
-
-                            }
-
-                        }
-
-                        if (x[16].trim().length() > 0) {
-
-                            for (Vendedor v : lVendedor) {
-
-                                String vendedor = x[16].trim().replaceAll(",", " ");
-
-                                if (v.getNombresyapellidos().compareTo(vendedor) == 0) {
-
-                                    matriz.setVendedor(v);
-                                    break;
-                                }
-
-                            }
-
-                        }
-
-                        if (x[18].trim().length() > 0)
-                            matriz.setGln(Long.parseLong(x[18].trim()));
-
-                        cliente.getSucursales().add(matriz);
-                        
-                    } 
-                    
-
-                    cliente.getTipoVenta().setId(7554);
+                    }*/
+                    // if (!encontroMatriz001){
+                    // } 
+                    // en una actualizacion el 09/05/2022 cambio de 7554 a 369  
+                    cliente.getTipoVenta().setId(369);
 
                     for (FormaPago x3 : lFormaPago) {
 

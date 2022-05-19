@@ -17,7 +17,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  *
@@ -130,9 +129,10 @@ public class ComprobanteDatosProcesar {
                                 }
 
                             }
-
+                            break;
                         }
-                        break;
+
+                        
                     }else{
                     
                         comp.setSucursalCliente(c.getSucursales().get(0).getId());
@@ -145,7 +145,7 @@ public class ComprobanteDatosProcesar {
                         
                              for (Sucursal s : c.getSucursales()) {
 
-                                if (s.getCodigoEstablecimiento().compareTo("001") == 0) {
+                                if (s.getDescripcion().compareTo("Matriz") == 0) {
 
                                     comp.setSucursalCliente(s.getId());
                                     break;
@@ -206,8 +206,23 @@ public class ComprobanteDatosProcesar {
 
             comp.getMontosImponibles().add(mi2);
 
-            comp.setCambio(1L);
-            comp.setMoneda(56L);
+            /*comp.setCambio(1L);
+            comp.setMoneda(56L);*/
+            
+            if (x[1].trim().compareTo("Gs")==0){
+                
+                comp.setMoneda(56L);
+                comp.setCambio(1L);
+                
+            }
+            
+            if (x[1].trim().compareTo("U$S")==0){
+            
+                comp.setMoneda(57L);
+                comp.setCambio(Long.parseLong(x[0].trim()));
+                
+            }
+            
             comp.setTipo(tipoComprobante); // 4 NOTA DE CREDITO 3 FACTURA credito
             
             Long timbradoPuntoEmisionId = 0L;
@@ -302,6 +317,8 @@ public class ComprobanteDatosProcesar {
                 
             }
             
+            if (x.length > 13){
+            
             for (FormaPago fp : lTiposPagos){
             
                 if (fp.getDescripcion().compareTo(x[13].trim())==0){
@@ -312,11 +329,14 @@ public class ComprobanteDatosProcesar {
                 }
                 
             }
+            }
             
             comp.setSucursal(sucursalId);
             
             out.add(comp);
 
+        
+            
         }
 
         return out;

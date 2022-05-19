@@ -15,7 +15,7 @@ public class MontoImponible {
     private Double total;
     private Double baseImponible;
     private Long porcentaje;
-    private Long valor = 0L;
+    private Double valor = 0.0;
     private String totalView;
     private String baseImponibleView;
     private String valorView;
@@ -55,11 +55,11 @@ public class MontoImponible {
         this.baseImponible = baseImponible;
     }
 
-    public Long getValor() {
+    public Double getValor() {
         return valor;
     }
 
-    public void setValor(Long valor) {
+    public void setValor(Double valor) {
         this.valor = valor;
     }
 
