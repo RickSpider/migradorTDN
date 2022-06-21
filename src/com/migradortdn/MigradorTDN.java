@@ -7,14 +7,16 @@ package com.migradortdn;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.migradortdn.model.Almacen;
 import com.migradortdn.model.Cliente;
 import com.migradortdn.model.Comprobante;
-import com.migradortdn.model.ComprobanteID;
+import com.migradortdn.model.ComprobanteProducto;
 import com.migradortdn.model.Data;
 import com.migradortdn.model.FormaPago;
 import com.migradortdn.model.Login;
 import com.migradortdn.model.Marca;
 import com.migradortdn.model.Producto;
+import com.migradortdn.model.Producto1;
 import com.migradortdn.model.Proveedor;
 import com.migradortdn.model.PuntoVenta;
 import com.migradortdn.model.Ramo;
@@ -30,6 +32,7 @@ import com.migradortdn.model.Zona;
 import controlador.DatosProcesar;
 import controlador.ClienteDatosProcesar;
 import controlador.ComprobanteDatosProcesar;
+import controlador.ComprobanteProductoProcesar;
 import controlador.LeeCSV;
 import controlador.ProductoDatosProcesar;
 import controlador.ProveedorDatosProcesar;
@@ -75,6 +78,7 @@ public class MigradorTDN {
         boolean sucursalesProveedor = false;
         boolean timbradoProveedor = false;
         boolean comprobanteCompraProveedor = false;
+        boolean comprobanteProducto = false;
 
         String[] archivos = {"datos/ciudad.csv", "datos/departamento.csv", "datos/distrito.csv"};
 
@@ -102,7 +106,7 @@ public class MigradorTDN {
 
         if (zona) {
             System.out.println("Cargando zona");
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/zonasventa_25042022.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/zonas_20062022.csv");
 
             ArrayList<Zona> lZona = dp.procesarZona(csvArray);
 
@@ -125,7 +129,7 @@ public class MigradorTDN {
 
         if (ruta) {
             System.out.println("Cargando Ruta");
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/rutasventa_25042022.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/rutas_20062022.csv");
 
             ArrayList<Ruta> lRuta = dp.procesarRuta(csvArray);
 
@@ -149,7 +153,7 @@ public class MigradorTDN {
         //seccion vendedores
         if (vendedor) {
             System.out.println("Cargando Vendedor");
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/vendedores/vendedores_25042022.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/vendedores/vendedores_20062022.csv");
             System.out.println("el csvArray Vendedores " + csvArray.size());
 
             ArrayList[] sv = dp.separarVendedores(csvArray);
@@ -208,7 +212,7 @@ public class MigradorTDN {
 
         if (categoriaCliente) { // esto pasa a ser Categoria Cliente
             System.out.println("Cargando TipoCliente");
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/tipocliente_25042022.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/tipocliente_20062022.csv");
 
             ArrayList<TipoCliente> lTipocliente = dp.procesarTipoCliente(csvArray);
 
@@ -262,16 +266,16 @@ public class MigradorTDN {
         con.setBody("");
 
         String jsonCategoria = con.getConexion(Config.GET);
-        
+
         System.out.println(jsonCategoria);
-        
+
         Data dataCategoriaCliente = new Gson().fromJson(jsonCategoria, Data.class);
 
         Type arrayCC = new TypeToken<List<TipoCliente>>() {
         }.getType();
 
         ArrayList<TipoCliente> lCategoriaCliente = (new Gson().fromJson(new Gson().toJson(dataCategoriaCliente.getData()), arrayCC));
-        
+
         //Lista Zona
         con = new ConexionHttps();
 
@@ -327,7 +331,7 @@ public class MigradorTDN {
         if (formaPago) {
 
             System.out.println("Cargando formaPago (CONDICION)");
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/codicionventa_25042022.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/condicionventa_20062022.csv");
 
             ArrayList<FormaPago> lFormaPago = dp.procesarFormaPago(csvArray);
 
@@ -392,13 +396,13 @@ public class MigradorTDN {
             ArrayList<Ramo> lRamos = (new Gson().fromJson(new Gson().toJson(dataRamo.getData()), arrayRa));
 
             System.out.println("Cargando cliente");
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/clientes_25042022.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/clientes/clientes_20062022.csv");
 
             ArrayList<Cliente> lClientes = cdp.procesarDatosClientes(csvArray, csvDepartamentos, csvCiudades, csvDistritos,
                     lVendedores, lZona, lRuta, lTipocliente, lTiposPagos, csvArrayCoordenadas, lRamos, lCategoriaCliente);
 
             for (int i = 0; i < lClientes.size(); i++) { //retail 64
-                
+
                 System.out.println(i);
                 con = new ConexionHttps();
 
@@ -421,7 +425,7 @@ public class MigradorTDN {
 
             System.out.println("Cargando Tipo Proveedor");
 
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/proveedor/tipoproveedor_25042022.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/proveedor/tipoproveedor_12052022.csv");
 
             ArrayList<TipoProveedor> lTipoProveedor = dp.procesarTipoProveedor(csvArray);
 
@@ -461,7 +465,7 @@ public class MigradorTDN {
         if (proveedor) {
 
             System.out.println("Cargando Proveedor");
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/proveedor/proveedor_25042022.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/proveedor/proveedores_12052022.csv");
 
             ProveedorDatosProcesar pdp = new ProveedorDatosProcesar();
 
@@ -483,7 +487,7 @@ public class MigradorTDN {
         }
 
         //Seccion UnidadMedida
-        ArrayList<String[]> csvArrayProducto = csv.leerArchivo("datos/producto/QUALITA_PRODUCTOSVIEW_20042022.csv");
+        ArrayList<String[]> csvArrayProducto = csv.leerArchivo("datos/producto/productos_20062022.csv");
 
         if (unidadMedidaBase) {
 
@@ -588,7 +592,6 @@ public class MigradorTDN {
                 System.out.println(s[4]);
                 
             } */
-            
             // proveedor
             System.out.println("Lista Proveedor");
 
@@ -671,12 +674,12 @@ public class MigradorTDN {
             //Producto
             ProductoDatosProcesar pdp = new ProductoDatosProcesar();
             ArrayList<Producto> lProducto = pdp.procesarDatosProducto(csvArrayProducto, csvArrayLinea, lProveedor, lUnidadMedidaBase,
-                     lUnidadMedida, lMarca);
+                    lUnidadMedida, lMarca);
 
-            for (int i = 400; i < lProducto.size(); i++) {
+            for (int i = 0; i < lProducto.size(); i++) {
 
-                System.out.println("el valor de i === "+i);
-                
+                System.out.println("el valor de i === " + i);
+
                 con = new ConexionHttps();
 
                 con.setLink(Config.HOST + Config.PRODUCTO);
@@ -694,7 +697,7 @@ public class MigradorTDN {
 
         if (timbrado) {
 
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/timbradosSaric_25042022.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/timbradoSARIC.csv");
 
             System.out.println("Puntos de venta");
 
@@ -805,11 +808,11 @@ public class MigradorTDN {
 
             if (comprbanteNTCCliente) {
 
-                ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/notascredito_ventas_25042022.csv");
+                ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/notascreditoventas_12052022.csv");
 
                 ComprobanteDatosProcesar cmdp = new ComprobanteDatosProcesar();
 
-                ArrayList<Comprobante> lComprobanteNTCC = cmdp.procesarDatosComprobante(csvArray, lCliente, lTimbradosObj, csvLocacion, 4L, lTiposPagos );
+                ArrayList<Comprobante> lComprobanteNTCC = cmdp.procesarDatosComprobante(csvArray, lCliente, lTimbradosObj, csvLocacion, 4L, lTiposPagos);
 
                 for (int i = 0; i < lComprobanteNTCC.size(); i++) {
 
@@ -829,17 +832,12 @@ public class MigradorTDN {
             }
 
             if (comprbanteVentaCliente) {
-                
-                
-                
-                
-                
 
-                ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/facturas_ventas_29042022.csv");
+                ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/facturasventapendientes_12052022.csv");
 
                 ComprobanteDatosProcesar cmdp = new ComprobanteDatosProcesar();
 
-                ArrayList<Comprobante> lComprobanteVENTACliente = cmdp.procesarDatosComprobante(csvArray, lCliente, lTimbradosObj, csvLocacion, 3L, lTiposPagos );
+                ArrayList<Comprobante> lComprobanteVENTACliente = cmdp.procesarDatosComprobante(csvArray, lCliente, lTimbradosObj, csvLocacion, 3L, lTiposPagos);
 
                 for (int i = 0; i < lComprobanteVENTACliente.size(); i++) {
 
@@ -890,7 +888,7 @@ public class MigradorTDN {
 
             }
 
-            if (aprobarComprobantes) {
+            /* if (aprobarComprobantes) {
 
                 System.out.println("Lista de Comprobantes");
 
@@ -911,7 +909,7 @@ public class MigradorTDN {
                 ArrayList<ComprobanteID> lComprobantesVenta = (new Gson().fromJson(new Gson().toJson(dataComprobanteVenta.getData()), arrayComp));
                 System.out.println("tamaño Comprobante " + lComprobantesVenta.size());
 
-                for (int i = 1; i < lComprobantesVenta.size(); i++) {
+                for (int i = 0; i < lComprobantesVenta.size(); i++) {
 
                     String link = Config.HOST + Config.COMPROBANTEVENTAAPROBAR + lComprobantesVenta.get(i).getId();
 
@@ -927,79 +925,76 @@ public class MigradorTDN {
 
                 }
 
-            }
-
+            }*/
         }
 
-        ArrayList<String[]> csvArrayCompProv = csv.leerArchivo("datos/comprobante/saldoscompras_25042022.csv");
+        ArrayList<String[]> csvArrayCompProv = csv.leerArchivo("datos/comprobante/pendientescompras12052022.csv");
 
         if (sucursalesProveedor || timbradoProveedor || comprobanteCompraProveedor) {
-            
-            
-             // proveedor
-                System.out.println("Lista Proveedor");
+
+            // proveedor
+            System.out.println("Lista Proveedor");
+
+            con = new ConexionHttps();
+
+            con.setLink(Config.HOST + Config.PROVEEDOR + Config.PROVEEDORLISTA);
+
+            con.setToken(rToken.getAccessToken());
+            con.setBarerAutenticacion(true);
+
+            con.setBody("");
+
+            Data dataProveedor = new Gson().fromJson(con.getConexion(Config.GET), Data.class);
+
+            Type arrayP = new TypeToken<List<Proveedor>>() {
+            }.getType();
+
+            ArrayList<Proveedor> lProveedoresOri = (new Gson().fromJson(new Gson().toJson(dataProveedor.getData()), arrayP));
+
+            ArrayList<Proveedor> lProveedores = new ArrayList<Proveedor>();
+            Set<Long> proveedoresID = new HashSet<Long>();
+
+            for (String[] s : csvArrayCompProv) {
+
+                for (Proveedor p : lProveedoresOri) {
+
+                    if (p.getNumeroDocumento().compareTo(s[2].trim()) == 0) {
+
+                        proveedoresID.add(p.getId());
+                        break;
+
+                    }
+
+                }
+            }
+
+            System.out.println("Consultando proveedores");
+
+            for (Long pid : proveedoresID) {
 
                 con = new ConexionHttps();
 
-                con.setLink(Config.HOST + Config.PROVEEDOR + Config.PROVEEDORLISTA);
+                String link = Config.HOST + Config.PROVEEDOR + "/" + pid + "?view=ProveedorForm";
+
+                System.out.println(link);
+
+                con.setLink(link);
 
                 con.setToken(rToken.getAccessToken());
                 con.setBarerAutenticacion(true);
 
                 con.setBody("");
 
-                Data dataProveedor = new Gson().fromJson(con.getConexion(Config.GET), Data.class);
+                String jsonProv = con.getConexion(Config.GET);
 
-                Type arrayP = new TypeToken<List<Proveedor>>() {}.getType();
+                //System.out.println(jsonProv);
+                Proveedor x = new Gson().fromJson(jsonProv, Proveedor.class);
 
-                ArrayList<Proveedor> lProveedoresOri = (new Gson().fromJson(new Gson().toJson(dataProveedor.getData()), arrayP));
+                lProveedores.add(x);
 
-                ArrayList<Proveedor> lProveedores = new ArrayList<Proveedor>();
-                Set<Long> proveedoresID = new HashSet<Long>();
-
-                for (String[] s : csvArrayCompProv) {
-
-                    for (Proveedor p : lProveedoresOri) {
-
-                        if (p.getNumeroDocumento().compareTo(s[2].trim()) == 0) {
-
-                            proveedoresID.add(p.getId());
-                            break;
-
-                        }
-
-                    }
-                }
-
-                System.out.println("Consultando proveedores");
-
-                for (Long pid : proveedoresID) {
-
-                    con = new ConexionHttps();
-
-                    String link = Config.HOST + Config.PROVEEDOR + "/" + pid + "?view=ProveedorForm";
-
-                    System.out.println(link);
-
-                    con.setLink(link);
-
-                    con.setToken(rToken.getAccessToken());
-                    con.setBarerAutenticacion(true);
-
-                    con.setBody("");
-
-                    String jsonProv = con.getConexion(Config.GET);
-
-                    //System.out.println(jsonProv);
-                    Proveedor x = new Gson().fromJson(jsonProv, Proveedor.class);
-
-                    lProveedores.add(x);
-
-                }
+            }
 
             if (sucursalesProveedor) {
-
-               
 
                 System.out.println("tamaño proveedor " + lProveedores.size());
 
@@ -1034,7 +1029,7 @@ public class MigradorTDN {
             if (timbradoProveedor) {
 
                 // proveedor
-              /*  System.out.println("Lista Proveedor");
+                /*  System.out.println("Lista Proveedor");
 
                 con = new ConexionHttps();
 
@@ -1094,7 +1089,6 @@ public class MigradorTDN {
                     lProveedores.add(x);
 
                 }*/
-
                 System.out.println("tamaño proveedor " + lProveedores.size());
                 ProveedorDatosProcesar pdp = new ProveedorDatosProcesar();
                 ArrayList<TimbradoProveedor> lTimbradoProv = pdp.procesarTimbradoProveedor(csvArrayCompProv, lProveedores);
@@ -1120,16 +1114,11 @@ public class MigradorTDN {
             }
 
             if (comprobanteCompraProveedor) {
-                
-                
+
                 //timbradoProveedor
                 System.out.println("consultando Timbrado Proveedor");
-                
-          
 
                 con = new ConexionHttps();
-                
-                
 
                 con.setLink(Config.HOST + Config.TIMBRADOPROVEEDOR + Config.TIMBRADOPROVEEDORLISTA);
 
@@ -1140,27 +1129,28 @@ public class MigradorTDN {
 
                 Data dataTimbradoProveedor = new Gson().fromJson(con.getConexion(Config.GET), Data.class);
 
-                Type arrayTProv = new TypeToken<List<TimbradoProveedor>>() {}.getType();
+                Type arrayTProv = new TypeToken<List<TimbradoProveedor>>() {
+                }.getType();
 
                 ArrayList<TimbradoProveedor> lTimbradoProveedor = (new Gson().fromJson(new Gson().toJson(dataTimbradoProveedor.getData()), arrayTProv));
-                
-                System.out.println("El tamaña del timbrado es "+lTimbradoProveedor.size());
-                System.out.println("El tamaño de proveedores es "+lProveedores.size());
-                
-                System.out.println("cargando comprobante Proveedor" );
-                
+
+                System.out.println("El tamaña del timbrado es " + lTimbradoProveedor.size());
+                System.out.println("El tamaño de proveedores es " + lProveedores.size());
+
+                System.out.println("cargando comprobante Proveedor");
+
                 ProveedorDatosProcesar pdp = new ProveedorDatosProcesar();
-                
-                ArrayList<Comprobante> lComprobanteProveedor = pdp.procesarComprobanteProveedor(csvArrayCompProv, lTimbradoProveedor ,lProveedores);
+
+                ArrayList<Comprobante> lComprobanteProveedor = pdp.procesarComprobanteProveedor(csvArrayCompProv, lTimbradoProveedor, lProveedores);
 
                 for (int i = 0; i < lComprobanteProveedor.size(); i++) {
 
                     System.out.println(i);
 
-                    String linkX =  Config.HOST + Config.COMPROBANTECOMPRA +Config.COMPROBANTECOMPRAPOST.replace("#1#",""+lComprobanteProveedor.get(i).getProveedorPlazoCuotas() );
-                    
+                    String linkX = Config.HOST + Config.COMPROBANTECOMPRA + Config.COMPROBANTECOMPRAPOST.replace("#1#", "" + lComprobanteProveedor.get(i).getProveedorPlazoCuotas());
+
                     System.out.println(linkX);
-                    
+
                     con.setLink(linkX);
 
                     con.setToken(rToken.getAccessToken());
@@ -1176,6 +1166,106 @@ public class MigradorTDN {
                 }
 
             }
+
+        }
+
+        if (comprobanteProducto) {
+
+            System.out.println("Almacenes");
+
+            con.setLink(Config.HOST + Config.ALMACEN + Config.ALMACENLISTA);
+
+            con.setToken(rToken.getAccessToken());
+            con.setBarerAutenticacion(true);
+
+            con.setBody("");
+
+            Data<Almacen> dataAlmacen = new Gson().fromJson(con.getConexion(Config.GET), Data.class);
+
+            System.out.println(new Gson().toJson(dataAlmacen));
+
+            Type arrayTAlmacen = new TypeToken<List<Almacen>>() {
+            }.getType();
+
+            ArrayList<Almacen> lAlmacenes = (new Gson().fromJson(new Gson().toJson(dataAlmacen.getData()), arrayTAlmacen));
+
+            System.out.println("Almacen size " + lAlmacenes.size());
+
+            System.out.println("Productos");
+
+            con.setLink(Config.HOST + Config.PRODUCTO + Config.PRODUCTOLISTA);
+
+            con.setToken(rToken.getAccessToken());
+            con.setBarerAutenticacion(true);
+
+            con.setBody("");
+
+            Data dataProducto = new Gson().fromJson(con.getConexion(Config.GET), Data.class);
+
+            //System.out.println("el size del producto "+dataProducto.getData().size());
+            Type arrayTProducto = new TypeToken<List<Producto1>>() {
+            }.getType();
+
+            ArrayList<Producto1> lProductos = (new Gson().fromJson(new Gson().toJson(dataProducto.getData()), arrayTProducto));
+
+            // System.out.println("Unidad Medida producto 0"+lProductos.get(0).getUnidadMedidaBase().getId());
+            //System.out.println("Productos size "+lProductos.size());
+            System.out.println("Unidad Medida Base");
+
+            con = new ConexionHttps();
+
+            con.setLink(Config.HOST + Config.UNIDADMEDIDA + Config.UNIDADMEDIDALISTABASE);
+
+            con.setToken(rToken.getAccessToken());
+            con.setBarerAutenticacion(true);
+
+            con.setBody("");
+
+            Data dataUndBase = new Gson().fromJson(con.getConexion(Config.GET), Data.class);
+
+            Type arrayUNDbase = new TypeToken<List<UnidadMedida>>() {
+            }.getType();
+
+            ArrayList<UnidadMedida> lUnidadMedidaBase = (new Gson().fromJson(new Gson().toJson(dataUndBase.getData()), arrayUNDbase));
+
+            // Locaciones
+            System.out.println("Locaciones");
+            ArrayList<String[]> csvLocacion = csv.leerArchivo("datos/comprobante/gnr_locacion.csv");
+
+            ArrayList<String[]> csvArrayCompProd = csv.leerArchivo("datos/comprobante/PRUEBA_EXISTENCIA_13062022_V2.csv");
+
+            ComprobanteProductoProcesar cpp = new ComprobanteProductoProcesar();
+
+            ArrayList<ComprobanteProducto> lComprobanteProducto = cpp.procesarComprobante(csvArrayCompProd, lProductos, lAlmacenes, lUnidadMedidaBase, csvLocacion);
+
+            System.out.println("tamaño out " + lComprobanteProducto.size());
+
+            for (int i = 0; i < lComprobanteProducto.size(); i++) {
+
+                /*System.out.println(i);
+                
+                String j = new Gson().toJson(lComprobanteProducto.get(i));
+                
+                System.out.println(j);*/
+                /*
+                System.out.println(i);
+                
+                System.out.println("Este es el total "+lComprobanteProducto.get(i).getMontosImponibles().get(0).getTotal());
+
+                con.setLink(Config.HOST + Config.COMPROBANTEPRODUCTO);
+
+                con.setToken(rToken.getAccessToken());
+                con.setBarerAutenticacion(true);
+
+                String j = new Gson().toJson(lComprobanteProducto.get(i));
+
+                System.out.println(j);
+
+                con.setBody(j);
+                System.out.println(con.getConexion(Config.POST));*/
+
+            }
+
         }
 
         //Logout

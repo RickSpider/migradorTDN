@@ -6,6 +6,7 @@
 package com.migradortdn.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -26,6 +27,36 @@ public class ComprobanteDetalle {
     private String descuentoView = "0";
     private double ultimoPrecio;
     private String ultimoPrecioView;
+    
+    //seccion para comprobante producto
+    
+    private Long unidadMedida;
+    private String numeroGrupo;
+    private Date fechaVencimientoGrupo;
+    
+     public Long getUnidadMedida() {
+        return unidadMedida;
+    }
+
+    public void setUnidadMedida(Long unidadMedida) {
+        this.unidadMedida = unidadMedida;
+    }
+
+    public String getNumeroGrupo() {
+        return numeroGrupo;
+    }
+
+    public void setNumeroGrupo(String numeroGrupo) {
+        this.numeroGrupo = numeroGrupo;
+    }
+
+    public Date getFechaVencimientoGrupo() {
+        return fechaVencimientoGrupo;
+    }
+
+    public void setFechaVencimientoGrupo(Date fechaVencimientoGrupo) {
+        this.fechaVencimientoGrupo = fechaVencimientoGrupo;
+    }
     
     private ArrayList<MontoImponible> montosImponibles = new ArrayList<MontoImponible>();
 

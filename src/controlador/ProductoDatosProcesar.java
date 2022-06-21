@@ -54,7 +54,7 @@ public class ProductoDatosProcesar {
                      
                 int cant = (int) Double.parseDouble(x[17].toString().replace(",", "."));
             
-                if (u.getDescripcion().compareTo(x[16].toString().trim().toUpperCase()+" - "+cant) == 0
+                if (u.getDescripcion().compareTo(x[16].toString().trim().toUpperCase()+cant) == 0
                        // && u.getCantidad() == ((int) Double.parseDouble(x[17].toString().replace(",", ".")))
                         && u.getCantidad() == cant
                         && u.getUnidadContenida().getDescripcion().toString().compareTo(x[15].toString().trim().toUpperCase()) == 0) {
@@ -181,7 +181,7 @@ public class ProductoDatosProcesar {
                 
                 int cant = (int) Double.parseDouble(x[17].toString().replace(",", "."));
             
-                 if (u.getDescripcion().compareTo(x[16].toString().trim().toUpperCase()+" - "+cant) == 0
+                 if (u.getDescripcion().compareTo(x[16].toString().trim().toUpperCase()+cant) == 0
                        // && u.getCantidad() == ((int) Double.parseDouble(x[17].toString().replace(",", ".")))
                         && u.getCantidad() == cant
                         && u.getUnidadContenida().getDescripcion().toString().compareTo(x[15].toString().trim().toUpperCase()) == 0) {

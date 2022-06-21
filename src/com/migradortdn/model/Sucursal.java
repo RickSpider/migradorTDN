@@ -36,7 +36,33 @@ public class Sucursal {
     
     private String ubicacionGeografica = "";
 
-    
+    private boolean activo = true;
+    private UnidadNegocio unidadNegocio;
+    private Sucursal sucursal;
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+    public UnidadNegocio getUnidadNegocio() {
+        return unidadNegocio;
+    }
+
+    public void setUnidadNegocio(UnidadNegocio unidadNegocio) {
+        this.unidadNegocio = unidadNegocio;
+    }
+
+    public Sucursal getSucursal() {
+        return sucursal;
+    }
+
+    public void setSucursal(Sucursal sucursal) {
+        this.sucursal = sucursal;
+    }
     
     
     //Esto es para Proveedor

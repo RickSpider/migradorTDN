@@ -13,6 +13,7 @@ import com.migradortdn.model.Ruta;
 import com.migradortdn.model.Sucursal;
 import com.migradortdn.model.Tipo;
 import com.migradortdn.model.TipoCliente;
+import com.migradortdn.model.UnidadNegocio;
 import com.migradortdn.model.Vendedor;
 import com.migradortdn.model.Zona;
 import java.util.ArrayList;
@@ -287,7 +288,14 @@ public class ClienteDatosProcesar {
 
                     if (x[18].trim().length() > 0) {
                         matriz.setGln(Long.parseLong(x[18].trim()));
+                        Sucursal sx = new Sucursal ();
+                        sx.setId(1L);
+                        matriz.setSucursal(sx);
                     }
+                    
+                    UnidadNegocio unx = new UnidadNegocio();
+                    unx.setId(1);
+                    matriz.setUnidadNegocio(unx);
 
                     cliente.getSucursales().add(matriz);
 
@@ -433,7 +441,14 @@ public class ClienteDatosProcesar {
 
                                 if (x2[18].trim().length() > 0) {
                                     sucursal.setGln(Long.parseLong(x2[18].trim()));
+                                    Sucursal sx = new Sucursal ();
+                                    sx.setId(1L);
+                                    sucursal.setSucursal(sx);
                                 }
+                                
+                                   //UnidadNegocio unx = new UnidadNegocio();
+                                   //unx.setId(1);
+                                   sucursal.setUnidadNegocio(unx);
 
                                 cliente.getSucursales().add(sucursal);
 

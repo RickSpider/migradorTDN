@@ -321,7 +321,7 @@ public class DatosProcesar {
 
                 int cant = (int) Double.parseDouble(x[17].toString().replace(",", "."));
                 
-                if (um.getDescripcion().compareTo(x[16].toString().trim().toUpperCase()+" - "+cant) == 0
+                if (um.getDescripcion().compareTo(x[16].toString().trim().toUpperCase()+cant) == 0
                         //&& um.getCantidad() == ((int) Double.parseDouble(x[17].toString().replace(",", ".")))
                         && um.getCantidad() == cant
                         && um.getUnidadContenida().getDescripcion().toString().compareTo(x[15].toString().trim().toUpperCase()) == 0) {
@@ -338,7 +338,7 @@ public class DatosProcesar {
                     UnidadMedida u = new UnidadMedida();
                    // double cantidad = Double.parseDouble(x[17].toString().replace(",", "."));
                     u.setCantidad(((int) Double.parseDouble(x[17].toString().replace(",", "."))));
-                    u.setDescripcion(x[16].toString().trim().toUpperCase()+" - "+u.getCantidad());
+                    u.setDescripcion(x[16].toString().trim().toUpperCase()+u.getCantidad());
                     u.setAbreviatura(u.getDescripcion());
 
                     for (UnidadMedida x1 : lUnidadMedidaBase) {
