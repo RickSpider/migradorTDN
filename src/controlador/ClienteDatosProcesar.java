@@ -200,7 +200,7 @@ public class ClienteDatosProcesar {
 
                     //seccion matriz
                     Sucursal matriz = new Sucursal();
-                    matriz.setDescripcion("Matriz");
+                    matriz.setDescripcion(x[19].trim()+" - Matriz");
                     matriz.setCodigoSucursal("000");
 
                     for (String[] s : csvCiudades) {

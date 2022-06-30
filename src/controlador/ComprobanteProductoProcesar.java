@@ -47,10 +47,10 @@ public class ComprobanteProductoProcesar {
 
             }
 
-            //System.out.println("almacen " + almacenDescripcion);
+           // System.out.println("almacen " + almacenDescripcion);
             for (Almacen ax : lAlmacen) {
 
-                if (ax.getDescripcion().compareTo(almacenDescripcion) == 0) {
+                if (ax.getDescripcion().trim().compareTo(almacenDescripcion) == 0) {
 
                     almacenActual = ax;
                     // System.out.println("encontre almacen " + almacenActual.getId());
@@ -66,7 +66,7 @@ public class ComprobanteProductoProcesar {
                 2 IVA 5
                 3 IVA EXCENTO
              */
-            int iva = Integer.parseInt(x[13].trim());
+            int iva = (int) Double.parseDouble(x[13].trim().replace(",", "."));
 
             for (ComprobanteProducto cpx : out) {
 
@@ -212,6 +212,7 @@ public class ComprobanteProductoProcesar {
             
                 System.out.println("Producto nulo");
                 System.out.println("Falta "+x[4].trim());
+                continue; //esto borrar en el final
             }
             cd.setTipo(106L);
             cd.setCantidad(Double.valueOf(x[11].trim().replace(",", ".")).intValue());
