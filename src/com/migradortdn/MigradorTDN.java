@@ -1232,7 +1232,7 @@ public class MigradorTDN {
             System.out.println("Locaciones");
             ArrayList<String[]> csvLocacion = csv.leerArchivo("datos/comprobante/gnr_locacion.csv");
 
-            ArrayList<String[]> csvArrayCompProd = csv.leerArchivo("datos/comprobante/PRUEBA_EXISTENCIA_13062022_V2.csv");
+            ArrayList<String[]> csvArrayCompProd = csv.leerArchivo("datos/comprobante/productos_21062022.csv");
 
             ComprobanteProductoProcesar cpp = new ComprobanteProductoProcesar();
 
@@ -1247,7 +1247,7 @@ public class MigradorTDN {
                 String j = new Gson().toJson(lComprobanteProducto.get(i));
                 
                 System.out.println(j);*/
-                /*
+                
                 System.out.println(i);
                 
                 System.out.println("Este es el total "+lComprobanteProducto.get(i).getMontosImponibles().get(0).getTotal());
@@ -1262,7 +1262,7 @@ public class MigradorTDN {
                 System.out.println(j);
 
                 con.setBody(j);
-                System.out.println(con.getConexion(Config.POST));*/
+                System.out.println(con.getConexion(Config.POST));
 
             }
 
