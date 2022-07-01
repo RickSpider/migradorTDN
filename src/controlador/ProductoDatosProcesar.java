@@ -190,7 +190,7 @@ public class ProductoDatosProcesar {
 
                  
                    
-                   if (u.getDescripcion().compareTo("UNIDAD - 1")!=0){
+                   if (u.getDescripcion().compareTo("UNIDAD1")!=0){
                      
                         p.getUnidadesMedida().add(u.getId());
                    
