@@ -487,7 +487,7 @@ public class MigradorTDN {
         }
 
         //Seccion UnidadMedida
-        ArrayList<String[]> csvArrayProducto = csv.leerArchivo("datos/producto/productos.csv");
+        ArrayList<String[]> csvArrayProducto = csv.leerArchivo("datos/producto/productos_v2.csv");
 
         if (unidadMedidaBase) {
 
