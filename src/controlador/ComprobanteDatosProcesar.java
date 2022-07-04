@@ -174,7 +174,7 @@ public class ComprobanteDatosProcesar {
             MontoImponible mi = new MontoImponible();
             mi.setTipoImpuesto(3L);
             
-            Double saldo = Double.valueOf(x[10].trim().replace(",", "."));
+            Double saldo = Double.valueOf(x[10].trim());
             
             if (tipoComprobante.longValue() == 4L){
             
