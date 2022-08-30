@@ -18,6 +18,16 @@ public class AsientoCabecera {
     private Estado estado;
     private String fecha;
     private String tituloasiento;
+    
+    private Long numero;
+
+    public Long getNumero() {
+        return numero;
+    }
+
+    public void setNumero(Long numero) {
+        this.numero = numero;
+    }
 
     public TipoAsiento getTipoAsiento() {
         return tipoAsiento;

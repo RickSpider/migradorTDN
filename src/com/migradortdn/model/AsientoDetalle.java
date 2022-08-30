@@ -11,6 +11,9 @@ package com.migradortdn.model;
  */
 public class AsientoDetalle {
     
+    //linea t
+    //transaccion u
+    
     private AsientoCabecera asientoContable;
     private CentroCosto centroCostos;
     private CuentaContable cuentaContable;
