@@ -78,7 +78,7 @@ public class MigradorTDN {
         boolean sucursalesProveedor = false;
         boolean timbradoProveedor = false;
         boolean comprobanteCompraProveedor = false;
-        boolean comprobanteProducto = false;
+        boolean comprobanteProducto = true;
 
         String[] archivos = {"datos/ciudad.csv", "datos/departamento.csv", "datos/distrito.csv"};
 
@@ -697,7 +697,7 @@ public class MigradorTDN {
 
         if (timbrado) {
 
-            ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/timbradoSARIC.csv");
+            ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/timbradoSaric.csv");
 
             System.out.println("Puntos de venta");
 
@@ -808,7 +808,7 @@ public class MigradorTDN {
 
             if (comprbanteNTCCliente) {
 
-                ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/notascreditoventas_12052022.csv");
+                ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/ncrventas.csv");
 
                 ComprobanteDatosProcesar cmdp = new ComprobanteDatosProcesar();
 
@@ -833,7 +833,7 @@ public class MigradorTDN {
 
             if (comprbanteVentaCliente) {
 
-                ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/facturasventapendientes_12052022.csv");
+                ArrayList<String[]> csvArray = csv.leerArchivo("datos/comprobante/saldoventas.csv");
 
                 ComprobanteDatosProcesar cmdp = new ComprobanteDatosProcesar();
 
@@ -928,7 +928,7 @@ public class MigradorTDN {
             }*/
         }
 
-        ArrayList<String[]> csvArrayCompProv = csv.leerArchivo("datos/comprobante/pendientescompras12052022.csv");
+        ArrayList<String[]> csvArrayCompProv = csv.leerArchivo("datos/comprobante/saldoProveedor_2.csv");
 
         if (sucursalesProveedor || timbradoProveedor || comprobanteCompraProveedor) {
 
@@ -1232,7 +1232,7 @@ public class MigradorTDN {
             System.out.println("Locaciones");
             ArrayList<String[]> csvLocacion = csv.leerArchivo("datos/comprobante/gnr_locacion.csv");
 
-            ArrayList<String[]> csvArrayCompProd = csv.leerArchivo("datos/comprobante/productos_21062022.csv");
+            ArrayList<String[]> csvArrayCompProd = csv.leerArchivo("datos/comprobante/INVENTARIOVALORIZADO_04072022_0848.csv");
 
             ComprobanteProductoProcesar cpp = new ComprobanteProductoProcesar();
 

@@ -297,7 +297,9 @@ public class ProveedorDatosProcesar {
                     if (comp.getTimbradoProveedor().longValue() == timbradoID
                             && comp.getNumero().compareTo(x[9].trim()) == 0) {
 
-                        Long iva = Long.parseLong(x[13].trim());
+                        Double ivaD = Double.parseDouble(x[13].trim().replace(",", "."));
+                        Long iva = ivaD.longValue();//Long.parseLong(x[13].trim());
+                        //Long iva = Long.parseLong(x[13].trim());
                         Double saldo = Double.valueOf(x[10].trim().replace(",", "."));
 
                         MontoImponible mi = new MontoImponible();
@@ -353,7 +355,9 @@ public class ProveedorDatosProcesar {
 
                         comp.getComprobanteDetalle().add(cd);
 
-                        Long iva2 = Long.parseLong(x[13].trim());
+                        Double ivaD2 = Double.parseDouble(x[13].trim().replace(",", "."));
+                        Long iva2 = ivaD2.longValue();//Long.parseLong(x[13].trim());
+                        //Long iva2 = Long.parseLong(x[13].trim());
                         boolean encontroMontoImponible2 = false;
 
                         for (MontoImponible mi2 : comp.getMontosImponibles()) {

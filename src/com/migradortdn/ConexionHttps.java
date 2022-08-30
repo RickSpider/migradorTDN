@@ -37,7 +37,7 @@ public class ConexionHttps {
         
         if (metodo == Config.POST){
             
-              
+             urlConnection.setRequestProperty("accept", "application/json; text/plain; */*");    
             urlConnection.setRequestProperty("Content-Type", "application/json;charset=iso-8859-1");
             urlConnection.setRequestMethod("POST");
             
@@ -48,7 +48,7 @@ public class ConexionHttps {
         if (metodo == Config.GET){
            
             
-           // urlConnection.setRequestProperty("accept", "application/json; text/plain; */*");        
+            urlConnection.setRequestProperty("accept", "application/json; text/plain; */*");        
             //urlConnection.setRequestProperty("Content-Type", "application/json");
             //urlConnection.setRequestProperty("Content-length", "1520");
             

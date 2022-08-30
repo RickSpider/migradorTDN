@@ -102,14 +102,14 @@ public class ComprobanteProductoProcesar {
 
                 System.out.println("No existe");
 
-                cp.setCompra(1L); // este es el numero de fulujo
+                cp.setCompra(2L); // este es el numero de fulujo
                 cp.setCambio(1L);
                 cp.setMoneda1(56L);
                 cp.setImputarIvaGeneral(true);
-                cp.setProveedor(3420L);//este es el codigo del proveedor
-                cp.setSucursalProveedor(390L);
+                cp.setProveedor(6919L);//este es el codigo del proveedor
+                cp.setSucursalProveedor(6952L);
                 //cp.setTimbradoProveedor(30L);
-                cp.setRubroIva(4L);
+                //cp.setRubroIva(4L);
                 cp.setTipo(19L);
                 cp.setFecha(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").format(new Date()));
                 cp.setDeposito(almacenActual.getId());
@@ -243,14 +243,15 @@ public class ComprobanteProductoProcesar {
 
             }
             mi2.setPorcentaje(new Long(iva));
-            mi2.setValor(Precision.round(Double.valueOf(x[12].trim().replace(",", ".")),2));
+           // mi2.setValor(Precision.round(Double.valueOf(x[12].trim().replace(",", ".")),2));
+            mi2.setValor(Precision.round(cd.getTotalItem() - ((Double.valueOf(x[12].trim().replace(",", ".")))*cd.getCantidad()),2));
             mi2.setBaseImponible(Precision.round((Double.valueOf(x[12].trim().replace(",", ".")) * cd.getCantidad()),2));
 
             cd.getMontosImponibles().add(mi2);
 
             cp.getComprobanteDetalle().add(cd);
             
-            double baseImponible = cp.getMontosImponibles().get(0).getBaseImponible() + + mi2.getBaseImponible();
+            double baseImponible = cp.getMontosImponibles().get(0).getBaseImponible() + mi2.getBaseImponible();
             cp.getMontosImponibles().get(0).setBaseImponible(Precision.round(baseImponible,2));
             cp.getMontosImponibles().get(0).setBaseImponibleView(cp.getMontosImponibles().get(0).getBaseImponible() + "");
             
@@ -261,6 +262,8 @@ public class ComprobanteProductoProcesar {
             double total = cp.getMontosImponibles().get(0).getTotal() + cd.getTotalItem();
             cp.getMontosImponibles().get(0).setTotal(Precision.round(total,2));
             cp.getMontosImponibles().get(0).setTotalView(cp.getMontosImponibles().get(0).getTotal() + "");
+            
+            cp.setMontoTotal(total);
 
             //out.add(cp);
         }
