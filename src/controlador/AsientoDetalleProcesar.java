@@ -10,7 +10,6 @@ import com.migradortdn.model.AsientoDetalle;
 import com.migradortdn.model.CentroCosto;
 import com.migradortdn.model.CuentaContable;
 import com.migradortdn.model.Sucursal;
-import com.migradortdn.model.TipoAsiento;
 import com.migradortdn.model.TipoDetalleAsiento;
 import java.util.ArrayList;
 
@@ -20,55 +19,80 @@ import java.util.ArrayList;
  */
 public class AsientoDetalleProcesar {
     
-    public  ArrayList <AsientoDetalle> procesarDetalle(AsientoCabecera asiento, ArrayList<String[]> asientos, ArrayList<String[]> centroCostos, ArrayList<String[]> planCuentas ){
+    public  ArrayList <AsientoDetalle> procesarDetalle(ArrayList<AsientoCabecera> lcabeceras, ArrayList<String[]> asientos, ArrayList<String[]> centroCostosQualita, ArrayList<String[]> planCuentas ){
         
         ArrayList <AsientoDetalle> lDetalles = new ArrayList<AsientoDetalle>();
         
         for (String [] x : asientos){
         
             AsientoDetalle detalle = new AsientoDetalle();
-            detalle.setAsientoContable(asiento);
+            //detalle.setAsientoContable(asiento);
+            
+            for (AsientoCabecera ac : lcabeceras){
+            
+                Long numero = Long.parseLong(x[2]);
+                if (numero.longValue() == ac.getNumero().longValue()){
+                    detalle.setAsientoContable(ac);
+                    break;
+                }
+                
+            }
             
             if (x[9].length() == 0){
                 
-               // System.out.println("Sin Sucursal para "+x[2]+" "+x[6]+" "+x[7]+" "+x[10]);
+                System.out.println("Sin Sucursal para "+x[2]+" "+x[6]+" "+x[7]+" "+x[10]);
             
                 continue;
             }
             
-            int sucursalID = Integer.parseInt(x[9]);
+            int sucursalID = Integer.parseInt(x[22]);
             
-            // falsta sucursal para LOS PINOS, COLONIA'I, PETROBRAS PLAYA
             switch(sucursalID){
             
                 case 1:{
-                    
+                    // San Lorenzo Matriz
                     Sucursal sucursal = new Sucursal();
                     sucursal.setId(1l);
                     detalle.setSucursal(sucursal);
                     break;
                 }
                 
-                case 3:{
-                    
+                 case 2:{
+                    //encarnacion
                     Sucursal sucursal = new Sucursal();
-                    sucursal.setId(6l);
+                    sucursal.setId(2l);
+                    detalle.setSucursal(sucursal);
+                    break;
+                }
+                
+                case 3:{
+                    //coronel oviedo
+                    Sucursal sucursal = new Sucursal();
+                    sucursal.setId(3l);
                     detalle.setSucursal(sucursal);
                     break;
                 }
                 
                 case 4:{
-                    
+                    // los pinos
                     Sucursal sucursal = new Sucursal();
-                    sucursal.setId(2l);
+                    sucursal.setId(4l);
                     detalle.setSucursal(sucursal);
                     break;
                 }                
                 
-                case 9:{
-                    
+                case 5:{
+                    //colonia
                     Sucursal sucursal = new Sucursal();
-                    sucursal.setId(3l);
+                    sucursal.setId(5l);
+                    detalle.setSucursal(sucursal);
+                    break;
+                }
+                
+                case 6:{
+                    //san ignacio
+                    Sucursal sucursal = new Sucursal();
+                    sucursal.setId(6l);
                     detalle.setSucursal(sucursal);
                     break;
                 }
@@ -76,26 +100,24 @@ public class AsientoDetalleProcesar {
             }
             
             if (detalle.getSucursal() == null){
-               // System.out.println("No encontre Sucursal para "+x[2]+" "+x[6]+" "+x[7]+" "+x[10]);
+                System.out.println("No encontre Sucursal para "+x[2]+" "+x[6]+" "+x[7]+" "+x[10]);
                 continue;
                 
             }
             
-            if (x[11].length() == 0){
+           /* if (x[11].length() == 0){
             
-              //  System.out.println("Sin Centro de costos "+x[2]+" "+x[6]+" "+x[7]+" "+x[10]);
+                System.out.println("Sin Centro de costos "+x[2]+" "+x[6]+" "+x[7]+" "+x[10]);
                 continue;
                 
-            }
+            }*/
             
-            for (String [] y : centroCostos){
-                
-                
-            
-                if (Integer.parseInt(x[11]) == Integer.parseInt(y[0])){
+            for (String [] y : centroCostosQualita){
+
+                if (x[24].compareTo(y[1])==0){
                     
                     CentroCosto cc = new CentroCosto();
-                    cc.setId(Long.parseLong(y[3]));
+                    cc.setId(Long.parseLong(y[0]));
                     detalle.setCentroCostos(cc);
                     
                     break;
@@ -103,24 +125,24 @@ public class AsientoDetalleProcesar {
                 
             }
             
-            if (detalle.getCentroCostos() == null){
+           /* if (detalle.getCentroCostos() == null){
             
                // System.out.println("No encontre centro para "+x[2]+" "+x[6]+" "+x[7]+" "+x[10]);
                 
                 continue;
                 
-            }
+            }*/
             
-            if (x[8].compareTo("D") == 0){
+            if (x[17].length() > 0){
             
                 TipoDetalleAsiento tda = new TipoDetalleAsiento();
                 tda.setId(7550);
                 
                 detalle.setTipoDetalle(tda);
-                detalle.setHaber(Double.parseDouble(x[17].replace(",", ".")));
+                detalle.setDebe(Double.parseDouble(x[17].replace(",", ".")));
             }
             
-            if (x[8].compareTo("A") == 0){
+            if (x[18].length() > 0){
             
                 TipoDetalleAsiento tda = new TipoDetalleAsiento();
                 tda.setId(7546);
@@ -145,16 +167,16 @@ public class AsientoDetalleProcesar {
                 }
             }
             
-            if (detalle.getCentroCostos() == null){
+            /*if (detalle.getCentroCostos() == null){
             
                // System.out.println("No Cuenta para "+x[2]+" "+x[6]+" "+x[7]+" "+x[10]);
                 
                 continue;
                 
-            }
+            }*/
         
-            detalle.setDescripciontransaccion(x[19]);
-            detalle.setDescripcionlinea(x[20]);
+            detalle.setDescripciontransaccion(x[20]);
+            detalle.setDescripcionlinea(x[19]);
             
             lDetalles.add(detalle);
         }
